@@ -13,7 +13,7 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittajat voivat kommentoida tekstin tiettyä riviä
 - Kirjoittajat voivat lisätä lukuihin kyselyitä
 - Kirjoittajat voivat vastata lukujen lopussa oleviin kyselyihin
-- Anonyymit ja kirjoittajat pysytvät näkemään kommentit
+- Anonyymit ja kirjoittajat pystyvät näkemään postauksen kommentit
 - Postauksen omistavat kirjoittajat pystyvät näkemään yksityisesti luvun kyselyt
 - Postauksen omistava kirjoittaja pystyy poistamaan joko muutaman tai kaikki kommentit
 - Postauksen omistava kirjoittaja pystyy poistamaan muutaman tai kaikki kyselyt
