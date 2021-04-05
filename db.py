@@ -57,7 +57,7 @@ def get_user_id(username):
         print(e)
         return 0
 
-def save_post(user_id, general_comments_on, name, misc):
+def save_post(user_id, visible, general_comments_on, name, misc):
     try:
         sql = "SELECT id FROM posts WHERE name=:name"
         result = db.session.execute(sql, {"name":name})
@@ -67,7 +67,7 @@ def save_post(user_id, general_comments_on, name, misc):
             return -1
 
         sql = "INSERT INTO posts (user_id,visible,general_comments_on,name,misc) VALUES (:user_id,:visible,:general_comments_on,:name,:misc)"
-        db.session.execute(sql, {"user_id":user_id,"visible":'0',"general_comments_on":general_comments_on,"name":name,"misc":misc})
+        db.session.execute(sql, {"user_id":user_id,"visible":visible,"general_comments_on":general_comments_on,"name":name,"misc":misc})
         db.session.commit()
         
         return 0

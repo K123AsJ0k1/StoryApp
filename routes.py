@@ -105,6 +105,14 @@ def save_logic():
        session["workbencherror"] = "3"
        return render_template("workbench.html")
 
+    public = request.form["public"]
+
+    if public == "true":
+       visible = '1'
+
+    if public == "false":
+       visible = '0'
+
     general_comments = request.form["general"]
     
     if general_comments == "true":
@@ -112,14 +120,14 @@ def save_logic():
 
     if general_comments == "false":
        general_comments_on = '0'
-    
+
     name = request.form["name"]
     
     rating = request.form["rating"]
     genre = request.form["genre"]
     misc = create_misc(rating,genre)
     
-    check_number = save_post(user_id, general_comments_on, name, misc)
+    check_number = save_post(user_id, visible, general_comments_on, name, misc)
 
     if check_number == -1:
        session["workbencherror"] = "4"
