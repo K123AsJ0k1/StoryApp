@@ -106,7 +106,18 @@ body {
 
 <div class="row">
   <div class="main">
-    <h2>(Käyttäjän julkaisemat postaukset + sen muokkaus + niiden yleiset kommentit)</h2>
+    {% if size > 0 %}
+    <hr>
+    {% for post in posts %}
+    Tarina: {{ post[3] }} <br>
+    Julkisesti nähtävä: {{ post[1] }} <br>
+    Yleinen kommentointi: {{ post[2] }} <br>
+    <hr>
+    {% endfor %}
+    {% endif %}
+    {% if size == 0 %}
+    <h2>Et omista yhtään postausta</h2>
+    {% endif %}
   </div>
 </div>
 

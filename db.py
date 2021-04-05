@@ -52,7 +52,7 @@ def get_user_id(username):
         if user_id == None:
            return 0
 
-        return user_id
+        return user_id[0]
     except Exception as e:
         print(e)
         return 0
@@ -75,6 +75,31 @@ def save_post(user_id, general_comments_on, name, misc):
         print(e)
         return -2
 
-    
+def get_post_creator(id):
+    try:
+        sql = "SELECT user_id FROM posts WHERE id=:id"
+        result = db.session.execute(sql, {"id":id})
+        user_id = result.fetchone()
 
-    
+        if user_id == None:
+            return None
+
+        sql = "SELECT username FROM users WHERE id=:user_id"
+        result = db.session.execute(sql, {"user_id":user_id})
+        username = result.fetchone()
+
+        return username[0]
+    except Exception as e:
+        print(e)
+        return None
+
+def get_profile_posts(user_id):
+    try:
+        sql = "SELECT id,visible,general_comments_on,name,misc FROM posts WHERE user_id=:user_id"
+        result = db.session.execute(sql, {"user_id":user_id})
+        posts = result.fetchall()
+        return posts
+    except Exception as e:
+        print(e)
+        return None
+

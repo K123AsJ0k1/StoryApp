@@ -74,8 +74,10 @@ def logout():
 @app.route("/profile")
 def profile():
     if 'workbench' in session:
-        del session["workbench"]
-    return render_template("profile.html")
+        del session["workbench"] 
+    posts = get_profile_posts(get_user_id(session["username"]))
+    size = len(posts)
+    return render_template("profile.html", posts=posts, size=size)
 
 @app.route("/workbench")
 def workbench():
@@ -96,10 +98,10 @@ def chapter():
     return render_template("workbench.html")
 
 @app.route("/save", methods=["POST"])
-def save():
+def save_logic():
     user_id = get_user_id(session["username"]) 
     
-    if user_id[0] == 0:
+    if user_id == 0:
        session["workbencherror"] = "3"
        return render_template("workbench.html")
 
@@ -117,7 +119,7 @@ def save():
     genre = request.form["genre"]
     misc = create_misc(rating,genre)
     
-    check_number = save_post(user_id[0], general_comments_on, name, misc)
+    check_number = save_post(user_id, general_comments_on, name, misc)
 
     if check_number == -1:
        session["workbencherror"] = "4"
