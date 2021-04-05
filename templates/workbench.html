@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<title>Page Title</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Style the body */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+/* Header/logo Title */
+.header {
+  padding: 10px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+}
+
+/* Increase the font size of the heading */
+.header h1 {
+  font-size: 40px;
+}
+
+/* Style the top navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+textarea {
+    border: 0 none white;
+    overflow: hidden;
+    padding: 0;
+    outline: none;
+    background-color: #D0D0D0;
+}
+
+/* Footer */
+.footer {
+  padding: 10px;
+  text-align: center;
+  background: #ddd;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Työpöytä</h1>
+  {% if session.workbencherror == "0" %}
+  <p>Valitse jokin vasemmalla olevista vaihtoehdoista</p>
+  {% endif %}
+  {% if session.workbencherror == "1" %}
+  <p>Anna tarvitut tiedot postauksen, jonka jälkeen joko tallenna tai julkaise se</p>
+  {% endif %}
+  {% if session.workbencherror == "2" %}
+  <p>Anna tarvitut tiedot chapteriin, jonka jälkeen joko tallenna tai julkaise se</p>
+  {% endif %}
+  {% if session.workbencherror == "3" %}
+  <p>Id haussa tapahtui virhe</p>
+  {% endif %}
+  {% if session.workbencherror == "4" %}
+  <p>Annettu nimi on jo olemassa</p>
+  {% endif %}
+  {% if session.workbencherror == "5" %}
+  <p>Postin luonnissa tapahtui virhe</p>
+  {% endif %}
+</div>
+
+<div class="navbar">
+  {% if session.workbench == "0" %}
+  <a href="/post">Luo uusi postaus</a>
+  <a href="/chapter">Luo uusi luku</a>
+  {% endif %}
+  {% if session.workbench != "0" %}
+  <a href="#">Tallenna</a>
+  <a href="#">Julkaise</a>
+  <a href="/workbench">Resetoi</a>
+  {% endif %}
+  <a href="/logout" class="right">Kirjaudu Ulos</a>
+  <a href="/profile" class="right">Profiili</a>
+</div>
+
+<script> 
+  const tx = document.getElementsByTagName("textarea");
+  
+  for (let i = 0; i < tx.length; i++) {
+   tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+   tx[i].addEventListener("input", OnInput, false);
+  }
+
+  function OnInput() {
+  this.style.height = "auto";
+  this.style.height = (this.scrollHeight) + "px";
+  
+  }
+  
+</script>
+
+<div class="footer">
+  {% if session.workbench == "1" %}
+  <a>Mikä nimi postauksella pitäisi olla?</a>
+  <form action="/save" method="POST">
+    <input type="text" name="name"></p>
+    <a>Haluatko muiden kommentoivan postausta?</a>
+    <br>
+    <input type="radio" id="1" name="general" value="true">
+    <label for="Yes">Kyllä</label><br>
+    <input type="radio" id="2" name="general" value="false">
+    <label for="No">Ei</label>
+    <br>
+    <a>Minkä ikä rajan haluat</a><br>
+    <input type="radio" id="1" name="rating" value="K">
+    <label for="K">K</label><br>
+    <input type="radio" id="2" name="rating" value="T">
+    <label for="T">T</label><br>
+    <input type="radio" id="3" name="rating" value="M">
+    <label for="M">M</label><br>
+    <a>Mikä on tarinan genre?</a><br>
+    <input type="text" name="genre"></p>
+    <input type="submit" value="Tallenna">
+  </form>
+  {% endif %}
+  
+  {% if session.workbench == "2" %}
+  <a>(Luku luonti)</a>
+  <br>
+  <a>Haluatko muiden kommentoivat lukua?</a>
+  <br>
+  <input type="radio" id="Yes" name="Comments" value="Yes">
+  <label for="Yes">Kyllä</label><br>
+  <input type="radio" id="Yes" name="Comments" value="No">
+  <label for="No">Ei</label><br>
+  <br>
+  <textarea placeholder="Kirjoita tänne"></textarea>
+  <br>
+  <a>(Kyselyt)</a>
+  {% endif %}
+</div>
+
+</body>
+</html>

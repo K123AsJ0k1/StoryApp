@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<title>StoryApp</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+* {box-sizing: border-box;}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Header */
+.header {
+  padding: 10px;
+  text-align: center;
+  background: #10bfe7;
+  color: white;
+}
+
+/* font size of the heading */
+.header h1 {
+  font-size: 40px;
+}
+
+.signup {
+  max-width: 200px;
+  margin: auto;
+}
+
+/* Main column */
+.main {   
+  -ms-flex: 70%; /* IE10 */
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: none;
+  }
+  .topnav a, .topnav input[type=text], .topnav .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .topnav input[type=text] {
+    border: 1px solid #ccc;  
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Luo uusi käyttäjä</h1>
+  {% if session.signup == "1" %}
+  <p>Käyttäjän on oltava vähintään 5 merkkiä pitkä</p>
+  {% endif %}
+  {% if session.signup == "2" %}
+  <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
+  {% endif %}
+  {% if session.signup == "3" %}
+  <p>Käyttäjä nimi on jo olemassa</p>
+  {% endif %}
+</div>
+
+<div class="signup">
+  <div class="main">
+    <form action="/signup" method="POST">
+    <p>Tunnus:<br>
+    <input type="text" name="username"></p>
+    <p>Salasana:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Kirjaudu">
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
