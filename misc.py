@@ -12,3 +12,7 @@ def create_misc(*attributes):
         misc = misc + "," + attribute
         
     return misc 
+
+def list_misc(misc):
+    li = list(misc.split(","))
+    return li

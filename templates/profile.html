@@ -96,6 +96,15 @@ body {
 
 <div class="header">
   <h1>{{ session.username }}</h1>
+  {% if session.profileerror == "1" %}
+  <h1>Tietokannassa tapahtui virhe</h1>
+  {% endif %}
+  {% if session.profileerror == "2" %}
+  <h1>Postausta ei löydy tietokannasta</h1>
+  {% endif %}
+  {% if session.profileerror == "3" %}
+  <h1>Poisto onnistui</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
@@ -112,6 +121,8 @@ body {
     Tarina: {{ post[3] }} <br>
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
+    <a href="/update/{{ post[3] }}">Muokkaa</a>
+    <a href="/remove/{{ post[3] }}">Poista</a>
     <hr>
     {% endfor %}
     {% endif %}

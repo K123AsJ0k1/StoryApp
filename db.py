@@ -75,6 +75,67 @@ def save_post(user_id, visible, general_comments_on, name, misc):
         print(e)
         return -2
 
+def update_the_post(old_name, user_id, visible, general_comments_on, new_name, misc):
+    try:
+        sql = "SELECT id,user_id FROM posts WHERE name=:name"
+        result = db.session.execute(sql, {"name":old_name})
+        check = result.fetchone()
+
+        if check == None:
+            return -1
+
+        post_id = check[0]
+        username_id = check[1]
+
+        if not username_id == user_id:
+           return -2
+        
+        sql = "UPDATE posts SET visible=:visible WHERE id=:id"
+        db.session.execute(sql, {"visible":visible,"id":post_id})
+        db.session.commit()
+
+        sql = "UPDATE posts SET general_comments_on=:general_comments_on WHERE id=:id"
+        db.session.execute(sql, {"general_comments_on":general_comments_on,"id":post_id})
+        db.session.commit()
+
+        sql = "UPDATE posts SET name=:name WHERE id=:id"
+        db.session.execute(sql, {"name":new_name,"id":post_id})
+        db.session.commit()
+
+        sql = "UPDATE posts SET misc=:misc WHERE id=:id"
+        db.session.execute(sql, {"misc":misc,"id":post_id})
+        db.session.commit()
+
+        return 0
+    except Exception as e:
+        print(e)
+        return -3
+
+def remove_post(user_id,name):
+    try:
+        sql = "SELECT id,user_id FROM posts WHERE name=:name"
+        result = db.session.execute(sql, {"name":name})
+        check = result.fetchone()
+        post_id = check[0]
+        username_id = check[1]
+
+        if check == None:
+            return -1
+        
+        if not username_id == user_id:
+            return -2
+        
+        # Tätä ennen on tuhottava postaukseen liitettyn chapterit, commentit, kyselyt ja kyselyiden vastaukset
+
+        sql = "DELETE FROM posts WHERE id=:id"
+        db.session.execute(sql, {"id":post_id})
+        db.session.commit()
+
+        return 0
+    except Exception as e:
+        print(e)
+        return -3
+
 def get_post_creator(id):
     try:
         sql = "SELECT user_id FROM posts WHERE id=:id"
@@ -89,6 +150,32 @@ def get_post_creator(id):
         username = result.fetchone()
 
         return username[0]
+    except Exception as e:
+        print(e)
+        return None
+
+def get_profile_post(user_id,name):
+    try:
+        sql = "SELECT id,user_id FROM posts WHERE name=:name"
+        result = db.session.execute(sql, {"name":name})
+        check = result.fetchone()
+        post_id = check[0]
+        username_id = check[1]
+
+        if check == None:
+            return None
+        
+        if not username_id == user_id:
+            return None
+
+        sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts WHERE id=:id"
+        result = db.session.execute(sql, {"id":post_id})
+        post = result.fetchone()
+        
+        if post == None:
+            return None
+
+        return post
     except Exception as e:
         print(e)
         return None
