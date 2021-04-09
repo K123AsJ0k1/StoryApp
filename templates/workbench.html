@@ -4,7 +4,7 @@
 
 <head>
 
-<title>Page Title</title>
+<title>StoryApp</title>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,13 +14,11 @@
   box-sizing: border-box;
 }
 
-/* Style the body */
 body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
 }
 
-/* Header/logo Title */
 .header {
   padding: 10px;
   text-align: center;
@@ -28,18 +26,15 @@ body {
   color: white;
 }
 
-/* Increase the font size of the heading */
 .header h1 {
   font-size: 40px;
 }
 
-/* Style the top navigation bar */
 .navbar {
   overflow: hidden;
   background-color: #333;
 }
 
-/* Style the navigation bar links */
 .navbar a {
   float: left;
   display: block;
@@ -49,12 +44,10 @@ body {
   text-decoration: none;
 }
 
-/* Right-aligned link */
 .navbar a.right {
   float: right;
 }
 
-/* Change color on hover */
 .navbar a:hover {
   background-color: #ddd;
   color: black;
@@ -68,21 +61,18 @@ textarea {
     background-color: #D0D0D0;
 }
 
-/* Footer */
 .footer {
   padding: 10px;
   text-align: center;
   background: #ddd;
 }
 
-/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 700px) {
   .row {   
     flex-direction: column;
   }
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 400px) {
   .navbar a {
     float: none;
@@ -95,23 +85,45 @@ textarea {
 
 <div class="header">
   <h1>Työpöytä</h1>
+  
   {% if session.workbencherror == "0" %}
   <p>Valitse jokin vasemmalla olevista vaihtoehdoista</p>
   {% endif %}
+  
   {% if session.workbencherror == "1" %}
-  <p>Anna tarvitut tiedot postauksen, jonka jälkeen joko tallenna tai julkaise se</p>
+  <p>Anna tarvitut tiedot postausta varten</p>
   {% endif %}
+  
   {% if session.workbencherror == "2" %}
-  <p>Anna tarvitut tiedot chapteriin, jonka jälkeen joko tallenna tai julkaise se</p>
+  <p>Anna tarvitut tiedot chapteria varten</p>
   {% endif %}
+  
   {% if session.workbencherror == "3" %}
   <p>Id haussa tapahtui virhe</p>
   {% endif %}
+  
   {% if session.workbencherror == "4" %}
   <p>Annettu nimi on jo olemassa</p>
   {% endif %}
+  
   {% if session.workbencherror == "5" %}
   <p>Postin luonnissa tapahtui virhe</p>
+  {% endif %}
+
+  {% if session.workbencherror == "6" %}
+  <p>Valitse joku postaus</p>
+  {% endif %}
+
+  {% if session.workbencherror == "7" %}
+  <p>Chapterin seuraavan luvun haku epäonnistui</p>
+  {% endif %}
+
+  {% if session.workbencherror == "8" %}
+  <p>Chapter id ei löytynyt</p>
+  {% endif %}
+
+  {% if session.workbencherror == "9" %}
+  <p>Virhe chapter tietokannassa</p>
   {% endif %}
 </div>
 
@@ -120,10 +132,12 @@ textarea {
   <a href="/post">Luo uusi postaus</a>
   <a href="/chapter">Luo uusi luku</a>
   {% endif %}
+  
   {% if session.workbench != "0" %}
   <a href="#">Tallenna</a>
   <a href="/workbench">Resetoi</a>
   {% endif %}
+  
   <a href="/logout" class="right">Kirjaudu Ulos</a>
   <a href="/profile" class="right">Profiili</a>
 </div>
@@ -146,51 +160,114 @@ textarea {
 
 <div class="footer">
   {% if session.workbench == "1" %}
-  <form action="/save" method="POST">
+  <form action="/save/post" method="POST">
     <a>Mikä nimi postauksella pitäisi olla?</a>
+    
     <br>
+    
     <input type="text" name="name"></p>
+    
     <br>
+    
     <a>Haluatko postauksen olevan julkinen?</a>
+    
     <br>
+    
     <input type="radio" id="1" name="public" value="true">
     <label for="Yes">Kyllä</label><br>
     <input type="radio" id="2" name="public" value="false" checked="checked">
     <label for="No">Ei</label>
+    
     <br>
+    
     <a>Haluatko muiden kommentoivan postausta?</a>
+    
     <br>
+    
     <input type="radio" id="1" name="general" value="true">
     <label for="Yes">Kyllä</label><br>
     <input type="radio" id="2" name="general" value="false" checked="checked">
     <label for="No">Ei</label>
+    
     <br>
+    
     <a>Minkä ikä rajan haluat</a><br>
+    
     <input type="radio" id="1" name="rating" value="K" checked="checked">
     <label for="K">K</label><br>
     <input type="radio" id="2" name="rating" value="T">
     <label for="T">T</label><br>
     <input type="radio" id="3" name="rating" value="M">
     <label for="M">M</label><br>
+    
     <a>Mikä on tarinan genre?</a><br>
+    
     <input type="text" name="genre"></p>
     <input type="submit" value="Tallenna">
   </form>
   {% endif %}
   
   {% if session.workbench == "2" %}
-  <a>(Luku luonti)</a>
-  <br>
-  <a>Haluatko muiden kommentoivat lukua?</a>
-  <br>
-  <input type="radio" id="Yes" name="Comments" value="Yes">
-  <label for="Yes">Kyllä</label><br>
-  <input type="radio" id="Yes" name="Comments" value="No">
-  <label for="No">Ei</label><br>
-  <br>
-  <textarea placeholder="Kirjoita tänne"></textarea>
-  <br>
-  <a>(Kyselyt)</a>
+  {% if size == 0 %}
+    <h2>Et omista yhtään postausta</h2>
+  {% endif %}
+  {% if size > 0 %}
+  <form action="/save/chapter" method="POST">
+    <a>Mihin postaukseen haluat lisätä tämän chapterin?</a>
+    
+    <br>
+
+    {% for post in posts %}
+    {{ post[3] }} <input type="radio" id="post_{{ post[1] }}" name="chapter_picked_post" value="{{ post[0] }}">
+    <br>
+    {% endfor %}
+    
+    <br>
+        
+    <a>Haluatko chapterin olevan julkinen?</a>
+    
+    <br>
+    
+    <input type="radio" id="1" name="chapter_public" value="true">
+    <label for="Yes">Kyllä</label><br>
+    <input type="radio" id="2" name="chapter_public" value="false" checked="checked">
+    <label for="No">Ei</label>
+    
+    <br>
+    
+    <a>Haluatko chapteriin rivi kommentit</a>
+    
+    <br>
+    
+    <input type="radio" id="1" name="chapter_row_comments_on" value="true">
+    <label for="Yes">Kyllä</label><br>
+    <input type="radio" id="2" name="chapter_row_comments_on" value="false" checked="checked">
+    <label for="No">Ei</label>
+    
+    <br>
+    
+    <a>Haluatko chapteriin kyselyt?</a>
+    
+    <br>
+    
+    <input type="radio" id="1" name="chapter_inquiry" value="true">
+    <label for="Yes">Kyllä</label><br>
+    <input type="radio" id="2" name="chapter_inquiry" value="false" checked="checked">
+    <label for="No">Ei</label>
+    
+    <br>
+    
+    <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään</a>
+
+    <br>
+    
+    <textarea name="chapter_text"></textarea>
+
+    <br>
+
+    <input type="submit" value="Tallenna">
+  </form>
+  {% endif %}
   {% endif %}
   
   {% if session.workbench == "3" %}

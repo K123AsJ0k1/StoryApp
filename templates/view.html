@@ -94,18 +94,39 @@ textarea {
 <body>
 
 <div class="header">
-  <h1>Tarina:Luku</h1>
+  <h1>{{ story }}:{{ chapter }}</h1>
+  <h1>(error)</h1>
 </div>
 
 <div class="navbar">
-  <a href="#">Pääsivulle</a>
+  {% if session.view_chapter == "0" %}
+  <a href="/view/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
+  <a href="/view/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  {% endif %}
+  {% if session.view_chapter == "1" %}
+  <a href="/view/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
+  {% endif %}
+  {% if session.view_chapter == "2" %}
+  <a href="/view/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  {% endif %}
+  <a href="#">(Luku valinta)</a>
+  <a href="/" class="right">Pääsivulle</a>
+  {% if session.username %}
+  <a href="/profile" class="right">Profiili</a>
+  <a href="/" class="right">(Kyselyn vastaukset)</a>
+  <a href="/" class="right">(Muokkaa)</a>
+  <a href="/" class="right">(Poista)</a>
+  {% endif %}
 </div>
 
 <div class="footer">
-  <p>Tekstiä+rivi kommentit</p>
-  <p>Kyselyt</p>
-  <p>Siirtymä joko takaisin tai seuraavaan lukuun</p>
-  <p>Luku valikko</p>
+  {% if session.view_mode == "0" %}
+  <h1>Tapahtui virhe</h1>
+  {% endif %}
+   
+  {% if session.view_mode == "1" %}
+  {{ text }}
+  {% endif %}
 </div>
 
 </body>

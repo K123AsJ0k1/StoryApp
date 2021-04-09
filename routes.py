@@ -25,7 +25,9 @@ def index():
         del session["given_post_rating"]  
     if 'given_post_genre' in session:
         del session["given_post_genre"] 
-    return render_template("main.html")
+    posts = get_public_posts()
+    size = len(posts)
+    return render_template("main.html", posts=posts, size=size)
 
 @app.route("/signup")
 def signup():
@@ -125,13 +127,7 @@ def post():
     session["workbencherror"] = "1"
     return render_template("workbench.html")
 
-@app.route("/chapter")
-def chapter():
-    session["workbench"] = "2"
-    session["workbencherror"] = "2"
-    return render_template("workbench.html")
-
-@app.route("/save", methods=["POST"])
+@app.route("/save/post", methods=["POST"])
 def save_post_logic():
     user_id = get_user_id(session["username"]) 
     
@@ -288,6 +284,143 @@ def remove_post_logic(name):
 
     session["profileerror"] = "3"
     return redirect("/profile")
+
+@app.route("/chapter")
+def chapter():
+    session["workbench"] = "2"
+    session["workbencherror"] = "2"
+    posts = get_profile_posts(get_user_id(session["username"]))
+    size = len(posts)
+    return render_template("workbench.html", posts=posts, size=size)
+
+@app.route("/save/chapter", methods=["POST"])
+def save_chapter():
+    post_id = request.form["chapter_picked_post"]
+    
+    if post_id == None:
+       session["workbencherror"] = "6"
+       return redirect("/chapter")
+    
+    chapter_public = request.form["chapter_public"]
+
+    public = '2'
+    
+    if chapter_public == "true":
+       public = '1'
+
+    if chapter_public == "false":
+       public = '0'
+
+    row_comments = request.form["chapter_row_comments_on"]
+    
+    row_comments_on = '2'
+    
+    if row_comments == "true":
+       row_comments_on= '1'
+
+    if row_comments == "false":
+       row_comments_on = '0'
+
+    inquiry = request.form["chapter_inquiry"]
+    
+    inquiry_on = '2'
+
+    if inquiry == "true":
+       inquiry_on = '1'
+
+    if inquiry == "false":
+       inquiry_on = '0'
+
+    chapter_number = get_the_next_chapter_number(post_id)
+
+    if chapter_number == 0:
+       session["workbencherror"] = "7"
+       return redirect("/chapter")
+
+    text_content = request.form["chapter_text"]
+    
+    text_rows = len(text_content.split("\n"))
+
+    misc = ""
+
+    check_number = save_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_content, misc)
+    
+    if check_number == -1:
+       session["workbencherror"] = "8"
+       return redirect("/chapter")
+
+    if check_number == -1:
+       session["workbencherror"] = "9"
+       return redirect("/chapter")
+
+    session["workbench"] = "0"
+    session["workbencherror"] = "0"
+    return redirect("/profile")
+
+@app.route("/view/<string:post_name>/<int:chapter_number>")
+def view(post_name, chapter_number):
+    user_id = get_user_id(session["username"])
+    
+    if user_id == 0:
+       session["view_mode"] = "0"
+       session["view_error"] = "1"
+       return render_template("view.html")
+
+    post = get_profile_post(user_id, post_name)
+
+    if post == None:
+       session["view_mode"] = "0"
+       session["view_error"] = "2"
+       return render_template("view.html")
+
+    post_id = post[0]
+
+    chapter = get_the_chapter(post_id, chapter_number)
+
+    if chapter == None:
+       session["view_mode"] = "0"
+       session["view_error"] = "3"
+       return render_template("view.html")
+
+    chapter_content = chapter[7]
+
+    # Edellinen luku, seuraava luku ja valittavat luku asiat
+    
+    # Row comment asiat
+    
+    # chapter_rows = chapter[6]
+
+    # row_comments_on = chapter[3]
+
+    # Kyselyt asiat
+
+    # inquiry_on = chapter[4]
+
+    session["view_chapter"] = "0"
+
+    if chapter_number == 1:
+       session["view_chapter"] = "1"
+
+    if chapter_number == get_the_next_chapter_number(post_id)-1:
+       session["view_chapter"] = "2"
+    
+    session["view_mode"] = "1"
+    session["view_error"] = "0"
+    return render_template("view.html", story=post_name, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
+    
+        
+
+
+
+
+
+
+
+
+
+    
+
+
 
     
 
