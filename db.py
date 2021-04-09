@@ -192,6 +192,7 @@ def get_profile_posts(user_id):
 
 def get_public_posts():
     try:
+        # Hae ne postaukset, joihin on liitetty chaptereita
         sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts WHERE visible=true"
         result = db.session.execute(sql)
         posts = result.fetchall()
@@ -256,13 +257,51 @@ def update_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_num
         print(e)
         return -2
 
-# Luo update_the_chapter_numbers, jossa jokainen postauksen chapter_numberit paikataa siten
+def update_the_chapter_numbers(post_id):
+    try:
+        sql = "SELECT id,chapter_number FROM chapters WHERE post_id=:post_id"
+        result = db.session.execute(sql, {"post_id":post_id})
+        chapter_info = result.fetchall()
+
+        if chapter_info == None:
+            return -1
+        
+        index = 1
+        correct_number = 0
+        
+        for info in chapter_info:
+            if not info[1] == index:
+               correct_number = index 
+               break
+            index = index + 1
+
+        if correct_number == 0:
+            return 0
+
+        sql = "UPDATE chapters SET chapter_number=:correct_number WHERE id=:id"
+         
+        index = 1
+        fixed_number = correct_number
+
+        for info in chapter_info:
+            if index >= correct_number:
+                db.session.execute(sql, {"correct_number":fixed_number, "id":info[0]})
+                db.session.commit()
+                fixed_number = fixed_number + 1
+
+            index = index + 1
+
+        return 0
+    except Exception as e:
+        print(e)
+        return -2    
+
 
 def remove_the_chapter(post_id,chapter_number):
     try:
         sql = "SELECT id FROM chapters WHERE post_id=:post_id AND chapter_number=:chapter_number"
         result = db.session.execute(sql, {"post_id":post_id, "chapter_number":chapter_number})
-        chapter_id = result_fetchone()
+        chapter_id = result.fetchone()
 
         if chapter_id == None:
             return -1
@@ -270,7 +309,7 @@ def remove_the_chapter(post_id,chapter_number):
         # tätä ennen on tuhottava chapteriin liitetyn kyselyt ja kommentit
 
         sql = "DELETE FROM chapters WHERE id=:id"
-        db.session.execute(sql, {"id":chapter_id})
+        db.session.execute(sql, {"id":chapter_id[0]})
         db.session.commit()
 
         return 0

@@ -102,6 +102,9 @@ body {
   {% if session.profileerror == "2" %}
   <h1>Postausta ei löydy tietokannasta</h1>
   {% endif %}
+  {% if session.profileerror == "4" %}
+  <h1>Chapteria ei löydy tietokannasta</h1>
+  {% endif %}
   {% if session.profileerror == "3" %}
   <h1>Poisto onnistui</h1>
   {% endif %}

@@ -359,6 +359,32 @@ def save_chapter():
     session["workbencherror"] = "0"
     return redirect("/profile")
 
+@app.route("/remove/chapter/<int:post_id>/<int:chapter_number>")
+def remove_chapter_logic(post_id,chapter_number):
+    check_number = remove_the_chapter(post_id,chapter_number)
+    
+    if check_number == -1:
+       session["profileerror"] = "4"
+       return redirect("/profile")
+    
+    if check_number == -2:
+       session["profileerror"] = "1"
+       return redirect("/profile")
+
+    check_number = update_the_chapter_numbers(post_id)
+
+    if check_number == -1:
+       session["profileerror"] = "4"
+       return redirect("/profile")
+
+    if check_number == -2:
+       session["profileerror"] = "1"
+       return redirect("/profile")
+    
+    session["profileerror"] = "3"
+    return redirect("/profile")
+    
+
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:chapter_number>")
 def chapter_view(creator_name, post_name, chapter_number):
     user_id = get_user_id(creator_name)
@@ -408,7 +434,7 @@ def chapter_view(creator_name, post_name, chapter_number):
     
     session["view_mode"] = "1"
     session["view_error"] = "0"
-    return render_template("view.html", creator=creator_name, story=post_name, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
+    return render_template("view.html", creator=creator_name, story=post_name, post=post_id, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
     
 @app.route("/view/<int:post_id>/<string:post_name>")
 def redirect_into_chapter_view(post_id,post_name):

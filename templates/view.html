@@ -109,13 +109,12 @@ textarea {
   {% if session.view_chapter == "2" %}
   <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
-  <a href="#">(Luku valinta)</a>
   <a href="/" class="right">Pääsivulle</a>
   {% if session.username %}
   <a href="/profile" class="right">Profiili</a>
   <a href="/" class="right">(Kyselyn vastaukset)</a>
-  <a href="/" class="right">(Muokkaa)</a>
-  <a href="/" class="right">(Poista)</a>
+  <a href="/update/chapter/{{ post }}/{{ chapter }}" class="right">Muokkaa</a>
+  <a href="/remove/chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
   {% endif %}
 </div>
 
