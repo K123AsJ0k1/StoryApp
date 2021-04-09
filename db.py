@@ -144,9 +144,9 @@ def get_post_creator(id):
 
         if user_id == None:
             return None
-
+        
         sql = "SELECT username FROM users WHERE id=:user_id"
-        result = db.session.execute(sql, {"user_id":user_id})
+        result = db.session.execute(sql, {"user_id":user_id[0]})
         username = result.fetchone()
 
         return username[0]
@@ -192,7 +192,7 @@ def get_profile_posts(user_id):
 
 def get_public_posts():
     try:
-        sql = "SELECT id,visible,general_comments_on,name,misc FROM posts WHERE visible=true"
+        sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts WHERE visible=true"
         result = db.session.execute(sql)
         posts = result.fetchall()
         return posts

@@ -100,14 +100,14 @@ textarea {
 
 <div class="navbar">
   {% if session.view_chapter == "0" %}
-  <a href="/view/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
-  <a href="/view/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
+  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
   {% if session.view_chapter == "1" %}
-  <a href="/view/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
+  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
   {% endif %}
   {% if session.view_chapter == "2" %}
-  <a href="/view/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
   <a href="#">(Luku valinta)</a>
   <a href="/" class="right">Pääsivulle</a>

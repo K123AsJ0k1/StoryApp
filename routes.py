@@ -15,6 +15,7 @@ def index():
         del session["signup"]
     if 'workbench' in session:
         del session["workbench"] 
+    
     if 'given_post_name' in session:
         del session["given_post_name"]
     if 'given_post_public' in session:
@@ -25,6 +26,7 @@ def index():
         del session["given_post_rating"]  
     if 'given_post_genre' in session:
         del session["given_post_genre"] 
+    
     posts = get_public_posts()
     size = len(posts)
     return render_template("main.html", posts=posts, size=size)
@@ -357,9 +359,9 @@ def save_chapter():
     session["workbencherror"] = "0"
     return redirect("/profile")
 
-@app.route("/view/<string:post_name>/<int:chapter_number>")
-def view(post_name, chapter_number):
-    user_id = get_user_id(session["username"])
+@app.route("/view/<string:creator_name>/<string:post_name>/<int:chapter_number>")
+def chapter_view(creator_name, post_name, chapter_number):
+    user_id = get_user_id(creator_name)
     
     if user_id == 0:
        session["view_mode"] = "0"
@@ -406,9 +408,15 @@ def view(post_name, chapter_number):
     
     session["view_mode"] = "1"
     session["view_error"] = "0"
-    return render_template("view.html", story=post_name, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
+    return render_template("view.html", creator=creator_name, story=post_name, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
     
-        
+@app.route("/view/<int:post_id>/<string:post_name>")
+def redirect_into_chapter_view(post_id,post_name):
+    creator_name = get_post_creator(post_id)
+    address = "/view/"+creator_name+"/"+ post_name +"/1"
+    return redirect(address)
+
+
 
 
 

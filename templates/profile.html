@@ -121,7 +121,7 @@ body {
     Tarina: {{ post[3] }} <br>
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
-    <a href="/view/{{ post[3] }}/1">Lue</a>
+    <a href="/view/{{ session.username }}/{{ post[3] }}/1">Lue</a>
     <a href="/update/{{ post[3] }}">Muokkaa</a>
     <a href="/remove/{{ post[3] }}">Poista</a>
     <hr>
