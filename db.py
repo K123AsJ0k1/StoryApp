@@ -192,11 +192,34 @@ def get_profile_posts(user_id):
 
 def get_public_posts():
     try:
-        # Hae ne postaukset, joihin on liitetty chaptereita
         sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts WHERE visible=true"
         result = db.session.execute(sql)
         posts = result.fetchall()
-        return posts
+        
+        if posts == None:
+            return None
+        
+        posts_with_chapters = []
+
+        for post in posts:
+            if check_post_chapters(post[0]):
+               posts_with_chapters.append(post)
+        
+        return posts_with_chapters
+    except Exception as e:
+        print(e)
+        return None
+
+def check_post_chapters(post_id):
+    try:
+        sql = "SELECT id FROM chapters WHERE post_id=:post_id"
+        result = db.session.execute(sql, {"post_id":post_id})
+        chapter_id = result.fetchall()
+        
+        if len(chapter_id) == 0:
+            return False
+        
+        return True
     except Exception as e:
         print(e)
         return None

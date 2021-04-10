@@ -95,7 +95,6 @@ textarea {
 
 <div class="header">
   <h1>{{ story }}:{{ chapter }}</h1>
-  <h1>(error)</h1>
 </div>
 
 <div class="navbar">
@@ -110,7 +109,7 @@ textarea {
   <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
-  {% if session.username %}
+  {% if session.username == creator %}
   <a href="/profile" class="right">Profiili</a>
   <a href="/" class="right">(Kyselyn vastaukset)</a>
   <a href="/update/chapter/{{ post }}/{{ chapter }}" class="right">Muokkaa</a>
