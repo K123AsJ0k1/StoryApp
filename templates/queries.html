@@ -84,39 +84,20 @@ textarea {
 <body>
 
 <div class="header">
-  {% if text %}
-  <h1>{{ story }}:{{ chapter }}</h1>
-  {% endif %}
-  {% if not text %}
-  <h1>Postauksella ei ole yhtään lukua</h1>
-  {% endif %}
+  <h1>(tarina)/(luku)/Kyselyt</h1>
 </div>
 
 <div class="navbar">
-  {% if session.view_chapter == "0" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
-  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
-  {% endif %}
-  {% if session.view_chapter == "1" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
-  {% endif %}
-  {% if session.view_chapter == "2" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
-  {% endif %}
-  <a href="/" class="right">Pääsivulle</a>
-  {% if session.username %}
-  <a href="/profile" class="right">Profiili</a>
-  {% endif %}
-  {% if session.username == creator %}
-  <a href="/" class="right">(Kyselyn vastaukset)</a>
-  <a href="/remove/chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
-  {% endif %}
+  <a href="#">Takaisin</a>
+  <a href="#">Luo kysymyksia</a>
+  <a href="#">Lataa kyselystä tiedosto</a>
+  <a href="#" class="right">Pääsivulle</a>
+  <a href="#" class="right">Profiili</a>
+  <a href="#" class="right">Poista kysymykset</a>
 </div>
 
-<div class="footer"> 
-  {% if session.view_mode == "1" %}
-  {{ text }}
-  {% endif %}
+<div class="footer">
+  <p>Kysymykset+linkki vastausten tarkasteluun+tilastotietoja+kyky poistaa kysely</p>
 </div>
 
 </body>
