@@ -94,7 +94,12 @@ textarea {
 <body>
 
 <div class="header">
+  {% if text %}
   <h1>{{ story }}:{{ chapter }}</h1>
+  {% endif %}
+  {% if not text %}
+  <h1>Postauksella ei ole yhtään lukua</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
@@ -109,19 +114,17 @@ textarea {
   <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
-  {% if session.username == creator %}
+  {% if session.username %}
   <a href="/profile" class="right">Profiili</a>
+  {% endif %}
+  {% if session.username == creator %}
   <a href="/" class="right">(Kyselyn vastaukset)</a>
   <a href="/update/chapter/{{ post }}/{{ chapter }}" class="right">Muokkaa</a>
   <a href="/remove/chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
   {% endif %}
 </div>
 
-<div class="footer">
-  {% if session.view_mode == "0" %}
-  <h1>Tapahtui virhe</h1>
-  {% endif %}
-   
+<div class="footer"> 
   {% if session.view_mode == "1" %}
   {{ text }}
   {% endif %}
