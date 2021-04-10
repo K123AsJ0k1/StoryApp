@@ -1,4 +1,5 @@
 from app import app
+import re
 from db import *
 from misc import *
 from flask import redirect, render_template, request, session
@@ -491,9 +492,103 @@ def chapter_view(creator_name, post_name, chapter_number):
 @app.route("/view/<int:post_id>/<string:post_name>")
 def redirect_into_chapter_view(post_id,post_name):
    creator_name = get_post_creator(post_id)
-   address = "/view/"+creator_name+"/"+ post_name +"/1"
+   address = "/view/" + creator_name + "/"+ post_name +"/1"
    return redirect(address)
 
+@app.route("/comments/general/<int:post_id>/<string:post_name>")
+def view_general_comments(post_id,post_name):
+   post_creator = get_post_creator(post_id)
+   comments = get_post_general_comments(post_id)
+   
+   if len(comments) == 0:
+      session["comment_mode"] = "1"
+      session["comment_error"] = "0"
+      return render_template("comments.html", post_id=post_id, story=post_name)
+   
+   creators = {}
+
+   for comment in comments:
+       creator = get_comment_creator(comment[1])
+       creators[comment[0]] = creator
+   
+   if len(creators) == 0:
+      session["comment_mode"] = "1"
+      session["comment_error"] = "1"
+      return render_template("comments.html", post_id=post_id,  story=post_name)
+   
+   # luo parempi lista, jossa on ainoastaan kommentin luoja, kommentti, luku ja luku booleani
+   session["comment_mode"] = "1"
+   session["comment_error"] = "2"
+   return render_template("comments.html", creator=post_creator, post_id=post_id, story=post_name, comments=comments, creators=creators)
+
+@app.route("/create/comment/general/<int:post_id>/<string:post_name>")
+def create_general_comment(post_id,post_name):
+   session["comment_mode"] = "2"
+   session["comment_error"] = "3"
+   last_chapter = get_the_next_chapter_number(post_id)-1
+   return render_template("comments.html", last_chapter=last_chapter,  post_id=post_id, story=post_name)
+
+@app.route("/save/comment/general/<int:post_id>/<string:post_name>", methods=["POST"])
+def save_general_comment(post_id,post_name):
+   user_id = get_user_id(session["username"])
+   
+   referenced_chapter = request.form["referenced_chapter_number"]
+   
+   chapter_list = get_the_chapter_numbers(post_id)
+  
+   chapter_number_on = '0'
+   chapter_number = 0
+   
+   if referenced_chapter.isdigit(): 
+      for chapter in chapter_list:
+         if chapter[0] == int(referenced_chapter):
+          chapter_number_on = '1'
+          chapter_number = chapter[0]
+   
+   comment = request.form["comment_text"]
+
+   if comment == "":
+      address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
+      return redirect(address)
+
+   check_number = save_the_comment(user_id, post_id, 0, '1', '0', chapter_number_on, chapter_number, comment)
+   
+   if check_number == -1:
+      address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
+      return redirect("/create/comment/"+post_id+"/"+post_name)
+   
+   address = "/comments/general/"+ str(post_id) + "/"+ post_name
+   return redirect(address)
+
+@app.route("/remove/comment/general/<int:post_id>/<string:post_name>/<int:comment_id>")
+def remove_general_comment(post_id, post_name, comment_id):
+   check_number = remove_the_comment(comment_id)
+
+   if check_number == -1:
+       address = "/comments/general/"+ str(post_id) + "/"+ post_name
+       return redirect(address)
+
+   address = "/comments/general/"+ str(post_id) + "/"+ post_name
+   return redirect(address)
+
+   
+
+   
+
+
+
+
+   
+
+
+   
+    
+
+   
+
+   
+
+   
 
 
 

@@ -125,6 +125,9 @@ body {
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
     <a href="/view/{{ session.username }}/{{ post[3] }}/1">Lue</a>
+    {% if post[2] %}
+    <a href="/comments/general/{{ post[0] }}/{{ post[3] }}">Kommentit</a>
+    {% endif %}
     <a href="/update/{{ post[3] }}">Muokkaa</a>
     <a href="/remove/{{ post[3] }}">Poista</a>
     <hr>

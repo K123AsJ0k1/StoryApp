@@ -4,7 +4,7 @@
 
 <head>
 
-<title>Page Title</title>
+<title>StoryApp</title>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,13 +14,11 @@
   box-sizing: border-box;
 }
 
-/* Style the body */
 body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
 }
 
-/* Header/logo Title */
 .header {
   padding: 10px;
   text-align: center;
@@ -28,18 +26,15 @@ body {
   color: white;
 }
 
-/* Increase the font size of the heading */
 .header h1 {
   font-size: 40px;
 }
 
-/* Style the top navigation bar */
 .navbar {
   overflow: hidden;
   background-color: #333;
 }
 
-/* Style the navigation bar links */
 .navbar a {
   float: left;
   display: block;
@@ -49,12 +44,10 @@ body {
   text-decoration: none;
 }
 
-/* Right-aligned link */
 .navbar a.right {
   float: right;
 }
 
-/* Change color on hover */
 .navbar a:hover {
   background-color: #ddd;
   color: black;
@@ -68,21 +61,18 @@ textarea {
     background-color: #D0D0D0;
 }
 
-/* Footer */
 .footer {
   padding: 10px;
   text-align: center;
   background: #ddd;
 }
 
-/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 700px) {
   .row {   
     flex-direction: column;
   }
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 400px) {
   .navbar a {
     float: none;
@@ -94,16 +84,98 @@ textarea {
 <body>
 
 <div class="header">
-  <h1>Postin yleiset kommentit</h1>
+  {% if session.comment_mode == "1" %}
+  <h1>{{ story }}:Yleiset kommentit</h1>
+  {% endif %}
+  {% if session.comment_mode == "2" %}
+  <h1>{{ story }}:Kommentin luonti</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
-  <a href="#">Pääsivulle</a>
+  {% if session.comment_mode == "1" and session.username %}
+  <a href="/create/comment/general/{{ post_id }}/{{ story }}">Luo kommentti</a>
+  {% endif %}
+  {% if session.comment_mode == "2" %}
+  <a href="/comments/general/{{ post_id }}/{{ story }}">Takaisin</a>
+  {% endif %}
+  <a href="/" class="right">Pääsivulle</a>
+  {% if session.username %}
+  <a href="/profile" class="right">Profiili</a>
+  {% endif %}
 </div>
 
 <div class="footer">
-  <p>Mahdollisuus julkaista kommentti</p>
-  <p>(Kommentit)</p>
+  
+  {% if session.comment_error == "0" %}
+  <h1>Kukaan ei ole vielä kommentoinut tätä postausta</h1>
+  {% endif %}
+  
+  {% if session.comment_error == "1" %}
+  <h1>Tietokanta ongelmia</h1>
+  {% endif %}
+
+  {% if session.comment_error == "2" %}
+  
+  <hr>
+  
+  {% for comment in comments %}
+
+  {% if session.username == creator %}
+  <a href="/remove/comment/general/{{ post_id }}/{{ story }}/{{ comment[0] }}">Poista</a>
+  {% endif %}
+
+  <br>
+  
+  {{ creators[comment[0]] }}
+  
+  {% if comment[5] %}
+  / Luku:  {{ comment[6] }}
+  {% endif %}
+  
+  <br>
+
+  <br>
+
+  {{ comment[7] }}
+  
+  <hr>
+  
+  {% endfor %}
+  
+  {% endif %}
+  
+  {% if session.comment_error == "3" %}
+  <form action="/save/comment/general/{{ post_id }}/{{ story }}" method="POST">
+    {% if last_chapter > 0 %}
+    
+    {% if last_chapter == 1 %}
+    <a>Mihin lukuun viittaat kommentillasi (ainoa luku on 1)</a>
+
+    <br>
+    
+    <input type="text" name="referenced_chapter_number"></p>
+    {% endif %}
+    
+    {% if last_chapter > 1 %}
+    <a>Mihin lukuun viittaat kommentillasi (voit valita luvuista 1-{{ last_chapter }}) (vaihtoehtoinen)</a>
+
+    <br>
+    
+    <input type="text" name="referenced_chapter_number"></p>
+    {% endif %}
+    {% endif %}
+    <a>Kirjoita kommenttisi alla olevaan teksti kenttään</a>
+
+    <br>
+  
+    <textarea name="comment_text"></textarea>
+
+    <br>
+
+    <input type="submit" value="Tallenna">
+  </form>
+  {% endif %}
 </div>
 
 </body>
