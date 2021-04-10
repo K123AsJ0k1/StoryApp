@@ -136,10 +136,10 @@ def remove_post(user_id,name):
         print(e)
         return -3
 
-def get_post_creator(id):
+def get_post_creator(post_id):
     try:
         sql = "SELECT user_id FROM posts WHERE id=:id"
-        result = db.session.execute(sql, {"id":id})
+        result = db.session.execute(sql, {"id":post_id})
         user_id = result.fetchone()
 
         if user_id == None:

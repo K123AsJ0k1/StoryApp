@@ -43,7 +43,14 @@ def index():
     
    posts = get_public_posts()
    size = len(posts)
-   return render_template("main.html", posts=posts, size=size)
+
+   post_creators = {}
+
+   for post in posts:
+      post_creator = get_post_creator(post[0])
+      post_creators[post[0]] = post_creator
+
+   return render_template("main.html", posts=posts, size=size, post_creators=post_creators)
 
 @app.route("/signup")
 def signup():

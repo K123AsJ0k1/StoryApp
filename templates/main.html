@@ -158,6 +158,10 @@ body {
     <hr>
     {% for post in posts %}
     <a href="/view/{{ post[0] }}/{{ post[4] }}">{{ post[4] }}</a>
+    kirjoittajalta {{ post_creators[post[0]] }}
+    {% if post[3] %}
+    <a href="/comments/general/{{ post[0] }}/{{ post[4] }}" class="right">Kommentit</a>
+    {% endif %}
     <hr>
     {% endfor %}
     {% endif %}
