@@ -53,8 +53,8 @@ Sovelluksen ominaisuudet ovat:
 
 Perusidea:
 
-- Sovelluksen toimivuuden varmistaminen perustuu suurilta osin sen sisältämien eri sivujen toiminnallisuuden varmistamiseen,joka voidaan tehdä klikkamalla nähtyjä linkkejä
-- Suosittelen käyttämään alla olevia ehtoja testaukseen
+- Sovelluksen toimivuuden varmistaminen perustuu suurilta osin sen sisältämien eri sivujen toiminnallisuuden varmistamiseen,joka voidaan tehdä klikkamalla nähtyjä linkkejä, asetuksia ja antmaalla eri tekstejä
+- Suosittelen käyttämään alla olevia ehtoja apuna testauksessa
 
 Käyttäjän luonti:
 
@@ -75,12 +75,14 @@ Ulos kirjautuminen
 
 Profiili:
 
-- Näyttää kaikki postaukset, niiden asetuksiin,  antaa linkin työpöytään, pääsivulle ja ulos kirjautumisen
+- Tapauskessa, jossa käyttällä ei ole postauksia, sivu pitäisi näyttää ei postauksia
+- Tapauksessa, jossa käyttäjä on luonut postauksia, niin se pitäisi näyttää kaikki postaukset, niiden asetuksiin, antaa linkin työpöytään, pääsivulle ja ulos kirjautumisen
 
 Työpöytä
 
 - Antaa kaksi neljä vaihtoehtoa, jotka ovat uuden postauksen luonti, uuden chapterin luonti, linkin pääsivulle ja ulos kirjautumisen
 - Kyseiset linkit pitäisi tehdä nimiensä mukaisia asioita
+- Tapauksessa, jossa postauksia ei ole, chapter luonti pitäisi näyttää, ettei postauksia ole
 
 Reset
 
