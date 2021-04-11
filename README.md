@@ -2,9 +2,9 @@
 
 Pääset sovelluksen heroku versioon tästä linkistä https://st0ryapp.herokuapp.com/
 
-Sovelluksen avulla voi tarkastella, jakaa ja kommentoida tarinoita.Sovelluksessa on olemassa kolme käyttäjää, jotka ovat anonyymit, kirjoittajat ja adminit.
-
 # Sovellusmäärittelly:
+
+Sovelluksen avulla voi tarkastella, jakaa ja kommentoida tarinoita.Sovelluksessa on olemassa kolme käyttäjää, jotka ovat anonyymit, kirjoittajat ja adminit.
 
 Sovelluksen ominaisuudet ovat:
 
