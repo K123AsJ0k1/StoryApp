@@ -84,20 +84,121 @@ textarea {
 <body>
 
 <div class="header">
-  <h1>(tarina)/(luku)/Kyselyt</h1>
+  {% if session.query_mode == "1" %}
+  <h1>{{ story }}/{{ chapter }}/Kyselyt</h1>
+  {% endif %}
+  
+  {% if session.query_mode == "2" %}
+  <h1>{{ story }}/{{ chapter }}/Kysymyksen luonti</h1>
+  {% endif %}
+  
+  {% if session.query_mode == "3" %}
+  <h1>Kysymykseen vastaus</h1>
+  {% endif %}
+  
+  {% if session.query_error == "1" %}
+  <h1>Käyttäjää ei löytynyt tietokannasta</h1>
+  {% endif %}
+  
+  {% if session.query_error == "2" %}
+  <h1>Ongelmia post tietokannassa</h1>
+  {% endif %}
+  
+  {% if session.query_error == "3" %}
+  <h1>Ongelmia chapter tietokannassa</h1>
+  {% endif %}
+  
+  {% if session.query_error == "4" %}
+  <h1>chapteria ei löytynyt</h1>
+  {% endif %}
+  
+  {% if session.query_error == "5" %}
+  <h1>Ongelmia query tietokannassa</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
-  <a href="#">Takaisin</a>
-  <a href="#">Luo kysymyksia</a>
-  <a href="#">Lataa kyselystä tiedosto</a>
-  <a href="#" class="right">Pääsivulle</a>
-  <a href="#" class="right">Profiili</a>
-  <a href="#" class="right">Poista kysymykset</a>
+  {% if session.query_mode == "1" %}
+  <a href="/view/{{ creator }}/{{ story }}/{{ chapter }}">Takaisin</a>
+    {% if session.username == creator %}
+    <a href="/create/question/{{ post }}/{{ chapter }}">Luo kysymys</a>
+    {% endif %}
+  {% endif %}
+  
+  {% if session.query_mode == "2" %}
+  <a href="/query/chapter/{{ post }}/{{ chapter }}">Takaisin</a>
+  {% endif %}
+  
+  <a href="/" class="right">Pääsivulle</a>
+  
+  {% if session.username %}
+  <a href="/profile" class="right">Profiili</a>
+  {% endif %}
 </div>
 
+<script> 
+  const tx = document.getElementsByTagName("textarea");
+  
+  for (let i = 0; i < tx.length; i++) {
+   tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+   tx[i].addEventListener("input", OnInput, false);
+  }
+
+  function OnInput() {
+  this.style.height = "auto";
+  this.style.height = (this.scrollHeight) + "px";
+  
+  }
+  
+</script>
+
 <div class="footer">
-  <p>Kysymykset+linkki vastausten tarkasteluun+tilastotietoja+kyky poistaa kysely</p>
+  {% if session.query_mode == "1" %}
+   <hr>
+   
+   {% if size == 0 %}
+   <a>Kirjoittaja ei luonut yhtään kyselyä</a>
+   {% endif %}
+   
+   {% if size > 0 %}
+   
+   {% for query in queries %}
+      {{ query[3] }} 
+
+      <br>
+      
+      {% if session.username == creator %}
+      <a href="">(Tilastotietoja)</a>
+      {% endif %}
+      
+      <br>
+ 
+      <a href="">Vastaa</a>
+      {% if session.username == creator %}
+      <a href="">Tarkastele vastauksia</a>
+      <a href="">Poista</a>
+      {% endif %}
+   <hr>
+   {% endfor %}
+   
+   {% endif %}
+
+
+  {% endif %}
+
+  {% if session.query_mode == "2" %}
+  <form action="/save/question/{{ post }}/{{ chapter }}" method="POST">
+    <a>Kirjoita kysymykseksi alla olevaan teksti kenttään</a>
+
+    <br>
+    
+    <textarea name="question"></textarea>
+
+    <br>
+
+    <input type="submit" value="Tallenna">
+  </form>
+  {% endif %}
 </div>
 
 </body>

@@ -578,6 +578,96 @@ def remove_general_comment(post_id, post_name, comment_id):
    address = "/comments/general/"+ str(post_id) + "/"+ post_name
    return redirect(address)
 
+@app.route("/query/chapter/<int:post_id>/<int:chapter_number>")
+def view_query(post_id,chapter_number):
+   username = get_post_creator(post_id)
+   
+   if username == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "1"
+      return render_template("queries.html")
+
+   post = get_the_post(post_id)
+
+   if post == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "2"
+      return render_template("queries.html")
+
+   chapter = get_the_chapter(post_id,chapter_number)
+
+   if chapter == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "3"
+      return render_template("queries.html")
+   
+   queries = get_the_chapter_queries(chapter[0])
+   size = len(queries)
+
+   if queries == -1:
+      session["query_mode"] = "0"
+      session["query_error"] = "4"
+      return render_template("queries.html")
+
+   if queries == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "5"
+      return render_template("queries.html")
+
+   session["query_mode"] = "1"
+   session["query_error"] = "0"
+   return render_template("queries.html", creator=username, story=post[4], post=post[0], chapter=chapter_number, queries=queries, size=size)
+
+@app.route("/create/question/<int:post_id>/<int:chapter_number>")
+def create_question(post_id,chapter_number):
+   post = get_the_post(post_id)
+
+   if post == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "2"
+      return render_template("queries.html")
+
+   session["query_mode"] = "2"
+   session["query_error"] = "0"
+   return render_template("queries.html", post=post[0], story=[4], chapter=chapter_number)
+
+@app.route("/save/question/<int:post_id>/<int:chapter_number>", methods=["POST"])
+def save_question(post_id,chapter_number):
+   post = get_the_post(post_id)
+
+   if post == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "2"
+      return render_template("queries.html")
+   
+   user_id = post[1]
+   
+   chapter = get_the_chapter(post_id,chapter_number)
+
+   if chapter == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "3"
+      return render_template("queries.html")
+
+   chapter_id = chapter[0]
+
+   question = request.form["question"]
+
+   misc = ""
+
+   check_number = save_the_query(user_id,chapter_id,question,misc)
+
+   if check_number == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "5"
+      return render_template("queries.html")
+   
+   address = "/query/chapter/" + str(post_id) + "/" + str(chapter_number)
+   return redirect(address)
+
+
+   
+
    
 
    

@@ -106,9 +106,9 @@ textarea {
   <a href="/" class="right">Pääsivulle</a>
   {% if session.username %}
   <a href="/profile" class="right">Profiili</a>
+  <a href="/query/chapter/{{ post }}/{{ chapter }}" class="right">Kysely</a>
   {% endif %}
   {% if session.username == creator %}
-  <a href="/" class="right">(Kyselyn vastaukset)</a>
   <a href="/remove/chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
   {% endif %}
 </div>

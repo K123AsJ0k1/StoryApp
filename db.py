@@ -125,7 +125,13 @@ def remove_post(user_id,name):
         if not username_id == user_id:
             return -2
         
-        # Tätä ennen on tuhottava postaukseen liitettyn chapterit, commentit, kyselyt ja kyselyiden vastaukset
+        check_number = remove_the_chapters(post_id)
+
+        if check_number == -1:
+            return -1
+
+        if check_number == -2:
+            return -3
 
         sql = "DELETE FROM posts WHERE id=:id"
         db.session.execute(sql, {"id":post_id})
@@ -153,6 +159,16 @@ def get_post_creator(post_id):
     except Exception as e:
         print(e)
         return None
+
+def get_the_post(post_id):
+    try:
+        sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts WHERE id=:post_id"
+        result = db.session.execute(sql, {"post_id":post_id})
+        post = result.fetchone()
+        return post
+    except Exception as e:
+        print(e)
+        return None   
 
 def get_profile_post(user_id,name):
     try:
@@ -319,7 +335,6 @@ def update_the_chapter_numbers(post_id):
         print(e)
         return -2    
 
-
 def remove_the_chapter(post_id,chapter_number):
     try:
         sql = "SELECT id FROM chapters WHERE post_id=:post_id AND chapter_number=:chapter_number"
@@ -453,6 +468,42 @@ def get_post_general_comments(post_id):
     except Exception as e:
         print(e)    
         return None
+
+def save_the_query(user_id,chapter_id,question,misc):
+    try:
+        sql = "INSERT INTO queries (user_id,chapter_id,question,misc) VALUES (:user_id,:chapter_id,:question,:misc)"
+        db.session.execute(sql, {"user_id":user_id, "chapter_id":chapter_id, "question":question, "misc":misc})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+def remove_the_query(query_id):
+    try:
+        sql = "DELETE FROM queries WHERE id=:query_id"
+        db.session.execute(sql, {"query_id":query_id})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+def get_the_chapter_queries(chapter_id):
+    try:
+        sql = "SELECT id,user_id,chapter_id,question,misc FROM queries WHERE chapter_id=:chapter_id"
+        result = db.session.execute(sql, {"chapter_id":chapter_id})
+        queries = result.fetchall()
+
+        if queries == None:
+           return -1
+
+        return queries
+    except Exception as e:
+        print(e)    
+        return -2
+    
+
     
 
 
