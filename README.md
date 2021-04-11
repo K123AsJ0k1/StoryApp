@@ -22,6 +22,12 @@ Sovelluksen ominaisuudet ovat:
 - Admin käyttäjä pystyy tarkastelemaan olemassa olevia käyttäjiä, kommenteja ja kyselyitä
 - Admin käyttäjä pystyy poistamaan käyttäjiä, postauksia, kommenteja ja kyselyitä
 
+# HUOMIOTA (11.4.2021):
+
+- Sovelluksessa on olemassa jo kaksi valmista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
+- Chapterin luonnissa en suosittele olemaan painamatta tallenna, kun et ole valinnut yhtään postausta, sillä se saattaa aiheuttaa errorin
+- En suosittele käyttämään pääsivulla näkyvää haku selainta, sillä se saattaa aiheuttaa errorin
+
 # Toteutetut ominaisuudet välipalautus 2 (11.4.2021):
 
 - Anonyymit ja kirjoittajat näkevät postauksia pääsivulla
@@ -39,12 +45,6 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittaja pystyy valitsemaan, onko chapterilla kysely vai ei
 - Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
 - Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
-
-# HUOMIOTA (11.4.2021):
-
-- Sovelluksessa on olemassa jo kaksi valmista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
-- Chapterin luonnissa en suosittele olemaan painamatta tallenna, kun et ole valinnut yhtään postausta, sillä se saattaa aiheuttaa errorin
-- En suosittele käyttämään pääsivulla näkyvää haku selainta, sillä se saattaa aiheuttaa errorin
 
 # Testauksesta herokussa (11.4.2021):
 
