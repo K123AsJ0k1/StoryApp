@@ -29,6 +29,7 @@ Sovelluksen ominaisuudet ovat:
 - Sovelluksessa on olemassa jo kaksi valmista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
 - Chapterin luonnissa en suosittele olemaan painamatta tallenna, kun et ole valinnut yhtään postausta, sillä se saattaa aiheuttaa errorin
 - En suosittele käyttämään pääsivulla näkyvää haku selainta, sillä se saattaa aiheuttaa errorin
+- Sovellus ei osaa vielä rivittää tekstiä oikealla lailla, joten en suosittele pitkien tekstien antamista
 
 # Toteutetut ominaisuudet välipalautus 2 (11.4.2021):
 
