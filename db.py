@@ -116,6 +116,7 @@ def remove_post(user_id,name):
         sql = "SELECT id,user_id FROM posts WHERE name=:name"
         result = db.session.execute(sql, {"name":name})
         check = result.fetchone()
+        
         post_id = check[0]
         username_id = check[1]
 
@@ -130,6 +131,11 @@ def remove_post(user_id,name):
         if check_number == -1:
             return -1
 
+        if check_number == -2:
+            return -3
+
+        check_number = remove_the_general_comments(post_id)
+        
         if check_number == -2:
             return -3
 
@@ -344,7 +350,7 @@ def remove_the_chapter(post_id,chapter_number):
         if chapter_id == None:
             return -1
 
-        # tätä ennen on tuhottava chapteriin liitetyn kyselyt ja kommentit
+        remove_the_queries(chapter_id[0])
 
         sql = "DELETE FROM chapters WHERE id=:id"
         db.session.execute(sql, {"id":chapter_id[0]})
@@ -359,14 +365,17 @@ def remove_the_chapters(post_id):
     try:
         sql = "SELECT id FROM chapters WHERE post_id=:post_id"
         result = db.session.execute(sql, {"post_id":post_id})
-        chapter_ids = result.fetchall()
+        chapters_id = result.fetchall()
 
-        if chapter_ids == None:
+        if chapters_id == None:
             return -1
 
+        for chapter_id in chapters_id:
+            remove_the_queries(chapter_id[0])  
+
         sql = "DELETE FROM chapters WHERE post_id=:post_id"
-        db.session.execute(sql, {"post_id":post_id})
-        db.session.commit()
+        db.session.execute(sql, {"post_id":post_id})   
+        db.session.commit() 
 
         return 0
     except Exception as e:
@@ -431,8 +440,6 @@ def save_the_comment(user_id, post_id, row_id, general_comment, row_comment, cha
 
 def remove_the_comment(id):
     try:
-        # Rivi asiat täytyy poistaa, ennen tätä vaihetta
-
         sql = "DELETE FROM comments WHERE id=:id"
         db.session.execute(sql, {"id":id})
         db.session.commit()
@@ -441,10 +448,32 @@ def remove_the_comment(id):
         print(e)    
         return -1
 
-def get_comment_creator(user_id):
+def remove_the_general_comments(post_id):
     try:
+        sql = "SELECT id FROM comments WHERE post_id=:post_id"
+        result = db.session.execute(sql, {"post_id":post_id})
+        comments_id = result.fetchall()
+
+        if not comments_id == None:
+           for comment_id in comments_id:
+               remove_the_comment(comment_id[0])
+
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2  
+
+def get_comment_creator(comment_id):
+    try:
+        sql = "SELECT user_id FROM comments WHERE id=:comment_id"
+        result = db.session.execute(sql, {"comment_id": comment_id})
+        user_id = result.fetchone()
+
+        if user_id == None:
+            return None
+            
         sql = "SELECT username FROM users WHERE id=:user_id"
-        result = db.session.execute(sql, {"user_id":user_id})
+        result = db.session.execute(sql, {"user_id":user_id[0]})
         username = result.fetchone()
         
         if username == None:
@@ -481,6 +510,10 @@ def save_the_query(user_id,chapter_id,question,misc):
 
 def remove_the_query(query_id):
     try:
+        sql = "DELETE FROM answers WHERE query_id=:query_id"
+        db.session.execute(sql, {"query_id":query_id})
+        db.session.commit()
+
         sql = "DELETE FROM queries WHERE id=:query_id"
         db.session.execute(sql, {"query_id":query_id})
         db.session.commit()
@@ -488,6 +521,39 @@ def remove_the_query(query_id):
     except Exception as e:
         print(e)    
         return -2
+
+def remove_the_queries(chapter_id):
+    try:
+        sql = "SELECT id FROM queries WHERE chapter_id=:chapter_id"
+        result = db.session.execute(sql, {"chapter_id":chapter_id})
+        queries_id = result.fetchall()
+
+        if not queries_id == None:
+           for query_id in queries_id:
+               remove_the_answers(query_id[0])
+        
+        sql = "DELETE FROM queries WHERE chapter_id=:chapter_id"
+        db.session.execute(sql, {"chapter_id":chapter_id})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+
+def get_the_query(query_id):
+    try:
+        sql = "SELECT id,user_id,chapter_id,question,misc FROM queries WHERE id=:query_id"
+        result = db.session.execute(sql, {"query_id":query_id})
+        query = result.fetchone()
+        
+        if query == None:
+            return None
+
+        return query
+    except Exception as e:
+        print(e)    
+        return None
 
 def get_the_chapter_queries(chapter_id):
     try:
@@ -502,6 +568,72 @@ def get_the_chapter_queries(chapter_id):
     except Exception as e:
         print(e)    
         return -2
+
+def save_the_answer(user_id, query_id, answer, misc):
+    try:
+        sql = "INSERT INTO answers (user_id,query_id,answer,misc) VALUES (:user_id,:query_id,:answer,:misc)"
+        db.session.execute(sql, {"user_id":user_id, "query_id": query_id, "answer": answer, "misc":misc})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+def remove_the_answer(answer_id):
+    try:
+        sql = "DELETE FROM answers WHERE id=:answer_id"
+        db.session.execute(sql, {"answer_id":answer_id})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+def remove_the_answers(query_id):
+    try:
+        sql = "DELETE FROM answers WHERE query_id=:query_id"
+        db.session.execute(sql, {"query_id":query_id})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(e)    
+        return -2
+
+def get_answer_creator(answer_id):
+    try:
+        sql = "SELECT user_id FROM answers WHERE id=:answer_id"
+        result = db.session.execute(sql, {"answer_id":answer_id})
+        user_id = result.fetchone()
+
+        if user_id == None:
+           return None
+
+        sql = "SELECT username FROM users WHERE id=:user_id"
+        result = db.session.execute(sql, {"user_id":user_id[0]})
+        username = result.fetchone()
+        
+        if username == None:
+            return None
+
+        return username[0]
+    except Exception as e:
+        print(e)    
+        return None 
+
+def get_the_query_answers(query_id):
+    try:
+        sql = "SELECT id,user_id,query_id,answer,misc FROM answers WHERE query_id=:query_id"
+        result = db.session.execute(sql, {"query_id":query_id})
+        answers = result.fetchall()
+
+        if answers == None:
+           return -1
+
+        return answers
+    except Exception as e:
+        print(e)    
+        return -2   
+           
     
 
     

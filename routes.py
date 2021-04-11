@@ -12,8 +12,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 def index():
    if 'login' in session:
       del session["login"]
+   
    if 'signup' in session:
        del session["signup"]
+   
    if 'workbench' in session:
       del session["workbench"] 
     
@@ -40,6 +42,18 @@ def index():
 
    if 'view_error' in session:
       del session["view_error"] 
+
+   if 'comment_mode' in session:
+      del session["comment_mode"]
+
+   if 'comment_error' in session:
+      del session["comment_error"] 
+
+   if 'query_mode' in session:
+      del session["query_mode"]
+
+   if 'query_error' in session:
+      del session["query_error"]
     
    posts = get_public_posts()
    size = len(posts)
@@ -50,7 +64,13 @@ def index():
       post_creator = get_post_creator(post[0])
       post_creators[post[0]] = post_creator
 
-   return render_template("main.html", posts=posts, size=size, post_creators=post_creators)
+   posts_have_chapters = {}
+
+   for post in posts:
+      has_chapters = check_post_chapters(post[0])
+      posts_have_chapters[post[0]] = has_chapters
+
+   return render_template("main.html", posts=posts, size=size, post_creators=post_creators, owns_chapters=posts_have_chapters)
 
 @app.route("/signup")
 def signup():
@@ -137,6 +157,18 @@ def logout():
 
    if 'view_error' in session:
       del session["view_error"] 
+
+   if 'comment_mode' in session:
+      del session["comment_mode"]
+
+   if 'comment_error' in session:
+      del session["comment_error"] 
+
+   if 'query_mode' in session:
+      del session["query_mode"]
+
+   if 'query_error' in session:
+      del session["query_error"]
     
    return redirect("/")
 
@@ -166,9 +198,28 @@ def profile():
    if 'view_error' in session:
       del session["view_error"] 
 
+   if 'comment_mode' in session:
+      del session["comment_mode"]
+
+   if 'comment_error' in session:
+      del session["comment_error"] 
+
+   if 'query_mode' in session:
+      del session["query_mode"]
+
+   if 'query_error' in session:
+      del session["query_error"]
+
    posts = get_profile_posts(get_user_id(session["username"]))
    size = len(posts)
-   return render_template("profile.html", posts=posts, size=size)
+   
+   posts_have_chapters = {}
+
+   for post in posts:
+      has_chapters = check_post_chapters(post[0])
+      posts_have_chapters[post[0]] = has_chapters
+
+   return render_template("profile.html", posts=posts, size=size, owns_chapters=posts_have_chapters)
 
 @app.route("/workbench")
 def workbench():
@@ -464,7 +515,7 @@ def chapter_view(creator_name, post_name, chapter_number):
    if chapter == None:
       session["view_mode"] = "0"
       session["view_error"] = "3"
-      return render_template("view.html")
+      return render_template("view.html", owns_chapters=False)
 
    chapter_content = chapter[7]
 
@@ -477,10 +528,8 @@ def chapter_view(creator_name, post_name, chapter_number):
 
    # row_comments_on = chapter[3]
 
-   # Kyselyt asiat
-
-   # inquiry_on = chapter[4]
-
+   inquiry_on = chapter[4]
+   
    session["view_chapter"] = "0"
 
    if chapter_number == 1:
@@ -494,7 +543,7 @@ def chapter_view(creator_name, post_name, chapter_number):
     
    session["view_mode"] = "1"
    session["view_error"] = "0"
-   return render_template("view.html", creator=creator_name, story=post_name, post=post_id, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
+   return render_template("view.html", creator=creator_name, story=post_name, post=post_id, owns_chapters=inquiry_on, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
     
 @app.route("/view/<int:post_id>/<string:post_name>")
 def redirect_into_chapter_view(post_id,post_name):
@@ -515,9 +564,9 @@ def view_general_comments(post_id,post_name):
    creators = {}
 
    for comment in comments:
-       creator = get_comment_creator(comment[1])
+       creator = get_comment_creator(comment[0])
        creators[comment[0]] = creator
-   
+
    if len(creators) == 0:
       session["comment_mode"] = "1"
       session["comment_error"] = "1"
@@ -562,7 +611,7 @@ def save_general_comment(post_id,post_name):
    
    if check_number == -1:
       address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
-      return redirect("/create/comment/"+post_id+"/"+post_name)
+      return redirect(address)
    
    address = "/comments/general/"+ str(post_id) + "/"+ post_name
    return redirect(address)
@@ -629,7 +678,7 @@ def create_question(post_id,chapter_number):
 
    session["query_mode"] = "2"
    session["query_error"] = "0"
-   return render_template("queries.html", post=post[0], story=[4], chapter=chapter_number)
+   return render_template("queries.html", post=post[0], story=post[4], chapter=chapter_number)
 
 @app.route("/save/question/<int:post_id>/<int:chapter_number>", methods=["POST"])
 def save_question(post_id,chapter_number):
@@ -664,6 +713,140 @@ def save_question(post_id,chapter_number):
    
    address = "/query/chapter/" + str(post_id) + "/" + str(chapter_number)
    return redirect(address)
+
+@app.route("/remove/question/<int:post_id>/<int:chapter_number>/<int:question_id>")
+def remove_question(post_id, chapter_number, question_id):
+   check_number = remove_the_query(question_id)
+
+   if check_number == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "5"
+      return render_template("queries.html")
+
+   address = "/query/chapter/" + str(post_id) + "/" + str(chapter_number)
+   return redirect(address)
+
+@app.route("/query/chapter/answers/<int:post_id>/<int:chapter_number>/<int:query_id>")
+def view_answers_to_the_question(post_id,chapter_number,query_id):
+   username = get_post_creator(post_id)
+   
+   if username == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "1"
+      return render_template("queries.html")
+
+   post = get_the_post(post_id)
+
+   if post == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "2"
+      return render_template("queries.html")
+
+   answers = get_the_query_answers(query_id)
+
+   if answers == -1:
+      session["query_mode"] = "0"
+      session["query_error"] = "6"
+      return render_template("queries.html")
+
+   if answers == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "7"
+      return render_template("queries.html")
+   
+   if len(answers) == 0:
+      session["query_mode"] = "3"
+      session["query_error"] = "0"
+      return render_template("queries.html", creator=username, post=post_id, story=post[4], chapter=chapter_number, size=0)
+
+   creators = {}
+
+   for answer in answers:
+       creator = get_answer_creator(answer[0])
+       creators[answer[0]] = creator
+   
+   if len(creators) == 0:
+      session["query_mode"] = "3"
+      session["query_error"] = "8"
+      return render_template("queries.html")
+   
+   the_amount_of_answers = len(answers)
+   session["query_mode"] = "3"
+   session["query_error"] = "0"
+   return render_template("queries.html", creator=username, post=post_id, story=post[4], query_id=query_id, chapter=chapter_number, size=the_amount_of_answers, answers=answers, creators=creators)
+
+@app.route("/create/answer/<int:post_id>/<int:chapter_number>/<query_id>")
+def create_answer_to_the_question(post_id,chapter_number,query_id):
+   query = get_the_query(query_id)
+   
+   if query == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "5"
+      return render_template("queries.html")
+   
+   question = query[3]
+   
+   session["query_mode"] = "4"
+   session["query_error"] = "0"
+   return render_template("queries.html", question=question, post=post_id, query_id=query_id, chapter=chapter_number)
+
+@app.route("/save/answer/<int:post_id>/<int:chapter_number>/<query_id>", methods=["POST"])
+def save_the_answer_to_the_question(post_id,chapter_number,query_id):
+   user_id = get_user_id(session["username"])
+
+   if user_id == 0:
+      session["query_mode"] = "0"
+      session["query_error"] = "9"
+      return render_template("queries.html")
+
+   query = get_the_query(query_id)
+   
+   if query == None:
+      session["query_mode"] = "0"
+      session["query_error"] = "5"
+      return render_template("queries.html")
+   
+   question = query[3]
+
+   answer = request.form["answer"]
+
+   if answer == "":
+      session["query_mode"] = "4"
+      session["query_error"] = "10"
+      return render_template("queries.html", question=question, post=post_id, query_id=query_id, chapter=chapter_number)
+
+   misc = ""
+
+   check_number = save_the_answer(user_id, query_id, answer, misc)
+
+   if check_number == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "7"
+      return render_template("queries.html")
+
+   address = "/query/chapter/" + str(post_id) + "/" + str(chapter_number)
+   return redirect(address)
+
+@app.route("/remove/answer/<int:post_id>/<int:chapter_number>/<int:query_id>/<answer_id>")
+def remove_the_answer_to_the_question(post_id,chapter_number,query_id,answer_id):
+   check_number = remove_the_answer(answer_id)
+
+   if check_number == -2:
+      session["query_mode"] = "0"
+      session["query_error"] = "7"
+      return render_template("queries.html")
+   
+   address = "/query/chapter/answers/" + str(post_id) + "/" + str(chapter_number) + "/" + str(query_id)
+   return redirect(address)
+   
+
+
+
+   
+
+
+
+
 
 
    
