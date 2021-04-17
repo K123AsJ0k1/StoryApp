@@ -1,12 +1,16 @@
 from app import app
 import re
-from db import *
-from misc import *
 from flask import redirect, render_template, request, session
 from os import getenv
+from users_db import *
+from posts_db import *
+from chapters_db import *
+from comments_db import *
+from queries_db import *
+from answers_db import *
+from misc import *
 
 app.secret_key = getenv("SECRET_KEY")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.route("/")
 def index():
