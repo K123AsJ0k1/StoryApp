@@ -60,7 +60,6 @@ def get_the_query(query_id):
 
 def get_the_chapter_queries(chapter_id):
     try:
-        print("Toimii")
         sql = "SELECT id,user_id,chapter_id,question,misc FROM queries WHERE chapter_id=:chapter_id"
         result = db.session.execute(sql, {"chapter_id":chapter_id})
         queries = result.fetchall()

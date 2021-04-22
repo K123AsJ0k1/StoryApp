@@ -117,7 +117,9 @@ textarea {
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
-  {{ text }}
+  {% for para in text %}
+    {{para}}<br>
+  {% endfor %}
   {% endif %}
 </div>
 

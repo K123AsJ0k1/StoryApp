@@ -9,6 +9,7 @@ from comments_db import *
 from queries_db import *
 from answers_db import *
 from misc import *
+from text import *
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -58,7 +59,7 @@ def index():
 
    if 'query_error' in session:
       del session["query_error"]
-    
+
    posts = get_public_posts()
    size = len(posts)
 
@@ -122,58 +123,13 @@ def login_logic():
       return render_template("login.html")
      
    session["username"] = username
+   #Hoida csrf turvallisuus asiat
+   #session["csrf_token"] = os.urandom(16).hex()
    return redirect("/")
     
 @app.route("/logout")
 def logout():
-   if 'username' in session:
-      del session["username"]
-    
-   if 'workbench' in session:
-      del session["workbench"]
-
-   if 'workbencherror' in session:
-      del session["workbencherror"]
-
-   if 'profileerror' in session:
-      del session["profileerror"]
-    
-   if 'given_post_name' in session:
-      del session["given_post_name"]
-    
-   if 'given_post_public' in session:
-      del session["given_post_public"]    
-    
-   if 'given_post_general' in session:
-      del session["given_post_general"]  
-    
-   if 'given_post_rating' in session:
-      del session["given_post_rating"]  
-   
-   if 'given_post_genre' in session:
-      del session["given_post_genre"] 
-    
-   if 'view_chapter' in session:
-      del session["view_chapter"] 
-
-   if 'view_mode' in session:
-      del session["view_mode"] 
-
-   if 'view_error' in session:
-      del session["view_error"] 
-
-   if 'comment_mode' in session:
-      del session["comment_mode"]
-
-   if 'comment_error' in session:
-      del session["comment_error"] 
-
-   if 'query_mode' in session:
-      del session["query_mode"]
-
-   if 'query_error' in session:
-      del session["query_error"]
-    
+   session.clear()
    return redirect("/")
 
 @app.route("/profile")
@@ -451,12 +407,17 @@ def save_chapter():
       return redirect("/chapter")
 
    text_content = request.form["chapter_text"]
-    
-   text_rows = len(text_content.split("\n"))
+   
+   if not check_text_requirements(text_content):
+      session["workbencherror"] = "hyphenation"
+      return redirect("/chapter")
 
+   text_rows = rows(text_content)
+   text_source = get_source_text(text_content)
+   
    misc = ""
 
-   check_number = save_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_content, misc)
+   check_number = save_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_source, misc)
     
    if check_number == -1:
       session["workbencherror"] = "8"
@@ -520,10 +481,9 @@ def chapter_view(creator_name, post_name, chapter_number):
       session["view_mode"] = "0"
       session["view_error"] = "3"
       return render_template("view.html", owns_chapters=False)
-
-   chapter_content = chapter[7]
-
-    
+   
+   chapter_content = get_source_text_array(chapter[7])
+       
    # Edellinen luku, seuraava luku ja valittavat luku asiat
     
    # Row comment asiat
@@ -606,8 +566,8 @@ def save_general_comment(post_id,post_name):
           chapter_number = chapter[0]
    
    comment = request.form["comment_text"]
-
-   if comment == "":
+   
+   if not check_text_requirements(comment):
       address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
       return redirect(address)
 
@@ -705,6 +665,12 @@ def save_question(post_id,chapter_number):
    chapter_id = chapter[0]
 
    question = request.form["question"]
+
+   if not check_text_requirements(question):
+      session["query_mode"] = "2"
+      session["query_error"] = "0"
+      address = "/create/question/" + str(post_id) + "/" + str(chapter_number)
+      return redirect(address)
 
    misc = ""
 
@@ -814,9 +780,9 @@ def save_the_answer_to_the_question(post_id,chapter_number,query_id):
 
    answer = request.form["answer"]
 
-   if answer == "":
+   if not check_text_requirements(answer):
       session["query_mode"] = "4"
-      session["query_error"] = "10"
+      #Luo errori
       return render_template("queries.html", question=question, post=post_id, query_id=query_id, chapter=chapter_number)
 
    misc = ""

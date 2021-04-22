@@ -54,6 +54,7 @@ body {
 }
 
 textarea {
+    resize: vertical;
     border: 0 none white;
     overflow: hidden;
     padding: 0;
@@ -124,6 +125,10 @@ textarea {
 
   {% if session.workbencherror == "9" %}
   <p>Virhe chapter tietokannassa</p>
+  {% endif %}
+
+  {% if session.workbencherror == "hyphenation" %}
+  <p>Tekstin rivitys on väärin</p>
   {% endif %}
 </div>
 
@@ -255,11 +260,11 @@ textarea {
     
     <br>
     
-    <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään</a>
+    <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään (Teksti rivin saa olla seinään asti)</a>
 
     <br>
     
-    <textarea name="chapter_text"></textarea>
+    <textarea name="chapter_text" rows="25" cols="100"></textarea>
 
     <br>
 
