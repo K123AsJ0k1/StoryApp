@@ -104,14 +104,14 @@ textarea {
   <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
-  {% if session.username %}
+  {% if session.user_name %}
   <a href="/profile" class="right">Profiili</a>
   {% if owns_chapters %}
   <a href="/query/chapter/{{ post }}/{{ chapter }}" class="right">Kysely</a>
   {% endif %}
   {% endif %}
-  {% if session.username == creator %}
-  <a href="/remove/chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
+  {% if session.user_name == creator %}
+  <a href="/workbench/remove/remove_chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
   {% endif %}
 </div>
 

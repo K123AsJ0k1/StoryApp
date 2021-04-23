@@ -2,16 +2,15 @@ from app import app
 import re
 from flask import redirect, render_template, request, session
 from os import getenv
-from users_db import *
-from posts_db import *
-from chapters_db import *
+
 from comments_db import *
 from queries_db import *
 from answers_db import *
+
 from users_logic import *
 from main_page_logic import *
-from misc import *
-from text import *
+from profile_logic import *
+from workbench_logic import *
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -71,44 +70,9 @@ def logout():
 
 @app.route("/profile")
 def profile():
-   # Lisää user tarkastus tai muuta tämä
-   if 'given_post_name' in session:
-      del session["given_post_name"]
-    
-   if 'given_post_public' in session:
-      del session["given_post_public"]    
-    
-   if 'given_post_general' in session:
-      del session["given_post_general"]  
-    
-   if 'given_post_rating' in session:
-      del session["given_post_rating"]  
-    
-   if 'given_post_genre' in session:
-      del session["given_post_genre"] 
-
-   if 'view_chapter' in session:
-      del session["view_chapter"] 
-
-   if 'view_mode' in session:
-      del session["view_mode"] 
-
-   if 'view_error' in session:
-      del session["view_error"] 
-
-   if 'comment_mode' in session:
-      del session["comment_mode"]
-
-   if 'comment_error' in session:
-      del session["comment_error"] 
-
-   if 'query_mode' in session:
-      del session["query_mode"]
-
-   if 'query_error' in session:
-      del session["query_error"]
+   profile_session_deletion()
    
-   posts = get_profile_posts(get_user_id(session["username"]))
+   posts = get_profile_posts(session["user_id"])
    size = len(posts)
    
    posts_have_chapters = {}
@@ -117,296 +81,83 @@ def profile():
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
+   if not check_user():
+      return redirect("/")
+
    return render_template("profile.html", posts=posts, size=size, owns_chapters=posts_have_chapters)
 
-@app.route("/workbench")
-def workbench():
-   # Lisää user tarkastus
-   session["workbench"] = "0"
-   session["workbencherror"] = "0"
-   if 'profileerror' in session:
-      del session["profileerror"]
-   return render_template("workbench.html")
-
-@app.route("/post")
-def post():
-   # Lisää user tarkastus
-   session["workbench"] = "1"
-   session["workbencherror"] = "1"
-   return render_template("workbench.html")
-
-@app.route("/save/post", methods=["POST"])
-def save_post_logic():
-   # Lisää user tarkastus
-   user_id = get_user_id(session["username"]) 
-   print(user_id)
-   if user_id == 0:
-      session["workbencherror"] = "3"
-      return render_template("workbench.html")
-
-   public = request.form["public"]
-   visible = '2'
+@app.route("/workbench/save/<string:mode>", methods=["get","post"])
+def workbench_save(mode):
+   if not check_user():
+      return redirect("/")
    
-   if public == "true":
-      visible = '1'
-
-   if public == "false":
-      visible = '0'
-
-   general_comments = request.form["general"]
-   general_comments_on = '2'
-
-   if general_comments == "true":
-      general_comments_on = '1'
-
-   if general_comments == "false":
-      general_comments_on = '0'
-
-   name = request.form["name"]
-
-   if not check_title_requirements(name):
-      #session["workbencherror"] = "4"
-      return render_template("workbench.html")
-    
-   rating = request.form["rating"]
-   genre = request.form["genre"]
-   misc = create_misc(rating,genre)
-    
-   check_number = save_post(user_id, visible, general_comments_on, name, misc)
-
-   if check_number == -1:
-      session["workbencherror"] = "4"
+   if mode == "create_post" and request.method == "GET":
+      workbench_post_mode()   
       return render_template("workbench.html")
 
-   if check_number == -2:
-      session["workbencherror"] = "5"
-      return render_template("workbench.html") 
-    
-   session["workbench"] = "0"
-   session["workbencherror"] = "0"
-   return redirect("/profile")
-
-@app.route("/update/<string:name>")
-def update_post(name):
-   # Lisää user tarkastus
-   user_id = get_user_id(session["username"]) 
-    
-   if user_id == 0:
-      session["profileerror"] = "1"
+   if mode == "save_post" and request.method == "POST":
+      user_id = session["user_id"]
+      public = request.form["public"]
+      general_comments = request.form["general"]
+      name = request.form["name"]
+      rating = request.form["rating"]
+      genre = request.form["genre"]
+      
+      if not save_post(user_id,public,general_comments,name,rating,genre):
+         return render_template("workbench.html") 
       return redirect("/profile")
 
-   post = get_profile_post(user_id,name)
-    
-   if post == None:
-      session["profileerror"] = "2"
+   if mode == "create_chapter" and request.method == "GET":
+      workbench_chapter_mode()
+      posts = get_profile_posts(session["user_id"])
+      size = len(posts)
+      return render_template("workbench.html", posts=posts, size=size)
+
+   if mode == "save_chapter" and request.method == "POST":
+      post_id = request.form["chapter_picked_post"]
+      chapter_public = request.form["chapter_public"]
+      row_comments = request.form["chapter_row_comments_on"]
+      inquiry = request.form["chapter_inquiry"]
+      text_content = request.form["chapter_text"]
+
+      if not save_chapter(post_id, chapter_public, row_comments, inquiry, text_content):
+         return render_template("workbench.html") 
       return redirect("/profile")
 
-   session["workbench"] = "3"
-
-   session["given_post_name"] = post[4]
-    
-   check_public = post[2]
-
-   if check_public:
-      session["given_post_public"] = "1"
-
-   if not check_public:
-      session["given_post_public"] = "2"
-
-   check_general = post[3]
-
-   if check_general:
-      session["given_post_general"] = "1"
-    
-   if not check_general:
-      session["given_post_general"] = "2"
-
-   misc_list = list_misc(post[5])
-
-   session["given_post_rating"] = misc_list[0]
-
-   session["given_post_genre"] = misc_list[1]
-
-   return render_template("workbench.html") 
-
-@app.route("/update", methods=["POST"])
-def update_post_logic():
-   # Lisää user tarkastus
-   old_name = session["given_post_name"]
-   user_id = get_user_id(session["username"]) 
-    
-   if user_id == 0:
-      session["workbencherror"] = "3"
-      return render_template("workbench.html")
-
-   public = request.form["public"]
-   visible = '2'
-    
-   if public == "true":
-      visible = '1'
-
-   if public == "false":
-      visible = '0'
-
-   general_comments = request.form["general"]
-   general_comments_on = "2"
-    
-   if general_comments == "true":
-      general_comments_on = '1'
-
-   if general_comments == "false":
-      general_comments_on = '0'
-
-   new_name = request.form["name"]
-    
-   rating = request.form["rating"]
-   genre = request.form["genre"]
-   misc = create_misc(rating,genre)
-    
-   check_number = update_the_post(old_name, user_id, visible, general_comments_on, new_name, misc)
-    
-   if check_number == -1:
-      session["workbencherror"] = "4"
-      return render_template("workbench.html")
-
-   if check_number == -2:
-      session["workbencherror"] = "5"
-      return render_template("workbench.html") 
-    
-   session["workbench"] = "0"
-   session["workbencherror"] = "0"
-   return redirect("/profile")
-         
-@app.route("/remove/<string:name>")
-def remove_post_logic(name):
-   # Lisää user tarkastus
-   user_id = get_user_id(session["username"]) 
-    
-   if user_id == 0:
-      session["profileerror"] = "1"
-      return redirect("/profile")
-
-   check_number = remove_post(user_id,name)
-    
-   if check_number == -1:
-      session["profileerror"] = "2"
-      return redirect("/profile")
-
-   if check_number == -2:
-      session["profileerror"] = "1"
-      return redirect("/profile")
-
-   if check_number == -3:
-      session["profileerror"] = "1"
-      return redirect("/profile")
-
-   session["profileerror"] = "3"
-   return redirect("/profile")
-
-@app.route("/chapter")
-def chapter():
-   # Lisää user tarkastus
-   session["workbench"] = "2"
-   session["workbencherror"] = "2"
-   posts = get_profile_posts(get_user_id(session["username"]))
-   size = len(posts)
-   return render_template("workbench.html", posts=posts, size=size)
-
-@app.route("/save/chapter", methods=["POST"])
-def save_chapter():
-   # Lisää user tarkastus
-   post_id = request.form["chapter_picked_post"]
-    
-   if post_id == None:
-      session["workbencherror"] = "6"
-      return redirect("/chapter")
-    
-   chapter_public = request.form["chapter_public"]
-
-   public = '2'
-    
-   if chapter_public == "true":
-      public = '1'
-
-   if chapter_public == "false":
-      public = '0'
-
-   row_comments = request.form["chapter_row_comments_on"]
-    
-   row_comments_on = '2'
-    
-   if row_comments == "true":
-      row_comments_on= '1'
-
-   if row_comments == "false":
-      row_comments_on = '0'
-
-   inquiry = request.form["chapter_inquiry"]
-    
-   inquiry_on = '2'
-
-   if inquiry == "true":
-      inquiry_on = '1'
-
-   if inquiry == "false":
-      inquiry_on = '0'
-
-   chapter_number = get_the_next_chapter_number(post_id)
-
-   if chapter_number == 0:
-      session["workbencherror"] = "7"
-      return redirect("/chapter")
-
-   text_content = request.form["chapter_text"]
+@app.route("/workbench/update/<string:mode>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
+def workbench_update(mode, post_id, chapter_number):
+   if not check_user():
+      return redirect("/")
    
-   if not check_text_requirements(text_content):
-      session["workbencherror"] = "hyphenation"
-      return redirect("/chapter")
+   if mode == "change_post" and post_id > 0 and request.method == "GET":
+      get_post(post_id)
+      return render_template("workbench.html", post_id=post_id)
 
-   text_rows = rows(text_content)
-   text_source = get_source_text(text_content)
-   
-   misc = ""
-
-   check_number = save_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_source, misc)
-    
-   if check_number == -1:
-      session["workbencherror"] = "8"
-      return redirect("/chapter")
-
-   if check_number == -1:
-      session["workbencherror"] = "9"
-      return redirect("/chapter")
-
-   session["workbench"] = "0"
-   session["workbencherror"] = "0"
-   return redirect("/profile")
-
-@app.route("/remove/chapter/<int:post_id>/<int:chapter_number>")
-def remove_chapter_logic(post_id,chapter_number):
-   check_number = remove_the_chapter(post_id,chapter_number)
-    
-   if check_number == -1:
-      session["profileerror"] = "4"
-      return redirect("/profile")
-    
-   if check_number == -2:
-      session["profileerror"] = "1"
+   if mode == "update_post" and post_id > 0 and request.method == "POST":
+      old_name = session["given_post_name"]
+      user_id = session["user_id"]
+      public = request.form["public"]
+      general_comments = request.form["general"]
+      new_name = request.form["name"]
+      rating = request.form["rating"]
+      genre = request.form["genre"]
+      if not update_post(old_name, user_id, public, general_comments, new_name, rating, genre):
+         return render_template("workbench.html")
       return redirect("/profile")
 
-   check_number = update_the_chapter_numbers(post_id)
+@app.route("/workbench/remove/<string:mode>/<int:post_id>/<int:chapter_number>")
+def workbench_remove(mode, post_id, chapter_number):
+   if not check_user():
+      return redirect("/")
 
-   if check_number == -1:
-      session["profileerror"] = "4"
+   if mode == "remove_post" and post_id > 0:
+      user_id = session["user_id"]
+      remove_post(user_id,post_id)
       return redirect("/profile")
-
-   if check_number == -2:
-      session["profileerror"] = "1"
+      
+   if mode == "remove_chapter" and post_id > 0 and chapter_number > 0:
+      remove_chapter(post_id,chapter_number)
       return redirect("/profile")
-    
-   session["profileerror"] = "3"
-   return redirect("/profile")
-    
 
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:chapter_number>")
 def chapter_view(creator_name, post_name, chapter_number):
@@ -494,6 +245,9 @@ def view_general_comments(post_id,post_name):
 
 @app.route("/create/comment/general/<int:post_id>/<string:post_name>")
 def create_general_comment(post_id,post_name):
+   if not check_user():
+      return redirect("/")
+   
    session["comment_mode"] = "2"
    session["comment_error"] = "3"
    last_chapter = get_the_next_chapter_number(post_id)-1
@@ -501,7 +255,8 @@ def create_general_comment(post_id,post_name):
 
 @app.route("/save/comment/general/<int:post_id>/<string:post_name>", methods=["POST"])
 def save_general_comment(post_id,post_name):
-   user_id = get_user_id(session["username"])
+   if not check_user():
+      return redirect("/")
    
    referenced_chapter = request.form["referenced_chapter_number"]
    
@@ -522,7 +277,7 @@ def save_general_comment(post_id,post_name):
       address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
       return redirect(address)
 
-   check_number = save_the_comment(user_id, post_id, 0, '1', '0', chapter_number_on, chapter_number, comment)
+   check_number = save_the_comment(session["user_id"], post_id, 0, '1', '0', chapter_number_on, chapter_number, comment)
    
    if check_number == -1:
       address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
@@ -533,6 +288,9 @@ def save_general_comment(post_id,post_name):
 
 @app.route("/remove/comment/general/<int:post_id>/<string:post_name>/<int:comment_id>")
 def remove_general_comment(post_id, post_name, comment_id):
+   if not check_user():
+      return redirect("/")
+   
    check_number = remove_the_comment(comment_id)
 
    if check_number == -1:
@@ -544,6 +302,9 @@ def remove_general_comment(post_id, post_name, comment_id):
 
 @app.route("/query/chapter/<int:post_id>/<int:chapter_number>")
 def view_query(post_id,chapter_number):
+   if not check_user():
+      return redirect("/")
+   
    username = get_post_creator(post_id)
    
    if username == None:
@@ -584,6 +345,9 @@ def view_query(post_id,chapter_number):
 
 @app.route("/create/question/<int:post_id>/<int:chapter_number>")
 def create_question(post_id,chapter_number):
+   if not check_user():
+      return redirect("/")
+   
    post = get_the_post(post_id)
 
    if post == None:
@@ -597,6 +361,9 @@ def create_question(post_id,chapter_number):
 
 @app.route("/save/question/<int:post_id>/<int:chapter_number>", methods=["POST"])
 def save_question(post_id,chapter_number):
+   if not check_user():
+      return redirect("/")
+   
    post = get_the_post(post_id)
 
    if post == None:
@@ -637,6 +404,9 @@ def save_question(post_id,chapter_number):
 
 @app.route("/remove/question/<int:post_id>/<int:chapter_number>/<int:question_id>")
 def remove_question(post_id, chapter_number, question_id):
+   if not check_user():
+      return redirect("/")
+   
    check_number = remove_the_query(question_id)
 
    if check_number == -2:
@@ -649,6 +419,9 @@ def remove_question(post_id, chapter_number, question_id):
 
 @app.route("/query/chapter/answers/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def view_answers_to_the_question(post_id,chapter_number,query_id):
+   if not check_user():
+      return redirect("/")
+   
    username = get_post_creator(post_id)
    
    if username == None:
@@ -698,6 +471,9 @@ def view_answers_to_the_question(post_id,chapter_number,query_id):
 
 @app.route("/create/answer/<int:post_id>/<int:chapter_number>/<query_id>")
 def create_answer_to_the_question(post_id,chapter_number,query_id):
+   if not check_user():
+      return redirect("/")
+   
    query = get_the_query(query_id)
    
    if query == None:
@@ -713,13 +489,9 @@ def create_answer_to_the_question(post_id,chapter_number,query_id):
 
 @app.route("/save/answer/<int:post_id>/<int:chapter_number>/<query_id>", methods=["POST"])
 def save_the_answer_to_the_question(post_id,chapter_number,query_id):
-   user_id = get_user_id(session["username"])
-
-   if user_id == 0:
-      session["query_mode"] = "0"
-      session["query_error"] = "9"
-      return render_template("queries.html")
-
+   if not check_user():
+      return redirect("/")
+   
    query = get_the_query(query_id)
    
    if query == None:
@@ -738,7 +510,7 @@ def save_the_answer_to_the_question(post_id,chapter_number,query_id):
 
    misc = ""
 
-   check_number = save_the_answer(user_id, query_id, answer, misc)
+   check_number = save_the_answer(session["user_id"], query_id, answer, misc)
 
    if check_number == -2:
       session["query_mode"] = "0"
@@ -750,6 +522,9 @@ def save_the_answer_to_the_question(post_id,chapter_number,query_id):
 
 @app.route("/remove/answer/<int:post_id>/<int:chapter_number>/<int:query_id>/<answer_id>")
 def remove_the_answer_to_the_question(post_id,chapter_number,query_id,answer_id):
+   if not check_user():
+      return redirect("/")
+   
    check_number = remove_the_answer(answer_id)
 
    if check_number == -2:

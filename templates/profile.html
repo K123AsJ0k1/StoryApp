@@ -84,23 +84,12 @@ body {
 <body>
 
 <div class="header">
-  <h1>{{ session.username }}</h1>
-  {% if session.profileerror == "1" %}
-  <h1>Tietokannassa tapahtui virhe</h1>
-  {% endif %}
-  {% if session.profileerror == "2" %}
-  <h1>Postausta ei löydy tietokannasta</h1>
-  {% endif %}
-  {% if session.profileerror == "4" %}
-  <h1>Chapteria ei löydy tietokannasta</h1>
-  {% endif %}
-  {% if session.profileerror == "3" %}
-  <h1>Poisto onnistui</h1>
-  {% endif %}
+  <h1>{{ session.user_name }}</h1>
 </div>
 
 <div class="navbar">
-  <a href="/workbench">Työpöytä</a>
+  <a href="/workbench/save/create_post">Luo uusi postaus</a>
+  <a href="/workbench/save/create_chapter">Luo uusi luku</a>
   <a href="/logout" class="right">Kirjaudu ulos</a>
   <a href="/" class="right">Pääsivulle</a>
 </div>
@@ -113,12 +102,12 @@ body {
     Tarina: {{ post[3] }} <br>
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
-    <a href="/view/{{ session.username }}/{{ post[3] }}/1">Lue</a>
+    <a href="/view/{{ session.user_name }}/{{ post[3] }}/1">Lue</a>
     {% if post[2] and owns_chapters[post[0]] %}
     <a href="/comments/general/{{ post[0] }}/{{ post[3] }}">Kommentit</a>
     {% endif %}
-    <a href="/update/{{ post[3] }}">Muokkaa</a>
-    <a href="/remove/{{ post[3] }}">Poista</a>
+    <a href="/workbench/update/change_post/{{ post[0] }}/0">Muokkaa</a>
+    <a href="/workbench/remove/remove_post/{{ post[0] }}/0">Poista</a>
     <hr>
     {% endfor %}
     {% endif %}

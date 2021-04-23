@@ -145,7 +145,7 @@ textarea {
 <div class="navbar">
   {% if session.query_mode == "1" %}
   <a href="/view/{{ creator }}/{{ story }}/{{ chapter }}">Takaisin</a>
-    {% if session.username == creator %}
+    {% if session.user_name == creator %}
     <a href="/create/question/{{ post }}/{{ chapter }}">Luo kysymys</a>
     {% endif %}
   {% endif %}
@@ -164,7 +164,7 @@ textarea {
   
   <a href="/" class="right">Pääsivulle</a>
   
-  {% if session.username %}
+  {% if session.user_name %}
   <a href="/profile" class="right">Profiili</a>
   {% endif %}
 </div>
@@ -196,7 +196,7 @@ textarea {
    {% if size > 0 %}
    
    {% for query in queries %}
-      {% if session.username == creator %} 
+      {% if session.user_name == creator %} 
       <a href="">(Tilastotietoja)(WIP)</a>
       <br>
       <a href="/query/chapter/answers/{{ post }}/{{ chapter }}/{{ query[0] }}">Vastaukset</a>
@@ -241,7 +241,7 @@ textarea {
    <hr>
    {% for answer in answers %}
    
-   {% if session.username == creator %} 
+   {% if session.user_name == creator %} 
    <a href="/remove/answer/{{ post }}/{{ chapter }}/{{ query_id }}/{{ answer[0] }}">Poista</a>
    {% endif %}
 

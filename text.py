@@ -4,7 +4,7 @@ def rows(text):
     return len(text.split("\r\n"))
 
 def check_title_requirements(title):
-    text_lenght == len(title)
+    text_lenght = len(title)
 
     if text_lenght == 0:
         return False

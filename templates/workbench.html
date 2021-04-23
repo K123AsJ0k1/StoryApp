@@ -86,63 +86,12 @@ textarea {
 
 <div class="header">
   <h1>Työpöytä</h1>
-  
-  {% if session.workbencherror == "0" %}
-  <p>Valitse jokin vasemmalla olevista vaihtoehdoista</p>
-  {% endif %}
-  
-  {% if session.workbencherror == "1" %}
-  <p>Anna tarvitut tiedot postausta varten</p>
-  {% endif %}
-  
-  {% if session.workbencherror == "2" %}
-  <p>Anna tarvitut tiedot chapteria varten</p>
-  {% endif %}
-  
-  {% if session.workbencherror == "3" %}
-  <p>Id haussa tapahtui virhe</p>
-  {% endif %}
-  
-  {% if session.workbencherror == "4" %}
-  <p>Annettu nimi on jo olemassa</p>
-  {% endif %}
-  
-  {% if session.workbencherror == "5" %}
-  <p>Postin luonnissa tapahtui virhe</p>
-  {% endif %}
-
-  {% if session.workbencherror == "6" %}
-  <p>Valitse joku postaus</p>
-  {% endif %}
-
-  {% if session.workbencherror == "7" %}
-  <p>Chapterin seuraavan luvun haku epäonnistui</p>
-  {% endif %}
-
-  {% if session.workbencherror == "8" %}
-  <p>Chapter id ei löytynyt</p>
-  {% endif %}
-
-  {% if session.workbencherror == "9" %}
-  <p>Virhe chapter tietokannassa</p>
-  {% endif %}
-
-  {% if session.workbencherror == "hyphenation" %}
-  <p>Tekstin rivitys on väärin</p>
-  {% endif %}
 </div>
 
 <div class="navbar">
-  {% if session.workbench == "0" %}
-  <a href="/post">Luo uusi postaus</a>
-  <a href="/chapter">Luo uusi luku</a>
-  {% endif %}
-  
-  {% if session.workbench != "0" %}
-  <a href="/workbench">Resetoi</a>
-  {% endif %}
-  
-  <a href="/profile" class="right">Profiili</a>
+  <a href="/profile">Takaisin</a>
+  <a href="/logout" class="right">Kirjaudu ulos</a>
+  <a href="/" class="right">Pääsivulle</a>
 </div>
 
 <script> 
@@ -163,7 +112,7 @@ textarea {
 
 <div class="footer">
   {% if session.workbench == "1" %}
-  <form action="/save/post" method="POST">
+  <form action="/workbench/save/save_post" method="POST">
     <a>Mikä nimi postauksella pitäisi olla?</a>
     
     <br>
@@ -215,7 +164,7 @@ textarea {
     <h2>Et omista yhtään postausta</h2>
   {% endif %}
   {% if size > 0 %}
-  <form action="/save/chapter" method="POST">
+  <form action="/workbench/save/save_chapter" method="POST">
     <a>Mihin postaukseen haluat lisätä tämän chapterin?</a>
     
     <br>
@@ -274,7 +223,7 @@ textarea {
   {% endif %}
   
   {% if session.workbench == "3" %}
-  <form action="/update" method="POST">
+  <form action="/workbench/update/update_post/{{ post_id }}/0" method="POST">
     <a>Mikä nimi postauksella pitäisi olla?</a>
     
     <br>

@@ -135,8 +135,8 @@ body {
 </div>
 
 <div class="topnav">
-  {% if session.username %}
-  <a>{{ session.username }}</a>
+  {% if session.user_name %}
+  <a>{{ session.user_name }}</a>
   <a href="/profile">Profiili</a>
   <a href="/logout">Kirjaudu ulos</a>
   {% else %}

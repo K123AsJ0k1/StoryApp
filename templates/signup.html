@@ -68,13 +68,13 @@ body {
 
 <div class="header">
   <h1>Luo uusi käyttäjä</h1>
-  {% if session.signup == "1" %}
+  {% if session.sign_up == "1" %}
   <p>Käyttäjän on oltava vähintään 5 merkkiä pitkä</p>
   {% endif %}
-  {% if session.signup == "2" %}
+  {% if session.sign_up == "2" %}
   <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
   {% endif %}
-  {% if session.signup == "3" %}
+  {% if session.sign_up == "3" %}
   <p>Käyttäjä nimi on jo olemassa</p>
   {% endif %}
 </div>

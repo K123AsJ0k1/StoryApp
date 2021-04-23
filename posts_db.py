@@ -3,7 +3,7 @@ from db import *
 from chapters_db import *
 from comments_db import *
 
-def save_post(user_id, visible, general_comments_on, name, misc):
+def save_the_post(user_id, visible, general_comments_on, name, misc):
     try:
         sql = "SELECT id FROM posts WHERE name=:name"
         result = db.session.execute(sql, {"name":name})
@@ -57,7 +57,7 @@ def update_the_post(old_name, user_id, visible, general_comments_on, new_name, m
         print(e)
         return -3
 
-def remove_post(user_id,name):
+def remove_the_post(user_id,name):
     try:
         sql = "SELECT id,user_id FROM posts WHERE name=:name"
         result = db.session.execute(sql, {"name":name})

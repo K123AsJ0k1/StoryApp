@@ -69,10 +69,10 @@ body {
 
 <div class="header">
   <h1>Kirjaudu sisään</h1>
-  {% if session.login == "1" %}
+  {% if session.log_in == "1" %}
   <p>Käyttäjää ei ole olemassa</p>
   {% endif %}
-  {% if session.login == "2" %}
+  {% if session.log_in == "2" %}
   <p>Salasana on väärin</p>
   {% endif %}
 </div>

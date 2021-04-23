@@ -1,16 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, session
 
-def main_page_session_deletion():
-    if 'login' in session:
-      del session["login"]
-   
-    if 'signup' in session:
-      del session["signup"]
-   
-    if 'workbench' in session:
-      del session["workbench"] 
-    
+def profile_session_deletion():
     if 'given_post_name' in session:
       del session["given_post_name"]
     
