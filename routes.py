@@ -8,6 +8,7 @@ from chapters_db import *
 from comments_db import *
 from queries_db import *
 from answers_db import *
+from users_logic import *
 from misc import *
 from text import *
 
@@ -77,31 +78,20 @@ def index():
 
    return render_template("main.html", posts=posts, size=size, post_creators=post_creators, owns_chapters=posts_have_chapters)
 
-@app.route("/signup")
+@app.route("/signup", methods=["get","post"])
 def signup():
-    return render_template("signup.html")
+    if request.method == "GET":
+       return render_template("signup.html") 
+    
+    if request.method == "POST":
+       username = request.form["username"]
+       password = request.form["password"]
 
-@app.route("/signup",methods=["POST"])
-def signup_logic():
-   username = request.form["username"]
-   password = request.form["password"]
+       if not register(username,password):
+          return render_template("signup.html")
+         
+       return redirect("/")
 
-   if len(username) < 5:
-      session["signup"] = "1"
-      return render_template("signup.html")
-
-   if len(password) < 8:
-      session["signup"] = "2"
-      return render_template("signup.html")
-
-   check = create_user(username, password) 
-
-   if not check:
-      session["signup"] = "3"
-      return render_template("signup.html")
-
-   session["username"] = username
-   return redirect("/")
 
 @app.route("/login")
 def login():
@@ -109,6 +99,7 @@ def login():
 
 @app.route("/login", methods=["POST"])
 def login_logic():
+   # Muuta paremmaksi
    username = request.form["username"]
    password = request.form["password"]
     
@@ -134,6 +125,7 @@ def logout():
 
 @app.route("/profile")
 def profile():
+   # Lisää user tarkastus tai muuta tämä
    if 'given_post_name' in session:
       del session["given_post_name"]
     
@@ -169,7 +161,7 @@ def profile():
 
    if 'query_error' in session:
       del session["query_error"]
-
+   
    posts = get_profile_posts(get_user_id(session["username"]))
    size = len(posts)
    
@@ -183,6 +175,7 @@ def profile():
 
 @app.route("/workbench")
 def workbench():
+   # Lisää user tarkastus
    session["workbench"] = "0"
    session["workbencherror"] = "0"
    if 'profileerror' in session:
@@ -191,20 +184,23 @@ def workbench():
 
 @app.route("/post")
 def post():
+   # Lisää user tarkastus
    session["workbench"] = "1"
    session["workbencherror"] = "1"
    return render_template("workbench.html")
 
 @app.route("/save/post", methods=["POST"])
 def save_post_logic():
+   # Lisää user tarkastus
    user_id = get_user_id(session["username"]) 
-    
+   print(user_id)
    if user_id == 0:
       session["workbencherror"] = "3"
       return render_template("workbench.html")
 
    public = request.form["public"]
    visible = '2'
+   
    if public == "true":
       visible = '1'
 
@@ -221,6 +217,10 @@ def save_post_logic():
       general_comments_on = '0'
 
    name = request.form["name"]
+
+   if not check_title_requirements(name):
+      #session["workbencherror"] = "4"
+      return render_template("workbench.html")
     
    rating = request.form["rating"]
    genre = request.form["genre"]
@@ -242,6 +242,7 @@ def save_post_logic():
 
 @app.route("/update/<string:name>")
 def update_post(name):
+   # Lisää user tarkastus
    user_id = get_user_id(session["username"]) 
     
    if user_id == 0:
@@ -284,6 +285,7 @@ def update_post(name):
 
 @app.route("/update", methods=["POST"])
 def update_post_logic():
+   # Lisää user tarkastus
    old_name = session["given_post_name"]
    user_id = get_user_id(session["username"]) 
     
@@ -331,6 +333,7 @@ def update_post_logic():
          
 @app.route("/remove/<string:name>")
 def remove_post_logic(name):
+   # Lisää user tarkastus
    user_id = get_user_id(session["username"]) 
     
    if user_id == 0:
@@ -356,6 +359,7 @@ def remove_post_logic(name):
 
 @app.route("/chapter")
 def chapter():
+   # Lisää user tarkastus
    session["workbench"] = "2"
    session["workbencherror"] = "2"
    posts = get_profile_posts(get_user_id(session["username"]))
@@ -364,6 +368,7 @@ def chapter():
 
 @app.route("/save/chapter", methods=["POST"])
 def save_chapter():
+   # Lisää user tarkastus
    post_id = request.form["chapter_picked_post"]
     
    if post_id == None:
