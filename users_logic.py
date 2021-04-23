@@ -20,4 +20,18 @@ def register(username, password):
    session["username"] = username
    return True
 
+def log_in(username, password):
+   check_number = login_user(username, password)
+
+   if check_number == -1:
+      session["login"] = "1"
+      return False
+
+   if check_number == -2:
+      session["login"] = "2"
+      return False
+     
+   session["username"] = username
+   return True
+
 

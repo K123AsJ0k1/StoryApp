@@ -9,58 +9,16 @@ from comments_db import *
 from queries_db import *
 from answers_db import *
 from users_logic import *
+from main_page_logic import *
 from misc import *
 from text import *
 
 app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
-def index():
-   if 'login' in session:
-      del session["login"]
+def main_page():
+   main_page_session_deletion()
    
-   if 'signup' in session:
-       del session["signup"]
-   
-   if 'workbench' in session:
-      del session["workbench"] 
-    
-   if 'given_post_name' in session:
-      del session["given_post_name"]
-    
-   if 'given_post_public' in session:
-      del session["given_post_public"]    
-    
-   if 'given_post_general' in session:
-      del session["given_post_general"]  
-    
-   if 'given_post_rating' in session:
-      del session["given_post_rating"]  
-    
-   if 'given_post_genre' in session:
-      del session["given_post_genre"] 
-
-   if 'view_chapter' in session:
-      del session["view_chapter"] 
-
-   if 'view_mode' in session:
-      del session["view_mode"] 
-
-   if 'view_error' in session:
-      del session["view_error"] 
-
-   if 'comment_mode' in session:
-      del session["comment_mode"]
-
-   if 'comment_error' in session:
-      del session["comment_error"] 
-
-   if 'query_mode' in session:
-      del session["query_mode"]
-
-   if 'query_error' in session:
-      del session["query_error"]
-
    posts = get_public_posts()
    size = len(posts)
 
@@ -80,44 +38,32 @@ def index():
 
 @app.route("/signup", methods=["get","post"])
 def signup():
-    if request.method == "GET":
-       return render_template("signup.html") 
+   if request.method == "GET":
+      return render_template("signup.html") 
     
-    if request.method == "POST":
-       username = request.form["username"]
-       password = request.form["password"]
+   if request.method == "POST":
+      username = request.form["username"]
+      password = request.form["password"]
 
-       if not register(username,password):
-          return render_template("signup.html")
+      if not register(username,password):
+         return render_template("signup.html")
          
-       return redirect("/")
+      return redirect("/")
 
-
-@app.route("/login")
+@app.route("/login", methods=["get","post"])
 def login():
-   return render_template("login.html")
-
-@app.route("/login", methods=["POST"])
-def login_logic():
-   # Muuta paremmaksi
-   username = request.form["username"]
-   password = request.form["password"]
-    
-   check_number = login_user(username, password)
-    
-   if check_number == -1:
-      session["login"] = "1"
+   if request.method == "GET":
       return render_template("login.html")
 
-   if check_number == -2:
-      session["login"] = "2"
-      return render_template("login.html")
-     
-   session["username"] = username
-   #Hoida csrf turvallisuus asiat
-   #session["csrf_token"] = os.urandom(16).hex()
-   return redirect("/")
-    
+   if request.method == "POST":
+      username = request.form["username"]
+      password = request.form["password"]
+
+      if not log_in(username, password):
+         return render_template("login.html")
+
+      return redirect("/")
+
 @app.route("/logout")
 def logout():
    session.clear()
