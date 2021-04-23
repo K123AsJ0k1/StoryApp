@@ -14,7 +14,6 @@ def check_title_requirements(title):
 
     return True
        
-
 def check_text_requirements(text):
     text_lenght = len(text)
     

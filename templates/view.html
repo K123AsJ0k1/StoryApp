@@ -84,40 +84,40 @@ textarea {
 <body>
 
 <div class="header">
-  {% if text %}
-  <h1>{{ story }}:{{ chapter }}</h1>
-  {% endif %}
-  {% if not text %}
+  {% if session.view_mode == "0" %}
   <h1>Postauksella ei ole yhtään lukua</h1>
+  {% endif %}
+  {% if session.view_mode == "1" %}
+  <h1>{{ post_name }}:{{ chapter_number }}</h1>
   {% endif %}
 </div>
 
 <div class="navbar">
-  {% if session.view_chapter == "0" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
-  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  {% if session.switch_chapter == "0" %}
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number + 1 }}">Seuraava luku</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
-  {% if session.view_chapter == "1" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ next_chapter }}">Seuraava luku</a>
+  {% if session.switch_chapter == "1" %}
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number + 1 }}">Seuraava luku</a>
   {% endif %}
-  {% if session.view_chapter == "2" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ previous_chapter }}">Edellinen luku</a>
+  {% if session.switch_chapter == "2" %}
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
   {% if session.user_name %}
   <a href="/profile" class="right">Profiili</a>
-  {% if owns_chapters %}
-  <a href="/query/chapter/{{ post }}/{{ chapter }}" class="right">Kysely</a>
+  {% if session.inquiry %}
+  <a href="/query/chapter/{{ session.post_id }}/{{ chapter_number }}" class="right">Kysely</a>
   {% endif %}
   {% endif %}
-  {% if session.user_name == creator %}
-  <a href="/workbench/remove/remove_chapter/{{ post }}/{{ chapter }}" class="right">Poista</a>
+  {% if session.user_name == creator_name %}
+  <a href="/workbench/remove/remove_chapter/{{ session.post_id }}/{{ chapter_number }}" class="right">Poista</a>
   {% endif %}
 </div>
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
-  {% for para in text %}
+  {% for para in session.chapter_content %}
     {{para}}<br>
   {% endfor %}
   {% endif %}

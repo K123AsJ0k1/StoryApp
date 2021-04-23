@@ -11,6 +11,7 @@ from users_logic import *
 from main_page_logic import *
 from profile_logic import *
 from workbench_logic import *
+from view_logic import *
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -152,65 +153,24 @@ def workbench_remove(mode, post_id, chapter_number):
 
    if mode == "remove_post" and post_id > 0:
       user_id = session["user_id"]
-      remove_post(user_id,post_id)
+      if not remove_post(user_id,post_id):
+         return redirect("/profile")
       return redirect("/profile")
-      
+
    if mode == "remove_chapter" and post_id > 0 and chapter_number > 0:
-      remove_chapter(post_id,chapter_number)
+      if not remove_chapter(post_id,chapter_number):
+         return redirect("/profile")
+      remove_chapter_content_session()
       return redirect("/profile")
 
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:chapter_number>")
-def chapter_view(creator_name, post_name, chapter_number):
-   user_id = get_user_id(creator_name)
-    
-   if user_id == 0:
-      session["view_mode"] = "0"
-      session["view_error"] = "1"
-      return render_template("view.html")
+def view(creator_name, post_name, chapter_number):
+   if not view_chapter(creator_name, post_name, chapter_number):
+       view_none_mode()
+       return render_template("view.html")
+   view_read_mode()
+   return render_template("view.html", creator_name=creator_name, post_name=post_name, chapter_number=chapter_number)
 
-   post = get_profile_post(user_id, post_name)
-
-   if post == None:
-      session["view_mode"] = "0"
-      session["view_error"] = "2"
-      return render_template("view.html")
-
-   post_id = post[0]
-
-   chapter = get_the_chapter(post_id, chapter_number)
-
-   if chapter == None:
-      session["view_mode"] = "0"
-      session["view_error"] = "3"
-      return render_template("view.html", owns_chapters=False)
-   
-   chapter_content = get_source_text_array(chapter[7])
-       
-   # Edellinen luku, seuraava luku ja valittavat luku asiat
-    
-   # Row comment asiat
-    
-   # chapter_rows = chapter[6]
-
-   # row_comments_on = chapter[3]
-
-   inquiry_on = chapter[4]
-   
-   session["view_chapter"] = "0"
-
-   if chapter_number == 1:
-      session["view_chapter"] = "1"
-
-   if chapter_number == get_the_next_chapter_number(post_id)-1:
-      session["view_chapter"] = "2"
-
-   if get_the_next_chapter_number(post_id) == 2:
-      session["view_chapter"] = "3"
-    
-   session["view_mode"] = "1"
-   session["view_error"] = "0"
-   return render_template("view.html", creator=creator_name, story=post_name, post=post_id, owns_chapters=inquiry_on, chapter=chapter_number, text=chapter_content, previous_chapter=chapter_number-1, next_chapter=chapter_number+1)
-    
 @app.route("/view/<int:post_id>/<string:post_name>")
 def redirect_into_chapter_view(post_id,post_name):
    creator_name = get_post_creator(post_id)
