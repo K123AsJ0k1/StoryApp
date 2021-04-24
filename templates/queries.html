@@ -86,80 +86,40 @@ textarea {
 
 <div class="header">
   {% if session.query_mode == "1" %}
-  <h1>{{ story }}/{{ chapter }}/Kyselyt</h1>
+  <h1>{{ creator_name }}/{{ post_name }}/{{ chapter_number }}/Kyselyt</h1>
   {% endif %}
   
   {% if session.query_mode == "2" %}
-  <h1>{{ story }}/{{ chapter }}/Kysymyksen luonti</h1>
+  <h1>{{ post_name }}/{{ chapter_number }}/Kysymyksen luonti</h1>
   {% endif %}
   
   {% if session.query_mode == "3" %}
-  <h1>Kysymyksen vastaukset</h1>
+  <h1>Vastaukset</h1>
   {% endif %}
 
   {% if session.query_mode == "4" %}
   <h1>Kysymyksen vastaaminen</h1>
   {% endif %}
-  
-  {% if session.query_error == "1" %}
-  <h1>Käyttäjää ei löytynyt tietokannasta</h1>
-  {% endif %}
-  
-  {% if session.query_error == "2" %}
-  <h1>Ongelmia post tietokannassa</h1>
-  {% endif %}
-  
-  {% if session.query_error == "3" %}
-  <h1>Ongelmia chapter tietokannassa</h1>
-  {% endif %}
-  
-  {% if session.query_error == "4" %}
-  <h1>chapteria ei löytynyt</h1>
-  {% endif %}
-  
-  {% if session.query_error == "5" %}
-  <h1>Ongelmia query tietokannassa</h1>
-  {% endif %}
-
-  {% if session.query_error == "6" %}
-  <h1>Vastauksia ei löytynyt</h1>
-  {% endif %}
-
-  {% if session.query_error == "7" %}
-  <h1>Ongelmia answer tietokannassa</h1>
-  {% endif %}
-
-  {% if session.query_error == "8" %}
-  <h1>Kukaan ei ole vielä vastanut kyselyyn</h1>
-  {% endif %}
-
-  {% if session.query_error == "9" %}
-  <h1>Ongelmia user tietokannassa</h1>
-  {% endif %}
-
-  {% if session.query_error == "10" %}
-  <h1>Vastaa kysymykseen</h1>
-  {% endif %}
 </div>
 
 <div class="navbar">
   {% if session.query_mode == "1" %}
-  <a href="/view/{{ creator }}/{{ story }}/{{ chapter }}">Takaisin</a>
-    {% if session.user_name == creator %}
-    <a href="/create/question/{{ post }}/{{ chapter }}">Luo kysymys</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number }}">Takaisin</a>
+    {% if session.user_name == creator_name %}
+    <a href="/query/save/create_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Luo kysymys</a>
     {% endif %}
   {% endif %}
   
   {% if session.query_mode == "2" %}
-  <a href="/query/chapter/{{ post }}/{{ chapter }}">Takaisin</a>
+  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
 
   {% if session.query_mode == "3" %}
-  <a href="/query/chapter/{{ post }}/{{ chapter }}">Takaisin</a>
+  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
 
   {% if session.query_mode == "4" %}
-  <a href="/query/chapter/{{ post }}/{{ chapter }}">Takaisin</a>
+  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
   
   <a href="/" class="right">Pääsivulle</a>
@@ -196,18 +156,16 @@ textarea {
    {% if size > 0 %}
    
    {% for query in queries %}
-      {% if session.user_name == creator %} 
+      {% if session.user_name == creator_name %} 
       <a href="">(Tilastotietoja)(WIP)</a>
       <br>
-      <a href="/query/chapter/answers/{{ post }}/{{ chapter }}/{{ query[0] }}">Vastaukset</a>
+      <a href="/query/view_answers/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaukset</a>
       <br>
-      <a href="/remove/question/{{ post }}/{{ chapter }}/{{ query[0] }}">Poista</a>
+      <a href="/query/remove/remove_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}/0">Poista</a>
       <br>
       {% endif %}
-      <a href="/create/answer/{{ post }}/{{ chapter }}/{{ query[0] }}">Vastaa</a>
-      
+      <a href="/query/save/create_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaa</a>
       <br>
-   
       {{ query[3] }} 
    <hr>
    {% endfor %}
@@ -218,8 +176,8 @@ textarea {
   {% endif %}
 
   {% if session.query_mode == "2" %}
-  <form action="/save/question/{{ post }}/{{ chapter }}" method="POST">
-    <a>Kirjoita kysymykseksi alla olevaan teksti kenttään</a>
+  <form action="/query/save/save_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" method="POST">
+    <a>Kirjoita kysymyksesi alla olevaan teksti kenttään</a>
 
     <br>
     
@@ -241,13 +199,13 @@ textarea {
    <hr>
    {% for answer in answers %}
    
-   {% if session.user_name == creator %} 
-   <a href="/remove/answer/{{ post }}/{{ chapter }}/{{ query_id }}/{{ answer[0] }}">Poista</a>
+   {% if session.user_name == creator_name %} 
+   <a href="/query/remove/remove_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ answer[2] }}/{{ answer[0] }}">Poista</a>
    {% endif %}
 
    <br>
    
-   {{ creators[answer[0]] }}
+   {{ answer_creators[answer[0]] }}
    
    <br>
 
@@ -261,7 +219,7 @@ textarea {
   {% endif %}
 
   {% if session.query_mode == "4" %}
-  <form action="/save/answer/{{ post }}/{{ chapter }}/{{ query_id }}" method="POST">
+  <form action="/query/save/save_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query_id }}" method="POST">
     {{ question }}
 
     <br>

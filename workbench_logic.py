@@ -3,8 +3,9 @@ from flask import redirect, render_template, request, session
 from users_logic import *
 from posts_db import *
 from chapters_db import *
-from misc import *
 from text import *
+from misc import *
+
 
 def workbench_view_mode():
     session["workbench"] = "0"
