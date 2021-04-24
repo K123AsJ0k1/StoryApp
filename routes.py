@@ -12,6 +12,7 @@ from main_page_logic import *
 from profile_logic import *
 from workbench_logic import *
 from view_logic import *
+from comments_logic import *
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -69,11 +70,11 @@ def logout():
    session.clear()
    return redirect("/")
 
-@app.route("/profile")
-def profile():
+@app.route("/profile/<string:user_name>")
+def profile(user_name):
    profile_session_deletion()
-   
-   posts = get_profile_posts(session["user_id"])
+   user_id = get_user_id(user_name)
+   posts = get_profile_posts(user_id)
    size = len(posts)
    
    posts_have_chapters = {}
@@ -85,7 +86,7 @@ def profile():
    if not check_user():
       return redirect("/")
 
-   return render_template("profile.html", posts=posts, size=size, owns_chapters=posts_have_chapters)
+   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters)
 
 @app.route("/workbench/save/<string:mode>", methods=["get","post"])
 def workbench_save(mode):
@@ -106,7 +107,10 @@ def workbench_save(mode):
       
       if not save_post(user_id,public,general_comments,name,rating,genre):
          return render_template("workbench.html") 
-      return redirect("/profile")
+      
+      user_name = session["user_name"]
+      address = "/profile" + user_name
+      return redirect(address)
 
    if mode == "create_chapter" and request.method == "GET":
       workbench_chapter_mode()
@@ -123,7 +127,10 @@ def workbench_save(mode):
 
       if not save_chapter(post_id, chapter_public, row_comments, inquiry, text_content):
          return render_template("workbench.html") 
-      return redirect("/profile")
+      
+      user_name = session["user_name"]
+      address = "/profile" + user_name
+      return redirect(address)
 
 @app.route("/workbench/update/<string:mode>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
 def workbench_update(mode, post_id, chapter_number):
@@ -142,9 +149,13 @@ def workbench_update(mode, post_id, chapter_number):
       new_name = request.form["name"]
       rating = request.form["rating"]
       genre = request.form["genre"]
+      
       if not update_post(old_name, user_id, public, general_comments, new_name, rating, genre):
          return render_template("workbench.html")
-      return redirect("/profile")
+      
+      user_name = session["user_name"]
+      address = "/profile" + user_name
+      return redirect(address)
 
 @app.route("/workbench/remove/<string:mode>/<int:post_id>/<int:chapter_number>")
 def workbench_remove(mode, post_id, chapter_number):
@@ -153,15 +164,26 @@ def workbench_remove(mode, post_id, chapter_number):
 
    if mode == "remove_post" and post_id > 0:
       user_id = session["user_id"]
+      
       if not remove_post(user_id,post_id):
-         return redirect("/profile")
-      return redirect("/profile")
+         user_name = session["user_name"]
+         address = "/profile" + user_name
+         return redirect(address)
+      
+      user_name = session["user_name"]
+      address = "/profile" + user_name
+      return redirect(address)
 
    if mode == "remove_chapter" and post_id > 0 and chapter_number > 0:
       if not remove_chapter(post_id,chapter_number):
-         return redirect("/profile")
+         user_name = session["user_name"]
+         address = "/profile" + user_name
+         return redirect(address)
+      
       remove_chapter_content_session()
-      return redirect("/profile")
+      user_name = session["user_name"]
+      address = "/profile" + user_name
+      return redirect(address)
 
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:chapter_number>")
 def view(creator_name, post_name, chapter_number):
@@ -172,93 +194,65 @@ def view(creator_name, post_name, chapter_number):
    return render_template("view.html", creator_name=creator_name, post_name=post_name, chapter_number=chapter_number)
 
 @app.route("/view/<int:post_id>/<string:post_name>")
-def redirect_into_chapter_view(post_id,post_name):
+def redirect_into_view(post_id,post_name):
    creator_name = get_post_creator(post_id)
    address = "/view/" + creator_name + "/"+ post_name +"/1"
    return redirect(address)
 
-@app.route("/comments/general/<int:post_id>/<string:post_name>")
-def view_general_comments(post_id,post_name):
-   post_creator = get_post_creator(post_id)
+@app.route("/comments/general/<string:creator_name>/<string:post_name>/<int:post_id>")
+def comments_general(creator_name, post_name, post_id):
    comments = get_post_general_comments(post_id)
    
    if len(comments) == 0:
-      session["comment_mode"] = "1"
-      session["comment_error"] = "0"
-      return render_template("comments.html", post_id=post_id, story=post_name)
+      comment_view_mode()
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0)
    
-   creators = {}
+   comment_creators = {}
 
    for comment in comments:
-       creator = get_comment_creator(comment[0])
-       creators[comment[0]] = creator
+       comment_creators[comment[0]] = get_comment_creator(comment[0])
 
-   if len(creators) == 0:
-      session["comment_mode"] = "1"
-      session["comment_error"] = "1"
-      return render_template("comments.html", post_id=post_id,  story=post_name)
+   if len(comment_creators) == 0:
+      comment_view_mode()
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0)
    
-   # luo parempi lista, jossa on ainoastaan kommentin luoja, kommentti, luku ja luku booleani
-   session["comment_mode"] = "1"
-   session["comment_error"] = "2"
-   return render_template("comments.html", creator=post_creator, post_id=post_id, story=post_name, comments=comments, creators=creators)
+   size = len(comments)
+   comment_view_mode()
+   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, comments=comments, comment_creators=comment_creators, size=size)
 
-@app.route("/create/comment/general/<int:post_id>/<string:post_name>")
-def create_general_comment(post_id,post_name):
+@app.route("/comments/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
+def comments_tools(mode, creator_name, post_name, post_id, chapter_number):
    if not check_user():
       return redirect("/")
    
-   session["comment_mode"] = "2"
-   session["comment_error"] = "3"
-   last_chapter = get_the_next_chapter_number(post_id)-1
-   return render_template("comments.html", last_chapter=last_chapter,  post_id=post_id, story=post_name)
-
-@app.route("/save/comment/general/<int:post_id>/<string:post_name>", methods=["POST"])
-def save_general_comment(post_id,post_name):
-   if not check_user():
-      return redirect("/")
+   if mode == "create_general_comment" and request.method == "GET" and post_id > 0:
+      comment_creation_mode()
+      last_chapter = get_the_next_chapter_number(post_id)-1
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, last_chapter=last_chapter)
    
-   referenced_chapter = request.form["referenced_chapter_number"]
-   
-   chapter_list = get_the_chapter_numbers(post_id)
-  
-   chapter_number_on = '0'
-   chapter_number = 0
-   
-   if referenced_chapter.isdigit(): 
-      for chapter in chapter_list:
-         if chapter[0] == int(referenced_chapter):
-          chapter_number_on = '1'
-          chapter_number = chapter[0]
-   
-   comment = request.form["comment_text"]
-   
-   if not check_text_requirements(comment):
-      address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
+   if mode == "save_general_comment" and request.method == "POST" and post_id > 0:
+      user_id = session["user_id"]
+      comment = request.form["comment_text"]
+      referenced_chapter = request.form["referenced_chapter_number"]
+      
+      if not save_general_comment(post_id,user_id,comment,referenced_chapter):
+         address = "/comments/save/create_general_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
+         return redirect(address)
+      
+      address = "/comments/general/"+ creator_name + "/"+ post_name +"/" + str(post_id)
       return redirect(address)
 
-   check_number = save_the_comment(session["user_id"], post_id, 0, '1', '0', chapter_number_on, chapter_number, comment)
-   
-   if check_number == -1:
-      address = "/create/comment/general/"+ str(post_id) + "/"+ post_name
-      return redirect(address)
-   
-   address = "/comments/general/"+ str(post_id) + "/"+ post_name
-   return redirect(address)
-
-@app.route("/remove/comment/general/<int:post_id>/<string:post_name>/<int:comment_id>")
-def remove_general_comment(post_id, post_name, comment_id):
+@app.route("/comment/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:comment_id>")
+def comment_remove(mode, creator_name, post_name, post_id, chapter_number, comment_id):
    if not check_user():
       return redirect("/")
    
-   check_number = remove_the_comment(comment_id)
-
-   if check_number == -1:
-       address = "/comments/general/"+ str(post_id) + "/"+ post_name
-       return redirect(address)
-
-   address = "/comments/general/"+ str(post_id) + "/"+ post_name
-   return redirect(address)
+   if mode == "remove_general_comment" and post_id > 0 and comment_id > 0:
+      if not remove_comment(comment_id):
+         address = "/comments/general/" + creator_name + "/" + post_name + "/" + str(post_id)
+         return redirect(address)
+      address = "/comments/general/" + creator_name + "/" + post_name + "/" + str(post_id)
+      return redirect(address)
 
 @app.route("/query/chapter/<int:post_id>/<int:chapter_number>")
 def view_query(post_id,chapter_number):

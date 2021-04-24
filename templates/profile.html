@@ -84,13 +84,17 @@ body {
 <body>
 
 <div class="header">
-  <h1>{{ session.user_name }}</h1>
+  <h1>{{ user_name }}/Profiili</h1>
 </div>
 
 <div class="navbar">
+  {% if session.user_name == user_name %}
   <a href="/workbench/save/create_post">Luo uusi postaus</a>
   <a href="/workbench/save/create_chapter">Luo uusi luku</a>
+  {% endif %}
+  {% if session.user_name %}
   <a href="/logout" class="right">Kirjaudu ulos</a>
+  {% endif %}
   <a href="/" class="right">Pääsivulle</a>
 </div>
 
@@ -102,17 +106,19 @@ body {
     Tarina: {{ post[3] }} <br>
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
-    <a href="/view/{{ session.user_name }}/{{ post[3] }}/1">Lue</a>
+    {% if session.user_name == user_name %}
+    <a href="/view/{{ user_name }}/{{ post[3] }}/1">Lue</a>
     {% if post[2] and owns_chapters[post[0]] %}
-    <a href="/comments/general/{{ post[0] }}/{{ post[3] }}">Kommentit</a>
+    <a href="/comments/general/{{ user_name }}/{{ post[4] }}/{{ post[0] }}">Kommentit</a>
     {% endif %}
     <a href="/workbench/update/change_post/{{ post[0] }}/0">Muokkaa</a>
     <a href="/workbench/remove/remove_post/{{ post[0] }}/0">Poista</a>
     <hr>
+    {% endif %}
     {% endfor %}
     {% endif %}
     {% if size == 0 %}
-    <h2>Et omista yhtään postausta</h2>
+    <h2>Profiili ei omista yhtään postausta</h2>
     {% endif %}
   </div>
 </div>

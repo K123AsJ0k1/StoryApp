@@ -86,49 +86,45 @@ textarea {
 
 <div class="header">
   {% if session.comment_mode == "1" %}
-  <h1>{{ story }}/Yleiset kommentit</h1>
+  <h1>{{ creator_name }}/{{ post_name }}/Yleiset kommentit</h1>
   {% endif %}
   {% if session.comment_mode == "2" %}
-  <h1>{{ story }}/Kommentin luonti</h1>
+  <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
   {% endif %}
 </div>
 
 <div class="navbar">
-  {% if session.comment_mode == "1" and session.username %}
-  <a href="/create/comment/general/{{ post_id }}/{{ story }}">Luo kommentti</a>
+  {% if session.comment_mode == "1" and session.user_name %}
+  <a href="/comments/save/create_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0">Luo kommentti</a>
   {% endif %}
   {% if session.comment_mode == "2" %}
-  <a href="/comments/general/{{ post_id }}/{{ story }}">Takaisin</a>
+  <a href="/comments/general/{{ creator_name }}/{{ post_name }}/{{ post_id }}">Takaisin</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
-  {% if session.username %}
-  <a href="/profile" class="right">Profiili</a>
+  {% if session.user_name %}
+  <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
   {% endif %}
 </div>
 
-<div class="footer">
-  
-  {% if session.comment_error == "0" %}
-  <h1>Kukaan ei ole vielä kommentoinut tätä postausta</h1>
-  {% endif %}
-  
-  {% if session.comment_error == "1" %}
-  <h1>Tietokanta ongelmia</h1>
+<div class="footer">  
+  {% if size == 0 and session.comment_mode == "1" %}
+  <h1>Kukaan ei ole vielä kommentoinut postausta</h1>
   {% endif %}
 
-  {% if session.comment_error == "2" %}
+  {% if session.comment_mode == "1" %}
   
   <hr>
+  {% if size > 0 %}
   
   {% for comment in comments %}
 
-  {% if session.username == creator %}
-  <a href="/remove/comment/general/{{ post_id }}/{{ story }}/{{ comment[0] }}">Poista</a>
+  {% if session.user_name == creator_name %}
+  <a href="/comment/remove/remove_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/{{ comment[0] }}">Poista</a>
   {% endif %}
 
   <br>
   
-  {{ creators[comment[0]] }}
+  {{ comment_creators[comment[0]] }}
   
   {% if comment[5] %}
   / Luku:  {{ comment[6] }}
@@ -146,8 +142,10 @@ textarea {
   
   {% endif %}
   
-  {% if session.comment_error == "3" %}
-  <form action="/save/comment/general/{{ post_id }}/{{ story }}" method="POST">
+  {% endif %}
+  
+  {% if session.comment_mode == "2" %}
+  <form action="/comments/save/save_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0" method="POST">
     {% if last_chapter > 0 %}
     
     {% if last_chapter == 1 %}

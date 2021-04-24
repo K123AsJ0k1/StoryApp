@@ -137,7 +137,7 @@ body {
 <div class="topnav">
   {% if session.user_name %}
   <a>{{ session.user_name }}</a>
-  <a href="/profile">Profiili</a>
+  <a href="/profile/{{ session.user_name }}">Profiili</a>
   <a href="/logout">Kirjaudu ulos</a>
   {% else %}
   <a href="/signup">Luo käyttäjä</a>
@@ -160,7 +160,7 @@ body {
     <a href="/view/{{ post[0] }}/{{ post[4] }}">{{ post[4] }}</a>
     kirjoittajalta {{ post_creators[post[0]] }}
     {% if post[3] and owns_chapters[post[0]] %}
-    <a href="/comments/general/{{ post[0] }}/{{ post[4] }}" class="right">Kommentit</a>
+    <a href="/comments/general/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}" class="right">Kommentit</a>
     {% endif %}
     <hr>
     {% endfor %}
