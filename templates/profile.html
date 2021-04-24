@@ -109,7 +109,7 @@ body {
     {% if session.user_name == user_name %}
     <a href="/view/{{ user_name }}/{{ post[3] }}/1">Lue</a>
     {% if post[2] and owns_chapters[post[0]] %}
-    <a href="/comments/general/{{ user_name }}/{{ post[4] }}/{{ post[0] }}">Kommentit</a>
+    <a href="/comments/general/{{ user_name }}/{{ post[3] }}/{{ post[0] }}">Kommentit</a>
     {% endif %}
     <a href="/workbench/update/change_post/{{ post[0] }}/0">Muokkaa</a>
     <a href="/workbench/remove/remove_post/{{ post[0] }}/0">Poista</a>
