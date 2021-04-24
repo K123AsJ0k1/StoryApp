@@ -114,7 +114,7 @@ def workbench_save(mode):
          return render_template("workbench.html") 
       
       user_name = session["user_name"]
-      address = "/profile" + user_name
+      address = "/profile/" + user_name
       return redirect(address)
 
    if mode == "create_chapter" and request.method == "GET":
@@ -131,7 +131,9 @@ def workbench_save(mode):
       text_content = request.form["chapter_text"]
 
       if not save_chapter(post_id, chapter_public, row_comments, inquiry, text_content):
-         return render_template("workbench.html") 
+         posts = get_profile_posts(session["user_id"])
+         size = len(posts)
+         return render_template("workbench.html", posts=posts, size=size)
       
       user_name = session["user_name"]
       address = "/profile/" + user_name
