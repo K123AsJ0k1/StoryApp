@@ -61,8 +61,8 @@ Sovelluksen ominaisuudet ovat:
 - Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
 - Admin käyttäjän voi luoda ja sen avulla voi kirjautua
 - Hallinto sivusto antaa linkit eri tietokanta näkymiin
-- Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla
-- Sovellus osaa näyttää tekstiä oikealla lailla
+- Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla (Rivi saa olla korkeintaan 100 merkkiä pitkä ilman enteriä)
+- Sovellus osaa näyttää tekstiä oikealla lailla 
 
 # Testauksesta herokussa (25.4.2021):
 
