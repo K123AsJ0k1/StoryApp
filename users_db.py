@@ -21,6 +21,22 @@ def create_user(username, password):
         print(e)
         return False
 
+def create_admin(username, password, super_user_password):
+    try:
+      # Tarkoitus on hakea tietokannasta user taulusta käyttäjältä super user:in salasana
+      if not super_user_password == "Testi":
+         return -2
+
+      hash_value = generate_password_hash(password)
+      sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
+      db.session.execute(sql, {"username":username, "password":hash_value, "role":1})
+      db.session.commit()
+
+      return 0
+    except Exception as e:
+        print(e)
+        return -3
+
 def login_user(username, password):
     try:
         sql = "SELECT password FROM users WHERE username=:username"
