@@ -35,9 +35,11 @@ Perustiedot:
 - Kaikki asiat, joissa lukee WIP, on kehityksen alla
 - Julkinen postaus tulee näkyviin silloin, kun se omistaa vähintään yhden chapterin
 - Jos linkin nimen mukainen asia ei omista yhtään asiaa tietokannassa, se pitää käyttäjän sivustolla
+- En suosittele olemaan valitsematta mitään postausta chapterin luonnissa, sillä se voi aiheuttaa errorin
 
 Ongelmia:
 
+- Postauksen valinta chapterin luonnissa voi aiheuttaa errorin
 - sovelluksen tiedosto rakenne kaipaa refaktorointia
 - session asiat tarvitsevat refaktorointia
 - route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
