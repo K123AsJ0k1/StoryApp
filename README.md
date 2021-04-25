@@ -58,8 +58,12 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittaja pystyy valitsemaan, onko chapterilla kysely vai ei
 - Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
 - Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
+
+# Uudet ominaisuudet:
+
 - Chaptereista voidaan valita tekstiä rivi aiheeksi 
 - Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
+- Chapterin rivi aiheita ja niihin liittyviä kommenteja voi poistaa
 - Admin käyttäjän voi luoda ja sen avulla voi kirjautua
 - Hallinto sivusto antaa linkit eri tietokanta näkymiin
 - Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla (Rivi saa olla korkeintaan 100 merkkiä pitkä ilman enteriä)
