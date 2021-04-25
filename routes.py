@@ -428,7 +428,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       referenced_chapter = request.form["referenced_chapter_number"]
       
       if not save_general_comment(post_id,user_id,comment,referenced_chapter):
-         address = "/comments/save/create_general_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
+         address = "/comments/save/create_general_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
          return redirect(address)
       
       address = "/comments/general/"+ creator_name + "/"+ post_name +"/" + str(post_id)
@@ -454,7 +454,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       comment = request.form["row_subject_comment"]
       
       if not save_row_subject_comment(user_id, post_id, chapter_number, subject_id, comment):
-         address = "/comments/save/" + create_row_subject_comment + "/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
+         address = "/comments/save/create_row_subject_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
          return redirect(address)
       
       row_subject_comments_view_mode()
