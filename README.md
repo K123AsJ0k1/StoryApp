@@ -26,6 +26,8 @@ Sovelluksen ominaisuudet ovat:
 
 # HUOMIOTA (25.4.2021):
 
+Perustiedot:
+
 - Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi. Super user password on Salasana
 - Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
 - Sovelluksessa on olemassa jo kaksi tavallista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
