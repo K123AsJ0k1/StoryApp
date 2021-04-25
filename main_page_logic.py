@@ -3,10 +3,10 @@ from flask import redirect, render_template, request, session
 
 def main_page_session_deletion():
     if 'log_in' in session:
-      del session["login"]
+      del session["log_in"]
    
     if 'sign_up' in session:
-      del session["signup"]
+      del session["sign_up"]
    
     if 'workbench' in session:
       del session["workbench"] 

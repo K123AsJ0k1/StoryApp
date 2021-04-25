@@ -78,8 +78,9 @@ body {
 </div>
 
 <div class="signup">
+  {% if session.login_mode == "1" %}
   <div class="main">
-    <form action="/login" method="POST">
+    <form action="/login/check_user" method="POST">
     <p>Tunnus:<br>
     <input type="text" name="username"></p>
     <p>Salasana:<br>
@@ -87,6 +88,18 @@ body {
     <input type="submit" value="Kirjaudu">
     </form>
   </div>
+  {% endif %}
+  {% if session.login_mode == "2" %}
+  <div class="main">
+    <form action="/login/check_admin" method="POST">
+    <p>Tunnus:<br>
+    <input type="text" name="admin_name"></p>
+    <p>Salasana:<br>
+    <input type="password" name="admin_password"></p>
+    <input type="submit" value="Kirjaudu">
+    </form>
+  </div>
+  {% endif %}
 </div>
 
 </body>

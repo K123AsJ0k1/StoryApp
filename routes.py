@@ -41,39 +41,79 @@ def main_page():
 
    return render_template("main.html", posts=posts, size=size, post_creators=post_creators, owns_chapters=posts_have_chapters)
 
-@app.route("/signup", methods=["get","post"])
-def signup():
-   if request.method == "GET":
+@app.route("/signup/<string:mode>", methods=["get","post"])
+def signup(mode):
+   if mode == "create_user" and request.method == "GET":
+      sign_up_user_mode()
       return render_template("signup.html") 
     
-   if request.method == "POST":
+   if mode == "register_user" and request.method == "POST":
       username = request.form["username"]
       password = request.form["password"]
 
-      if not register(username,password):
-         return render_template("signup.html")
+      if not register(mode,username,password,""):
+         address = "/signup/create_user"
+         return redirect(address)
          
       return redirect("/")
 
-@app.route("/login", methods=["get","post"])
-def login():
-   if request.method == "GET":
+   if mode == "create_admin" and request.method == "GET":
+      sign_up_admin_mode()
+      return render_template("signup.html") 
+   
+   if mode == "register_admin" and request.method == "POST":
+      username = request.form["admin_name"]
+      password = request.form["admin_password"]
+      super_user_password = request.form["super_user_password"]
+
+      if not register(mode,username,password,super_user_password):
+         address = "/signup/create_admin"
+         return redirect(address)
+
+      return redirect("/login/log_in_admin")
+      
+@app.route("/login/<string:mode>", methods=["get","post"])
+def login(mode):
+   if mode == "log_in_user" and request.method == "GET":
+      log_in_user_mode()
       return render_template("login.html")
 
-   if request.method == "POST":
+   if mode == "check_user" and request.method == "POST":
       username = request.form["username"]
       password = request.form["password"]
 
-      if not log_in(username, password):
-         return render_template("login.html")
+      if not log_in(mode,username, password):
+         address = "/login/log_in_user"
+         return redirect(address)
 
       return redirect("/")
+   
+   if mode == "log_in_admin" and request.method == "GET":
+      log_in_admin_mode()
+      return render_template("login.html")
+
+   if mode == "check_admin" and request.method == "POST":
+      username = request.form["admin_name"]
+      password = request.form["admin_password"]
+
+      if not log_in(mode,username, password):
+         address = "/login/log_in_admin"
+         return redirect(address)
+      
+      address = "/administration/" + username
+      return redirect(address)
 
 @app.route("/logout")
 def logout():
    session.clear()
    return redirect("/")
 
+@app.route("/administration/<string:admin_name>")
+def administration(admin_name):
+   if not session["user_role"] == 2:
+      return redirect("/")
+   return render_template("administration.html")
+   
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
    profile_session_deletion()
