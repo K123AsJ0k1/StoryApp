@@ -37,6 +37,7 @@ Perustiedot:
 
 Ongelmia:
 
+- sovelluksen tiedosto rakenne kaipaa refaktorointia
 - session asiat tarvitsevat refaktorointia
 - route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
 - route.py linkkejä voisi refaktoroida
