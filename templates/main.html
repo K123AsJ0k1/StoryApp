@@ -157,7 +157,7 @@ body {
     {% if size > 0 %}
     <hr>
     {% for post in posts %}
-    <a href="/view/{{ post[0] }}/{{ post[4] }}">{{ post[4] }}</a>
+    <a href="/view/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}/1">{{ post[4] }}</a>
     kirjoittajalta {{ post_creators[post[0]] }}
     {% if post[3] and owns_chapters[post[0]] %}
     <a href="/comments/general/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}" class="right">Kommentit</a>

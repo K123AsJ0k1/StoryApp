@@ -91,6 +91,15 @@ textarea {
   {% if session.comment_mode == "2" %}
   <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
   {% endif %}
+  {% if session.comment_mode == "3" %}
+  <h1>Rivi Aiheet</h1>
+  {% endif %}
+  {% if session.comment_mode == "4" %}
+  <h1>Aiheen kommentit/h1>
+  {% endif %}
+  {% if session.comment_mode == "5" %}
+  <h1>Kommentoi aihetta</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
@@ -99,6 +108,9 @@ textarea {
   {% endif %}
   {% if session.comment_mode == "2" %}
   <a href="/comments/general/{{ creator_name }}/{{ post_name }}/{{ post_id }}">Takaisin</a>
+  {% endif %}
+  {% if session.comment_mode == "3" %}
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
   {% if session.user_name %}
@@ -175,6 +187,42 @@ textarea {
     <input type="submit" value="Tallenna">
   </form>
   {% endif %}
+
+  {% if session.comment_mode == "3" %}
+
+  <hr>
+  {% if size > 0 %}
+  
+  {% for subject in subjects %}
+
+  {% if session.user_name == creator_name %}
+  <a href="/comment/remove/remove_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}">Poista</a>
+  {% endif %}
+
+  <br>
+  
+  {{ subject_creators[subject[0]] }}
+
+  <br>
+
+  {{ subject[6] }}
+  
+  <hr>
+  
+  {% endfor %}
+  
+  {% endif %}
+  
+  {% endif %}
+
+  {% if session.comment_mode == "4" %}
+  
+  {% endif %}
+
+  {% if session.comment_mode == "5" %}
+  
+  {% endif %}
+
 </div>
 
 </body>

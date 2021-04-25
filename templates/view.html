@@ -35,6 +35,29 @@ body {
   background-color: #333;
 }
 
+.navbar button {
+  background-color:#333;
+  padding: 0;
+  border: none;   
+  background: none;
+  float: left;
+  display: block;
+  color: rgb(247, 239, 239);
+  text-align: center;
+  padding: 13.5px 20px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar button.right {
+  float: right;
+}
+
+.navbar button:hover {
+  background-color: #ddd;
+  color: black;
+}
+
 .navbar a {
   float: left;
   display: block;
@@ -83,6 +106,29 @@ textarea {
 </head>
 <body>
 
+<script> 
+    function getSelectionText() {
+      var text = "";
+      var activeEl = document.activeElement;
+      var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+      
+      if (
+        (activeElTagName == "textarea") || (activeElTagName == "input" &&
+        /^(?:text|search|password|tel|url)$/i.test(activeEl.type)) &&
+        (typeof activeEl.selectionStart == "number")
+      ) {
+          text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+      } else if (window.getSelection) {
+          text = window.getSelection().toString();
+      }
+      return text;
+    }
+  
+    document.onmouseup = document.onkeyup = document.onselectionchange = function() {
+      document.getElementById("sel").value = getSelectionText();
+    };
+</script>
+
 <div class="header">
   {% if session.view_mode == "0" %}
   <h1>Postauksella ei ole yhtään lukua</h1>
@@ -94,33 +140,47 @@ textarea {
 
 <div class="navbar">
   {% if session.switch_chapter == "0" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number + 1 }}">Seuraava luku</a>
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number - 1 }}">Edellinen luku</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
   {% if session.switch_chapter == "1" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number + 1 }}">Seuraava luku</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
   {% endif %}
   {% if session.switch_chapter == "2" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ chapter_number - 1 }}">Edellinen luku</a>
+  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
   <a href="/" class="right">Pääsivulle</a>
   {% if session.user_name %}
   <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+  <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
+  <button type="submit" form="form">Luo rivi aihe</button>
   {% if session.inquiry %}
-  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ session.post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
+  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
   {% endif %}
   {% endif %}
   {% if session.user_name == creator_name %}
-  <a href="/workbench/remove/remove_chapter/{{ session.post_id }}/{{ chapter_number }}" class="right">Poista</a>
+  <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
   {% endif %}
 </div>
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
   {% for para in session.chapter_content %}
-    {{para}}<br> 
+  
+  {% if not para == "" %}
+  {{ loop.index }}
+  {% endif %}
+  
+  {{ para }}
+  <br>
   {% endfor %}
   {% endif %}
+</div>
+
+<div class="clip_board"> 
+  <form id="form"  action="/comments/save/save_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}" method="POST">
+    <textarea id="sel" style="display:none;" name="selected_text"></textarea>
+  </form>
 </div>
 
 </body>

@@ -107,7 +107,7 @@ body {
     Julkisesti nähtävä: {{ post[1] }} <br>
     Yleinen kommentointi: {{ post[2] }} <br>
     {% if session.user_name == user_name %}
-    <a href="/view/{{ user_name }}/{{ post[3] }}/1">Lue</a>
+    <a href="/view/{{ user_name }}/{{ post[3] }}/{{ post[0] }}/1">Lue</a>
     {% if post[2] and owns_chapters[post[0]] %}
     <a href="/comments/general/{{ user_name }}/{{ post[3] }}/{{ post[0] }}">Kommentit</a>
     {% endif %}

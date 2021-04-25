@@ -9,7 +9,7 @@ def save_the_comment(user_id, post_id, row_id, general_comment, row_comment, cha
         return 0
     except Exception as e:
         print(e)    
-        return -1
+        return -2
 
 def remove_the_comment(id):
     try:
@@ -19,7 +19,7 @@ def remove_the_comment(id):
         return 0
     except Exception as e:
         print(e)    
-        return -1
+        return -2
 
 def remove_the_general_comments(post_id):
     try:
@@ -59,6 +59,7 @@ def get_comment_creator(comment_id):
         
 def get_post_general_comments(post_id):
     try:
+        #Korjaa se, että tässä tulee general_comment ja row_id mukaan
         sql = "SELECT id,user_id,post_id,row_id,general_comment,chapter_number_on,chapter_number,comment FROM comments WHERE post_id=:post_id AND general_comment=true"
         result = db.session.execute(sql, {"post_id":post_id})
         general_comments = result.fetchall()
@@ -70,3 +71,31 @@ def get_post_general_comments(post_id):
     except Exception as e:
         print(e)    
         return None
+
+def get_chapter_row_subjects(post_id,chapter_number):
+    try:
+        sql = "SELECT id,user_id,post_id,row_id,chapter_number_on,chapter_number,comment FROM comments WHERE post_id=:post_id AND chapter_number=:chapter_number AND row_comment=true"
+        result = db.session.execute(sql, {"post_id":post_id, "chapter_number":chapter_number})
+        chapter_subjects = result.fetchall()
+
+        if chapter_subjects == None:
+           return None
+        
+        return chapter_subjects
+    except Exception as e:
+        print(e)    
+        return None   
+
+def get_subject_comments(post_id,chapter_number,row_id):
+    try:
+        sql = "SELECT id,user_id,post_id,row_id,chapter_number,comment FROM comments WHERE post_id=:post_id AND chapter_number=:chapter_number AND row_id=:row_id AND row_comment=true"
+        result = db.session.execute(sql , {"post_id":post_id, "chapter_number":chapter_number, "row_id":row_id})
+        subject_comments = result.fetchall()
+
+        if subject_comments == None:
+            return None
+        
+        return subject_comments
+    except Exception as e:
+        print(e)    
+        return None   
