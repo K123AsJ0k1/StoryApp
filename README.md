@@ -37,6 +37,8 @@ Perustiedot:
 
 Ongelmia:
 
+- route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
+- route.py linkkejä voisi refaktoroida
 - Tietokanta ja route.py tarvitsevat hieman refaktorointia
 - Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
 - Sovelluksessa on edelleen CSRF haavoittuvuus, joka tullaan korjaamaan
