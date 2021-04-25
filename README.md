@@ -24,14 +24,23 @@ Sovelluksen ominaisuudet ovat:
 - Admin käyttäjä pystyy tarkastelemaan olemassa olevia käyttäjiä, kommenteja ja kyselyitä
 - Admin käyttäjä pystyy poistamaan käyttäjiä, postauksia, kommenteja ja kyselyitä
 
-# HUOMIOTA (11.4.2021):
+# HUOMIOTA (25.4.2021):
 
-- Sovelluksessa on olemassa jo kaksi valmista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
-- Chapterin luonnissa en suosittele olemaan painamatta tallenna, kun et ole valinnut yhtään postausta, sillä se saattaa aiheuttaa errorin
-- En suosittele käyttämään pääsivulla näkyvää haku selainta, sillä se saattaa aiheuttaa errorin
-- Sovellus ei osaa vielä rivittää tekstiä oikealla lailla, joten en suosittele pitkien tekstien antamista
+- Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi. Super user password on Salasana
+- Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
+- Sovelluksessa on olemassa jo kaksi tavallista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
+- Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin
+- Kaikki asiat, joissa lukee WIP, on kehityksen alla
+- Tietokanta ja route.py tarvitsevat hieman refaktorointia
+- Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
+- Sovelluksessa on edelleen CSRF haavoittuvuus, joka tullaan korjaamaan
+- Sovelluksen käyttöliittymä on tietyissä paikoissa hieman tynkä
+- Sovellus ei kommunikoi kovinkaan paljon käyttäjän kanssa
+- Adminit menemään pääsivulle ja profiilin
+- Tietokannan poisto metodit kaipaavat hieman refaktorointia
+- Super user password tarvitsee tietokanta varmistuksen
 
-# Toteutetut ominaisuudet välipalautus 2 (11.4.2021):
+# Toteutetut ominaisuudet välipalautus 3 (25.4.2021):
 
 - Anonyymit ja kirjoittajat näkevät postauksia pääsivulla
 - Anonyymit ja kirjoittajat voivat tarkastella postauksien chaptereita
@@ -48,6 +57,12 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittaja pystyy valitsemaan, onko chapterilla kysely vai ei
 - Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
 - Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
+- Chaptereista voidaan valita tekstiä rivi aiheeksi 
+- Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
+- Admin käyttäjän voi luoda ja sen avulla voi kirjautua
+- Hallinto sivusto antaa linkit eri tietokanta näkymiin
+- Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla
+- Sovellus osaa näyttää tekstiä oikealla lailla
 
 # Testauksesta herokussa (11.4.2021):
 
@@ -162,6 +177,39 @@ Postauksen kommentointi mahdollisuus
 Chapterin kyselyn näkymien
 
 - Chapter viewissä pitäisi näkyä kysely, jos kyseinen asetus on annettu
+
+Rivi aiheen valitseminen
+
+- Valittuasi jonkin tekstin chapterin näkymästä, paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterib rivialueella
+
+Rivi alue
+
+- Rivialueella näkyvät kaikki rivi aiheet, joita voi kommentoida käyttäjät ja joita omistaja pystyy poistamaan
+
+Rivi kommentit
+
+- Riviaihetta voi kommentoida menemällä sen vastauksiin ja luomalla kommentin, jonka jälkeen se pitäisi näkyä rivi aiheen vastauksissa.Luvun omistaja pystyy poistamana rivi kommentteja
+
+Adminin luonti
+
+- Muutettuasi tavallisen käyttäjän luonnin URL:in user adminiksi, anna 10 merkin pituinen käyttäjä nimi ja salasana ja super user password salasana. Sen jälkeen kirjaudu sisään
+
+Admin kirjautuminen
+
+- Luotuasi uuden adminin tai muutettuasi kirjautumisen URL:n user adminiksi, annan olemassa oleva käyttäjä nimi ja salasana
+
+Hallinto
+
+- Antaa linkit eri tietokanta työkaluihin ja ulos kirjautumis mahdollisuuden
+
+Tietokanta mäkymät
+
+- Näyttävät tällä hetkellä linkin mukaisen taulukon tiedot tietokannassa, takaisin paluu linkin ja ulos kirjautumisen
+
+
+
+
+
 
 
  
