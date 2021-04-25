@@ -64,7 +64,7 @@ Sovelluksen ominaisuudet ovat:
 - Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla
 - Sovellus osaa näyttää tekstiä oikealla lailla
 
-# Testauksesta herokussa (11.4.2021):
+# Testauksesta herokussa (25.4.2021):
 
 Perusidea:
 
