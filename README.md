@@ -116,10 +116,9 @@ Työpöytä
 - Kyseiset linkit pitäisi tehdä nimiensä mukaisia asioita
 - Tapauksessa, jossa postauksia ei ole, chapter luonti pitäisi näyttää, ettei postauksia ole
 
-Reset
+Takaisin
 
-- Kun saavut joko postauksen, chapterin luontiin, vasemmalla puolella pitäisi olla reset, jonka avulla pystyt palamaan takaisin edelliseen valintan
-- Sama linkki pitäisi löytyä muistakin sivuista
+- Tämä linkki löytyy monesta sivusta ja se vie takaisin edelliseen sivuun
 
 Postauksen luonti
 
