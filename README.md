@@ -35,7 +35,8 @@ Sovelluksen ominaisuudet ovat:
 - Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
 - Sovelluksessa on edelleen CSRF haavoittuvuus, joka tullaan korjaamaan
 - Sovelluksen käyttöliittymä on tietyissä paikoissa hieman tynkä
-- Sovellus ei kommunikoi kovinkaan paljon käyttäjän kanssa
+- Sovellus ei kommunikoi kovinkaan paljon käyttäjän tekemistä virheistä
+- Sovellus ei varmista poistamista, joten käyttäjä voi vahingossa painaa väärää linkkiä ja poistaa asian
 - Adminit menemään pääsivulle ja profiilin
 - Tietokannan poisto metodit kaipaavat hieman refaktorointia
 - Super user password tarvitsee tietokanta varmistuksen
@@ -180,7 +181,7 @@ Chapterin kyselyn näkymien
 
 Rivi aiheen valitseminen
 
-- Valittuasi jonkin tekstin chapterin näkymästä, paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterib rivialueella
+- Valittuasi jonkin tekstin chapterin näkymästä (sama periaate kuten copy paste), paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterin rivialueella
 
 Rivi alue
 
@@ -205,17 +206,3 @@ Hallinto
 Tietokanta mäkymät
 
 - Näyttävät tällä hetkellä linkin mukaisen taulukon tiedot tietokannassa, takaisin paluu linkin ja ulos kirjautumisen
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
