@@ -245,8 +245,33 @@ def row_subjects(creator_name, post_name, post_id, chapter_number):
    row_subject_view_mode()
    return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number ,subjects=subjects, subject_creators=subject_creators, size=size)
 
-@app.route("/comments/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
-def comments_save(mode, creator_name, post_name, post_id, chapter_number):
+@app.route("/comments/row/subject_comments/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>")
+def row_subject_comments(creator_name, post_name, post_id, chapter_number, subject_id):
+   #Luo creator_name, post_name, post_id tarkastus
+   print(post_id)
+   print(chapter_number)
+   print(subject_id)
+   subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
+   print(subject_comments)
+   if len(subject_comments) == 0:
+      row_subject_comments_view_mode()
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0)
+
+   subject_comment_creators = {}
+
+   for subject_comment in subject_comments:
+      subject_comment_creators[subject_comment[0]] = get_comment_creator(subject_comment[0])
+
+   if len(subject_comment_creators) == 0:
+      row_subject_comments_view_mode()
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0)
+
+   size = len(subject_comments)
+   row_subject_comments_view_mode()
+   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, subject_comments=subject_comments, subject_comment_creators=subject_comment_creators, size=size)
+
+@app.route("/comments/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>", methods=["get","post"])
+def comments_save(mode, creator_name, post_name, post_id, chapter_number, subject_id):
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
@@ -271,14 +296,32 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number):
    if mode == "save_row_subject" and request.method == "POST" and post_id > 0 and chapter_number > 0:
       user_id = session["user_id"]
       subject = request.form["selected_text"]
+      
       if not save_row_subject(user_id, post_id, chapter_number, subject):
          address = "/view/" + creator_name + "/" + post_name + "/" + str(post_id)  + "/" + str(chapter_number)
          return redirect(address)
+      
       address = "/comments/row/subjects/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
       return redirect(address)
 
-@app.route("/comment/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:comment_id>")
-def comment_remove(mode, creator_name, post_name, post_id, chapter_number, comment_id):
+   if mode == "create_row_subject_comment" and request.method == "GET" and post_id > 0 and chapter_number > 0 and subject_id > 0:
+      row_subject_comments_creation_mode()
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id)
+   
+   if mode == "save_row_subject_comment" and request.method == "POST" and post_id > 0 and chapter_number > 0 and subject_id > 0:
+      user_id = session["user_id"]
+      comment = request.form["row_subject_comment"]
+      
+      if not save_row_subject_comment(user_id, post_id, chapter_number, subject_id, comment):
+         address = "/comments/save/" + create_row_subject_comment + "/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
+         return redirect(address)
+      
+      row_subject_comments_view_mode()
+      address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
+      return redirect(address)
+      
+@app.route("/comment/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>/<int:comment_id>")
+def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subject_id, comment_id):
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
@@ -290,13 +333,20 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, comme
       address = "/comments/general/" + creator_name + "/" + post_name + "/" + str(post_id)
       return redirect(address)
 
-   if mode == "remove_row_subject" and post_id > 0 and chapter_number > 0 and comment_id > 0:
-      if not remove_comment(comment_id):
+   if mode == "remove_row_subject" and post_id > 0 and chapter_number > 0 and subject_id > 0:
+      if not remove_subject(post_id,chapter_number,subject_id):
          address = "/comments/row/subjects/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
          return redirect(address)
       address = "/comments/row/subjects/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
       return redirect(address)
 
+   if mode == "remove_subject_comment" and post_id > 0 and chapter_number > 0 and comment_id > 0:
+      if not remove_comment(comment_id):
+         address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
+         return redirect(address)
+      address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
+      return redirect(address)
+         
 @app.route("/query/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus

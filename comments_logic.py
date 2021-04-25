@@ -53,7 +53,7 @@ def save_row_subject(user_id, post_id, chapter_number, comment):
 
     return True
 
-def save_row_subject_comment(user_id, post_id, row_id, chapter_number, comment):
+def save_row_subject_comment(user_id, post_id, chapter_number, row_id, comment):
     if not check_text_requirements(comment):
       return False
 
@@ -68,7 +68,36 @@ def remove_comment(comment_id):
    check_number = remove_the_comment(comment_id)
 
    if check_number == -2:
-       return False
+      return False
 
    return True
+
+def remove_subject(post_id,chapter_number,subject_id):
+    check_number = remove_the_subject_comments(post_id,chapter_number,subject_id)
+
+    if check_number == -2:
+      return False
+      
+    check_number = remove_comment(subject_id)
+    
+    if check_number == -2:
+      return False
+
+    return True
+
+def remove_subjects(post_id,chapter_number):
+    check_number = remove_the_chapter_row_subjects(post_id,chapter_number)
+
+    if check_number == -2:
+      return False
+
+    return True
+
+def remove_subject_comments(post_id,chapter_number,subject_id):
+    check_number = remove_the_subject_comments(post_id,chapter_number,subject_id)
+
+    if check_number == -2:
+      return False
+
+    return True
    
