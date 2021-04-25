@@ -94,5 +94,20 @@ def get_user_id(username):
         print(e)
         return 0
 
+def get_users():
+    try:
+       sql = "SELECT id,username,role FROM users"
+       result = db.session.execute(sql)
+       users = result.fetchall()
+
+       if users == None:
+         return None
+      
+       return users
+    except Exception as e:
+        print(e)
+        return None  
+
+
 
 

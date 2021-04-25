@@ -184,3 +184,17 @@ def get_the_chapter_numbers(post_id):
     except Exception as e:
         print(e)
         return None
+
+def get_chapters():
+    try:
+        sql = "SELECT id,post_id,public,row_comments_on,inquiry_on,chapter_number,text_rows,text_content,misc FROM chapters"
+        result = db.session.execute(sql)
+        chapters = result.fetchall()
+
+        if chapters == None:
+            return None
+
+        return chapters
+    except Exception as e:
+        print(e)
+        return None

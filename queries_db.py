@@ -71,3 +71,17 @@ def get_the_chapter_queries(chapter_id):
     except Exception as e:
         print(e)    
         return -2
+
+def get_queries():
+    try:
+        sql = "SELECT id,user_id,chapter_id,question,misc FROM queries"
+        result = db.session.execute(sql)
+        queries = result.fetchall()
+
+        if queries == None:
+            return None
+
+        return queries
+    except Exception as e:
+        print(e)    
+        return None   

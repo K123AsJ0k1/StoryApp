@@ -65,3 +65,17 @@ def get_the_query_answers(query_id):
     except Exception as e:
         print(e)    
         return -2   
+
+def get_answers():
+    try:
+        sql = "SELECT id,user_id,query_id,answer,misc FROM answers"
+        result = db.session.execute(sql)
+        answers = result.fetchall()
+
+        if answers == None:
+           return None
+
+        return answers
+    except Exception as e:
+        print(e)    
+        return -2 

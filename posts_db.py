@@ -178,6 +178,20 @@ def get_public_posts():
         print(e)
         return None
 
+def get_posts():
+    try:
+        sql = "SELECT id,user_id,visible,general_comments_on,name,misc FROM posts"
+        result = db.session.execute(sql)
+        posts = result.fetchall()
+
+        if posts == None:
+            return None
+
+        return posts
+    except Exception as e:
+        print(e)
+        return None
+
 def check_post_chapters(post_id):
     try:
         sql = "SELECT id FROM chapters WHERE post_id=:post_id"

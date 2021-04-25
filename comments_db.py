@@ -134,3 +134,17 @@ def get_subject_comments(post_id,chapter_number,row_id):
     except Exception as e:
         print(e)    
         return None   
+
+def get_comments():
+    try:
+        sql = "SELECT id,user_id,post_id,row_id,general_comment,row_comment,chapter_number_on,chapter_number FROM comments"
+        result = db.session.execute(sql)
+        comments = result.fetchall()
+
+        if comments == None:
+            return None
+
+        return comments
+    except Exception as e:
+        print(e)    
+        return None    

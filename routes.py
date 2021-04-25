@@ -17,6 +17,7 @@ from workbench_logic import *
 from view_logic import *
 from comments_logic import *
 from query_logic import *
+from administration_logic import *
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -110,10 +111,116 @@ def logout():
 
 @app.route("/administration/<string:admin_name>")
 def administration(admin_name):
+   if not check_user():
+      return redirect("/")
+   
    if not session["user_role"] == 2:
       return redirect("/")
-   return render_template("administration.html")
+
+   admin_statistic_mode()
+   return render_template("administration.html", admin_name=admin_name)
    
+@app.route("/administration/users/<string:admin_name>")
+def administration_users(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+
+   users = get_users()
+
+   if len(users) == 0:
+      return redirect("/")
+
+   admin_users_mode()
+   return render_template("administration.html", admin_name=admin_name, users=users)
+
+@app.route("/administration/posts/<string:admin_name>")
+def administration_posts(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+
+   posts = get_posts()
+   
+   if len(posts) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   admin_posts_mode()
+   return render_template("administration.html", admin_name=admin_name, posts=posts)
+
+@app.route("/administration/chapters/<string:admin_name>")
+def administration_chapters(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+    
+   chapters = get_chapters()
+
+   if len(chapters) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+   
+   admin_chapters_mode()
+   return render_template("administration.html", admin_name=admin_name, chapters=chapters)
+
+@app.route("/administration/comments/<string:admin_name>")
+def administration_comments(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+
+   comments = get_comments()
+
+   if len(comments) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+   
+   admin_comments_mode()
+   return render_template("administration.html", admin_name=admin_name, comments=comments)
+
+@app.route("/administration/queries/<string:admin_name>")
+def administration_queries(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+
+   queries = get_queries()
+
+   if len(queries) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   admin_queries_mode()
+   return render_template("administration.html", admin_name=admin_name, queries=queries)
+
+@app.route("/administration/answers/<string:admin_name>")
+def administration_answers(admin_name):
+   if not check_user():
+      return redirect("/")
+   
+   if not session["user_role"] == 2:
+      return redirect("/")
+
+   answers = get_answers()
+
+   if len(answers) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   admin_answers_mode()
+   return render_template("administration.html", admin_name=admin_name, answers=answers)
+    
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
    profile_session_deletion()
