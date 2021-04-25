@@ -34,6 +34,7 @@ Perustiedot:
 - Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin (käyttäjä nimi/salasana)
 - Kaikki asiat, joissa lukee WIP, on kehityksen alla
 - Julkinen postaus tulee näkyviin silloin, kun se omistaa vähintään yhden chapterin
+- Jos linkin nimen mukainen asia ei omista yhtään asiaa tietokannassa, se pitää käyttäjän sivustolla
 
 Ongelmia:
 
