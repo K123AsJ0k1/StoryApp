@@ -29,7 +29,7 @@ Sovelluksen ominaisuudet ovat:
 - Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi. Super user password on Salasana
 - Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
 - Sovelluksessa on olemassa jo kaksi tavallista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
-- Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin
+- Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin (käyttäjä nimi/salasana)
 - Kaikki asiat, joissa lukee WIP, on kehityksen alla
 - Tietokanta ja route.py tarvitsevat hieman refaktorointia
 - Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
