@@ -84,7 +84,28 @@ textarea {
 <body>
 
 <div class="header">
-  <h1>Admin työkalut</h1>
+  <h1>Sovellus tilastot(WIP)</h1>
+  {% if session.admin_mode == "1" %}
+  <h1>Sovellus tilastot(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "2" %}
+  <h1>Käyttäjä työkalut(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "3" %}
+  <h1>Postaus työkalut(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "4" %}
+  <h1>Luvut työkalut(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "5" %}
+  <h1>Kommentit työkalut(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "6" %}
+  <h1>Kyselyt työkalut(WIP)</h1>
+  {% endif %}
+  {% if session.admin_mode == "7" %}
+  <h1>Vastaukset työkalut(WIP)</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
