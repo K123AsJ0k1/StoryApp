@@ -49,6 +49,7 @@ Ongelmia:
 - Sovellus ei varmista poistamista, joten käyttäjä voi vahingossa painaa väärää linkkiä ja poistaa asian
 - Adminit pystyvät menemään pääsivulle ja profiilin
 - Tietokannan poisto metodit kaipaavat hieman refaktorointia
+- Tietokannan muutamat asiat tarvitsevat nimi refaktorointia
 - Super user password tarvitsee tietokanta varmistuksen
 
 # Toteutetut ominaisuudet välipalautus 3 (25.4.2021):
