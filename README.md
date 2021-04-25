@@ -39,7 +39,7 @@ Perustiedot:
 
 Ongelmia:
 
-- Postauksen valinta chapterin luonnissa voi aiheuttaa errorin
+- satunnaisen postauksen valinta ei tapahdu automaattisesti chapterin valinnassa
 - sovelluksen tiedosto rakenne kaipaa refaktorointia
 - session asiat tarvitsevat refaktorointia
 - route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
