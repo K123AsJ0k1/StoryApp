@@ -42,7 +42,7 @@ Ongelmia:
 - Sovelluksen käyttöliittymä on tietyissä paikoissa hieman tynkä
 - Sovellus ei kommunikoi kovinkaan paljon käyttäjän tekemistä virheistä
 - Sovellus ei varmista poistamista, joten käyttäjä voi vahingossa painaa väärää linkkiä ja poistaa asian
-- Adminit menemään pääsivulle ja profiilin
+- Adminit pystyvät menemään pääsivulle ja profiilin
 - Tietokannan poisto metodit kaipaavat hieman refaktorointia
 - Super user password tarvitsee tietokanta varmistuksen
 
