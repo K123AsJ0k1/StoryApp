@@ -59,7 +59,7 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
 - Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
 
-# Uudet ominaisuudet:
+Uudet ominaisuudet:
 
 - Chaptereista voidaan valita tekstiä rivi aiheeksi 
 - Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
