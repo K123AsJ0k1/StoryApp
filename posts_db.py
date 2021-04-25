@@ -80,7 +80,7 @@ def remove_the_post(user_id,name):
         if check_number == -2:
             return -3
 
-        check_number = remove_the_general_comments(post_id)
+        check_number = remove_the_comments(post_id)
         
         if check_number == -2:
             return -3

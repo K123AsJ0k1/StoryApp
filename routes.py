@@ -178,7 +178,6 @@ def workbench_remove(mode, post_id, chapter_number):
          user_name = session["user_name"]
          address = "/profile/" + user_name
          return redirect(address)
-      
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
@@ -188,7 +187,6 @@ def workbench_remove(mode, post_id, chapter_number):
          user_name = session["user_name"]
          address = "/profile/" + user_name
          return redirect(address)
-      
       remove_chapter_content_session()
       user_name = session["user_name"]
       address = "/profile/" + user_name
@@ -248,11 +246,7 @@ def row_subjects(creator_name, post_name, post_id, chapter_number):
 @app.route("/comments/row/subject_comments/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>")
 def row_subject_comments(creator_name, post_name, post_id, chapter_number, subject_id):
    #Luo creator_name, post_name, post_id tarkastus
-   print(post_id)
-   print(chapter_number)
-   print(subject_id)
    subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
-   print(subject_comments)
    if len(subject_comments) == 0:
       row_subject_comments_view_mode()
       return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0)

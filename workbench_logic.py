@@ -168,6 +168,11 @@ def remove_post(user_id, post_id):
     return True
 
 def remove_chapter(post_id,chapter_number):
+    check_number = remove_the_chapter_row_subjects(post_id,chapter_number)
+    
+    if check_number == -2:
+      return False
+
     check_number = remove_the_chapter(post_id,chapter_number)
     
     if check_number == -1:

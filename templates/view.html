@@ -152,10 +152,12 @@ textarea {
   <a href="/" class="right">Pääsivulle</a>
   {% if session.user_name %}
   <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+  {% if session.view_mode == "1" %}
   <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
   <button type="submit" form="form">Luo rivi aihe</button>
   {% if session.inquiry %}
   <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
+  {% endif %}
   {% endif %}
   {% endif %}
   {% if session.user_name == creator_name %}

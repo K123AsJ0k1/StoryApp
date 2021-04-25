@@ -1,5 +1,6 @@
 from app import app
 from db import *
+from comments_db import *
 from queries_db import *
 
 def save_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_content, misc):

@@ -21,7 +21,7 @@ def remove_the_comment(id):
         print(e)    
         return -2
 
-def remove_the_general_comments(post_id):
+def remove_the_comments(post_id):
     try:
         sql = "SELECT id FROM comments WHERE post_id=:post_id"
         result = db.session.execute(sql, {"post_id":post_id})
@@ -50,7 +50,7 @@ def remove_the_chapter_row_subjects(post_id,chapter_number):
             for chapter_subject_id in chapter_subjects_id:
                 if remove_the_comment(chapter_subject_id[0]) == -2:
                    return -2 
-        
+
         return 0
     except Exception as e:
         print(e)    
