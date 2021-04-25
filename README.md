@@ -193,7 +193,7 @@ Rivi kommentit
 
 Adminin luonti
 
-- Muutettuasi tavallisen käyttäjän luonnin URL:in user adminiksi, anna 10 merkin pituinen käyttäjä nimi ja salasana ja super user password salasana. Sen jälkeen kirjaudu sisään
+- Muutettuasi tavallisen käyttäjän luonnin URL:in user adminiksi, anna 10 merkin pituinen uniikki käyttäjä nimi ja salasana ja super user password salasana. Sen jälkeen kirjaudu sisään
 
 Admin kirjautuminen
 
