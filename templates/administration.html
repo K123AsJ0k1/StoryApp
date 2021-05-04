@@ -109,16 +109,16 @@ textarea {
 
 <div class="navbar">
   {% if session.admin_mode == "1" %}
-  <a href="/administration/users/{{ admin_name }}">Käyttäjät</a>
-  <a href="/administration/posts/{{ admin_name }}">Postaukset</a>
-  <a href="/administration/chapters/{{ admin_name }}">Luvut</a>
-  <a href="/administration/comments/{{ admin_name }}">Kommentit</a>
-  <a href="/administration/queries/{{ admin_name }}">Kyselyt</a>
-  <a href="/administration/answers/{{ admin_name }}">Vastaukset</a>
+    <a href="/administration/users/{{ admin_name }}">Käyttäjät</a>
+    <a href="/administration/posts/{{ admin_name }}">Postaukset</a>
+    <a href="/administration/chapters/{{ admin_name }}">Luvut</a>
+    <a href="/administration/comments/{{ admin_name }}">Kommentit</a>
+    <a href="/administration/queries/{{ admin_name }}">Kyselyt</a>
+    <a href="/administration/answers/{{ admin_name }}">Vastaukset</a>
   {% endif %}
   
   {% if not session.admin_mode == "1" %}
-  <a href="/administration/{{ admin_name }}">Takaisin</a>
+    <a href="/administration/{{ admin_name }}">Takaisin</a>
   {% endif %}
   
   <a href="/logout"class="right">Kirjaudu ulos</a>
@@ -126,7 +126,7 @@ textarea {
 
 <div class="footer">
   {% if session.admin_mode == "1" %}
-  <h2>Tietokannan tilastotietoja(wip)</h2>
+    <h2>Tietokannan tilastotietoja(wip)</h2>
   {% endif %}
   
   {% if session.admin_mode == "2" %}

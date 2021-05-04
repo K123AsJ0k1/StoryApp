@@ -94,6 +94,20 @@ def remove_the_post(user_id,name):
         print(e)
         return -3
 
+def check_if_post_exists(post_id):
+    try:
+        sql = "SELECT id FROM posts WHERE id=:post_id"
+        result = db.session.execute(sql, {"post_id":post_id})
+        post = result.fetchone()
+        
+        if post == None:
+           return -1
+
+        return 0
+    except Exception as e:
+        print(e)
+        return -3    
+
 def get_post_creator(post_id):
     try:
         sql = "SELECT user_id FROM posts WHERE id=:id"

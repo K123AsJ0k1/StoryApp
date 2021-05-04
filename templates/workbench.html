@@ -156,6 +156,8 @@ textarea {
     
     <input type="text" name="genre"></p>
     <input type="submit" value="Tallenna">
+    
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
   
@@ -218,6 +220,8 @@ textarea {
     <br>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
   {% endif %}
@@ -228,7 +232,7 @@ textarea {
     
     <br>
     
-    <input type="text" name="name" value={{ session.given_post_name }}></p>
+    <input type="text" name="name" value="{{ session.given_post_name }}"></p>
     
     <br>
     
@@ -317,9 +321,11 @@ textarea {
     {% endif %}
     
     <a>Mikä on tarinan genre?</a><br>
-    <input type="text" name="genre" value={{ session.given_post_genre }}></p>
+    <input type="text" name="genre" value="{{ session.given_post_genre }}"></p>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
 

@@ -86,50 +86,62 @@ textarea {
 
 <div class="header">
   {% if session.comment_mode == "1" %}
-  <h1>{{ creator_name }}/{{ post_name }}/Yleiset kommentit</h1>
+    <h1>{{ creator_name }}/{{ post_name }}/Yleiset kommentit</h1>
   {% endif %}
+  
   {% if session.comment_mode == "2" %}
-  <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
+    <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
   {% endif %}
+  
   {% if session.comment_mode == "3" %}
-  <h1>Rivi Aiheet</h1>
+    <h1>Rivi Aiheet</h1>
   {% endif %}
+  
   {% if session.comment_mode == "4" %}
-  <h1>Aiheen kommentit</h1>
+    <h1>Aiheen kommentit</h1>
   {% endif %}
+  
   {% if session.comment_mode == "5" %}
-  <h1>Kommentoi aihetta</h1>
+    <h1>Kommentoi aihetta</h1>
   {% endif %}
 </div>
 
 <div class="navbar">
   {% if session.comment_mode == "1" and session.user_name %}
-  <a href="/comments/save/create_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0">Luo kommentti</a>
+    <a href="/comments/save/create_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0">Luo kommentti</a>
   {% endif %}
+  
   {% if session.comment_mode == "2" %}
-  <a href="/comments/general/{{ creator_name }}/{{ post_name }}/{{ post_id }}">Takaisin</a>
+    <a href="/comments/general/{{ creator_name }}/{{ post_name }}/{{ post_id }}">Takaisin</a>
   {% endif %}
+  
   {% if session.comment_mode == "3" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
+    <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
   {% endif %}
+  
   {% if session.comment_mode == "4" %}
-  <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
-  {% if session.user_name %}
-  <a href="/comments/save/create_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Luo kommentti</a>
+    <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
+  
+    {% if session.user_name %}
+      <a href="/comments/save/create_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Luo kommentti</a>
+    {% endif %}
+  
   {% endif %}
-  {% endif %}
+  
   {% if session.comment_mode == "5" %}
-  <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Takaisin</a>
+    <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Takaisin</a>
   {% endif %}
-  <a href="/" class="right">Pääsivulle</a>
+  
+    <a href="/" class="right">Pääsivulle</a>
+  
   {% if session.user_name %}
-  <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+    <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
   {% endif %}
 </div>
 
 <div class="footer">  
   {% if size == 0 and session.comment_mode == "1" %}
-  <h1>Kukaan ei ole vielä kommentoinut postausta</h1>
+     <h1>Kukaan ei ole vielä kommentoinut postausta</h1>
   {% endif %}
 
   {% if session.comment_mode == "1" %}
@@ -194,6 +206,8 @@ textarea {
     <br>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
 
@@ -270,9 +284,10 @@ textarea {
     <br>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
-
 </div>
 
 </body>

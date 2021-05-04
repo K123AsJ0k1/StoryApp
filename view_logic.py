@@ -17,11 +17,12 @@ def remove_chapter_content_session():
 
 def view_chapter(creator_name,post_name,chapter_number):
     user_id = get_user_id(creator_name)
-
+    
     if user_id == 0:
       return False
-
+  
     post = get_profile_post(user_id,post_name)
+
     if post == None:
       return False
 

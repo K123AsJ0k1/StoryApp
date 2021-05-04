@@ -191,5 +191,15 @@ def remove_chapter(post_id,chapter_number):
     
     return True
 
+def check_post_owner(user_name,post_id):
+    post_owner = get_post_creator(post_id)
+
+    if not user_name == post_owner:
+      return False
+
+    return True
+
+    
+
 
     

@@ -139,40 +139,43 @@ textarea {
 </div>
 
 <div class="navbar">
+  {% if session.view_mode == "1" %}
+  
   {% if session.switch_chapter == "0" %}
   <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
   <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
+  
   {% if session.switch_chapter == "1" %}
   <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
   {% endif %}
+  
   {% if session.switch_chapter == "2" %}
   <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
   {% endif %}
-  <a href="/" class="right">Pääsivulle</a>
+  
   {% if session.user_name %}
   <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
-  {% if session.view_mode == "1" %}
   <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
   <button type="submit" form="form">Luo rivi aihe</button>
+  
   {% if session.inquiry %}
   <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
   {% endif %}
+  
   {% endif %}
+  
   {% endif %}
+  
   {% if session.user_name == creator_name %}
   <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
   {% endif %}
+  <a href="/" class="right">Pääsivulle</a>
 </div>
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
   {% for para in session.chapter_content %}
-  
-  {% if not para == "" %}
-  {{ loop.index }}
-  {% endif %}
-  
   {{ para }}
   <br>
   {% endfor %}
@@ -182,6 +185,7 @@ textarea {
 <div class="clip_board"> 
   <form id="form"  action="/comments/save/save_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" method="POST">
     <textarea id="sel" style="display:none;" name="selected_text"></textarea>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
 </div>
 

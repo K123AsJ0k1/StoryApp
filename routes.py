@@ -23,6 +23,11 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def main_page():
+   if 'user_role' in session:
+      if session["user_role"] == 2:
+         address = "/administration/" + session["user_name"]
+         return redirect(address)
+
    main_page_session_deletion()
    
    posts = get_public_posts()
@@ -223,6 +228,14 @@ def administration_answers(admin_name):
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
+   if not check_user_name_exists(user_name):
+      return redirect("/")
+
+   owner = False
+   if 'user_name' in session:
+      if user_name == session["user_name"]:
+         owner = True
+
    profile_session_deletion()
    user_id = get_user_id(user_name)
    posts = get_profile_posts(user_id)
@@ -234,22 +247,25 @@ def profile(user_name):
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
-   if not check_user():
-      return redirect("/")
-
-   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters)
+   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, owner=owner)
 
 @app.route("/workbench/save/<string:mode>", methods=["get","post"])
 def workbench_save(mode):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
-   
+
+   if 'user_role' in session:
+      if session["user_role"] == 2:
+         address = "/administration/" + session["user_name"]
+         return redirect(address)
+   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if mode == "create_post" and request.method == "GET":
       workbench_post_mode()   
       return render_template("workbench.html")
 
    if mode == "save_post" and request.method == "POST":
+      check_csrf()
+      
       user_id = session["user_id"]
       public = request.form["public"]
       general_comments = request.form["general"]
@@ -271,6 +287,8 @@ def workbench_save(mode):
       return render_template("workbench.html", posts=posts, size=size)
 
    if mode == "save_chapter" and request.method == "POST":
+      check_csrf()
+      
       post_id = request.form["chapter_picked_post"]
       chapter_public = request.form["chapter_public"]
       row_comments = request.form["chapter_row_comments_on"]
@@ -288,8 +306,15 @@ def workbench_save(mode):
 
 @app.route("/workbench/update/<string:mode>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
 def workbench_update(mode, post_id, chapter_number):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
+      return redirect("/")
+
+   if 'user_role' in session:
+      if session["user_role"] == 2:
+         address = "/administration/" + session["user_name"]
+         return redirect(address)
+
+   if not check_post_owner(session["user_name"],post_id):
       return redirect("/")
    
    if mode == "change_post" and post_id > 0 and request.method == "GET":
@@ -297,6 +322,8 @@ def workbench_update(mode, post_id, chapter_number):
       return render_template("workbench.html", post_id=post_id)
 
    if mode == "update_post" and post_id > 0 and request.method == "POST":
+      check_csrf()
+      
       old_name = session["given_post_name"]
       user_id = session["user_id"]
       public = request.form["public"]
@@ -316,6 +343,9 @@ def workbench_update(mode, post_id, chapter_number):
 def workbench_remove(mode, post_id, chapter_number):
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
+      return redirect("/")
+
+   if not check_post_owner(session["user_name"],post_id):
       return redirect("/")
 
    if mode == "remove_post" and post_id > 0:
@@ -342,8 +372,8 @@ def workbench_remove(mode, post_id, chapter_number):
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def view(creator_name, post_name, post_id, chapter_number):
    if not view_chapter(creator_name, post_name, chapter_number):
-       view_none_mode()
-       return render_template("view.html")
+      view_none_mode()
+      return render_template("view.html")
    view_read_mode()
    return render_template("view.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number)
 
@@ -413,16 +443,22 @@ def row_subject_comments(creator_name, post_name, post_id, chapter_number, subje
 
 @app.route("/comments/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>", methods=["get","post"])
 def comments_save(mode, creator_name, post_name, post_id, chapter_number, subject_id):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
-   
+
+   if 'user_role' in session:
+      if session["user_role"] == 2:
+         address = "/administration/" + session["user_name"]
+         return redirect(address)
+   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if mode == "create_general_comment" and request.method == "GET" and post_id > 0:
       comment_creation_mode()
       last_chapter = get_the_next_chapter_number(post_id)-1
       return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, last_chapter=last_chapter)
    
    if mode == "save_general_comment" and request.method == "POST" and post_id > 0:
+      check_csrf()
+      
       user_id = session["user_id"]
       comment = request.form["comment_text"]
       referenced_chapter = request.form["referenced_chapter_number"]
@@ -435,6 +471,8 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       return redirect(address)
 
    if mode == "save_row_subject" and request.method == "POST" and post_id > 0 and chapter_number > 0:
+      check_csrf()
+      
       user_id = session["user_id"]
       subject = request.form["selected_text"]
       
@@ -450,6 +488,8 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id)
    
    if mode == "save_row_subject_comment" and request.method == "POST" and post_id > 0 and chapter_number > 0 and subject_id > 0:
+      check_csrf()
+      
       user_id = session["user_id"]
       comment = request.form["row_subject_comment"]
       
@@ -466,7 +506,10 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
-   
+
+   if not check_post_owner(session["user_name"],post_id):
+      return redirect("/")
+
    if mode == "remove_general_comment" and post_id > 0 and comment_id > 0:
       if not remove_comment(comment_id):
          address = "/comments/general/" + creator_name + "/" + post_name + "/" + str(post_id)
@@ -521,6 +564,9 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
       query_view_mode()
       return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, queries=queries, size=size)
    
+   if not check_post_owner(session["user_name"],post_id):
+      return redirect("/")
+
    if mode == "view_answers":
       post = get_the_post(post_id)
 
@@ -558,15 +604,27 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
 
 @app.route("/query/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>", methods=["get","post"])
 def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
 
+   if 'user_role' in session:
+      if session["user_role"] == 2:
+         address = "/administration/" + session["user_name"]
+         return redirect(address)
+   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if mode == "create_question" and post_id > 0 and request.method == "GET": 
+      if not check_post_owner(session["user_name"],post_id):
+         return redirect("/")
+
       query_create_mode()
       return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number)
    
    if mode == "save_question" and post_id > 0 and request.method == "POST":
+      check_csrf()
+
+      if not check_post_owner(session["user_name"],post_id):
+         return redirect("/")
+
       user_id = session["user_id"]
       question = request.form["question"]
       
@@ -589,6 +647,7 @@ def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
       return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, query_id=query_id, question=question)
    
    if mode == "save_answer" and query_id > 0 and request.method == "POST":
+      check_csrf()
       user_id = session["user_id"]
       answer = request.form["answer"]
       
@@ -605,7 +664,10 @@ def query_remove(mode,creator_name,post_name,post_id,chapter_number,query_id,ans
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
-   
+
+   if not check_post_owner(session["user_name"],post_id):
+      return redirect("/")
+
    if mode == "remove_question" and query_id > 0:
       if not remove_question(query_id):
          query_none_mode()

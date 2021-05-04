@@ -86,19 +86,19 @@ textarea {
 
 <div class="header">
   {% if session.query_mode == "1" %}
-  <h1>{{ creator_name }}/{{ post_name }}/{{ chapter_number }}/Kyselyt</h1>
+    <h1>{{ creator_name }}/{{ post_name }}/{{ chapter_number }}/Kyselyt</h1>
   {% endif %}
   
   {% if session.query_mode == "2" %}
-  <h1>{{ post_name }}/{{ chapter_number }}/Kysymyksen luonti</h1>
+    <h1>{{ post_name }}/{{ chapter_number }}/Kysymyksen luonti</h1>
   {% endif %}
   
   {% if session.query_mode == "3" %}
-  <h1>Vastaukset</h1>
+    <h1>Vastaukset</h1>
   {% endif %}
 
   {% if session.query_mode == "4" %}
-  <h1>Kysymyksen vastaaminen</h1>
+    <h1>Kysymyksen vastaaminen</h1>
   {% endif %}
 </div>
 
@@ -186,6 +186,8 @@ textarea {
     <br>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
 
@@ -233,6 +235,8 @@ textarea {
     <br>
 
     <input type="submit" value="Tallenna">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </form>
   {% endif %}
 </div>

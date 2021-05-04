@@ -122,6 +122,14 @@ def log_in(mode, username, password):
 
       return True
 
+def check_user_name_exists(user_name):
+    check_number = get_user_id(user_name)
+
+    if check_number == 0:
+      return False
+
+    return True
+    
 def check_user():
     if "user_name" in session:
        return True
