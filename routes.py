@@ -31,6 +31,7 @@ def main_page():
    main_page_session_deletion()
    
    posts = get_public_posts()
+   
    size = len(posts)
 
    post_creators = {}
@@ -600,7 +601,6 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
       the_amount_of_answers = len(answers)
       query_answers_mode()
       return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=the_amount_of_answers, answers=answers, answer_creators=answer_creators)
-
 
 @app.route("/query/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>", methods=["get","post"])
 def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):

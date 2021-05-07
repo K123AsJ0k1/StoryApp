@@ -85,25 +85,31 @@ textarea {
 
 <div class="header">
   {% if session.admin_mode == "1" %}
-  <h1>Sovellus tilastot(WIP)</h1>
+    <h1>Sovellus tilastot(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "2" %}
-  <h1>Käyttäjä työkalut(WIP)</h1>
+    <h1>Käyttäjä työkalut(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "3" %}
-  <h1>Postaus työkalut(WIP)</h1>
+    <h1>Postaus työkalut(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "4" %}
-  <h1>Luvut työkalut(WIP)</h1>
+    <h1>Luvut työkalut(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "5" %}
-  <h1>Kommentit työkalut(WIP)</h1>
+    <h1>Kommentit työkalut(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "6" %}
-  <h1>Kyselyt työkalut(WIP)</h1>
+    <h1>Kyselyt työkalut(WIP)</h1>
   {% endif %}
+  
   {% if session.admin_mode == "7" %}
-  <h1>Vastaukset työkalut(WIP)</h1>
+    <h1>Vastaukset työkalut(WIP)</h1>
   {% endif %}
 </div>
 
@@ -130,127 +136,127 @@ textarea {
   {% endif %}
   
   {% if session.admin_mode == "2" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Käyttäjä</th> 
-      <th>Rooli</th>
-    </tr>
-  {% for user in users %}
-    <tr>
-      <th>{{ user[0] }}</th>
-      <th>{{ user[1] }}</th> 
-      <th>{{ user[2] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Käyttäjä</th> 
+        <th>Rooli</th>
+      </tr>
+    {% for user in users %}
+      <tr>
+        <th>{{ user[0] }}</th>
+        <th>{{ user[1] }}</th> 
+        <th>{{ user[2] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
   {% if session.admin_mode == "3" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Käyttäjä id</th> 
-      <th>Julkisuus</th>
-      <th>Kommentointi</th>
-      <th>Nimi</th>
-    </tr>
-  {% for post in posts %}
-    <tr>
-      <th>{{ post[0] }}</th>
-      <th>{{ post[1] }}</th> 
-      <th>{{ post[2] }}</th>
-      <th>{{ post[3] }}</th>
-      <th>{{ post[4] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Käyttäjä id</th> 
+        <th>Julkisuus</th>
+        <th>Kommentointi</th>
+        <th>Nimi</th>
+      </tr>
+    {% for post in posts %}
+      <tr>
+        <th>{{ post[0] }}</th>
+        <th>{{ post[1] }}</th> 
+        <th>{{ post[2] }}</th>
+        <th>{{ post[3] }}</th>
+        <th>{{ post[4] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
   {% if session.admin_mode == "4" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Postaus id</th> 
-      <th>Julkisuus</th>
-      <th>Rivi kommentit</th>
-      <th>Kyselyt</th>
-      <th>Luku</th>
-      <th>Rivit</th>
-    </tr>
-  {% for chapter in chapters %}
-    <tr>
-      <th>{{ chapter[0] }}</th>
-      <th>{{ chapter[1] }}</th> 
-      <th>{{ chapter[2] }}</th>
-      <th>{{ chapter[3] }}</th>
-      <th>{{ chapter[4] }}</th>
-      <th>{{ chapter[5] }}</th>
-      <th>{{ chapter[6] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Postaus id</th> 
+        <th>Julkisuus</th>
+        <th>Rivi kommentit</th>
+        <th>Kyselyt</th>
+        <th>Luku</th>
+        <th>Rivit</th>
+      </tr>
+    {% for chapter in chapters %}
+      <tr>
+        <th>{{ chapter[0] }}</th>
+        <th>{{ chapter[1] }}</th> 
+        <th>{{ chapter[2] }}</th>
+        <th>{{ chapter[3] }}</th>
+        <th>{{ chapter[4] }}</th>
+        <th>{{ chapter[5] }}</th>
+        <th>{{ chapter[6] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
   {% if session.admin_mode == "5" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Käyttäjä id</th>
-      <th>Postaus id</th>
-      <th>Rivi id</th>
-      <th>Yleinen kommentti</th>
-      <th>Rivi kommentti</th>
-      <th>Numerointi</th>
-      <th>Luku</th>
-    </tr>
-  {% for comment in comments %}
-    <tr>
-      <th>{{ comment[0] }}</th>
-      <th>{{ comment[1] }}</th> 
-      <th>{{ comment[2] }}</th>
-      <th>{{ comment[3] }}</th>
-      <th>{{ comment[4] }}</th>
-      <th>{{ comment[5] }}</th>
-      <th>{{ comment[6] }}</th>
-      <th>{{ comment[7] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Käyttäjä id</th>
+        <th>Postaus id</th>
+        <th>Rivi id</th>
+        <th>Yleinen kommentti</th>
+        <th>Rivi kommentti</th>
+        <th>Numerointi</th>
+        <th>Luku</th>
+      </tr>
+    {% for comment in comments %}
+      <tr>
+        <th>{{ comment[0] }}</th>
+        <th>{{ comment[1] }}</th> 
+        <th>{{ comment[2] }}</th>
+        <th>{{ comment[3] }}</th>
+        <th>{{ comment[4] }}</th>
+        <th>{{ comment[5] }}</th>
+        <th>{{ comment[6] }}</th>
+        <th>{{ comment[7] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
   {% if session.admin_mode == "6" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Käyttäjä id</th>
-      <th>Luku id</th>
-    </tr>
-  {% for query in queries %}
-    <tr>
-      <th>{{ query[0] }}</th>
-      <th>{{ query[1] }}</th> 
-      <th>{{ query[2] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Käyttäjä id</th>
+        <th>Luku id</th>
+      </tr>
+    {% for query in queries %}
+      <tr>
+        <th>{{ query[0] }}</th>
+        <th>{{ query[1] }}</th> 
+        <th>{{ query[2] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
   {% if session.admin_mode == "7" %}
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Käyttäjä id</th>
-      <th>Kysymys id</th>
-    </tr>
-  {% for answer in answers %}
-    <tr>
-      <th>{{ answer[0] }}</th>
-      <th>{{ answer[1] }}</th> 
-      <th>{{ answer[2] }}</th>
-    </tr>
-  {% endfor %}
-  </table>
+    <table style="width:100%">
+      <tr>
+        <th>Id</th>
+        <th>Käyttäjä id</th>
+        <th>Kysymys id</th>
+      </tr>
+    {% for answer in answers %}
+      <tr>
+        <th>{{ answer[0] }}</th>
+        <th>{{ answer[1] }}</th> 
+        <th>{{ answer[2] }}</th>
+      </tr>
+    {% endfor %}
+    </table>
   {% endif %}
 
 </div>

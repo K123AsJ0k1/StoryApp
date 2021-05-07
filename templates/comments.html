@@ -145,148 +145,94 @@ textarea {
   {% endif %}
 
   {% if session.comment_mode == "1" %}
-  
-  <hr>
-  {% if size > 0 %}
-  
-  {% for comment in comments %}
-
-  {% if session.user_name == creator_name %}
-  <a href="/comment/remove/remove_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0/{{ comment[0] }}">Poista</a>
-  {% endif %}
-
-  <br>
-  
-  {{ comment_creators[comment[0]] }}
-  
-  {% if comment[5] %}
-  / Luku:  {{ comment[6] }}
-  {% endif %}
-  
-  <br>
-
-  <br>
-
-  {{ comment[7] }}
-  
-  <hr>
-  
-  {% endfor %}
-  
-  {% endif %}
-  
+    <hr>
+    {% if size > 0 %}
+      {% for comment in comments %}
+        {% if session.user_name == creator_name %}
+            <a href="/comment/remove/remove_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0/{{ comment[0] }}">Poista</a>
+        {% endif %}
+        <br>
+        {{ comment_creators[comment[0]] }}
+        {% if comment[5] %}
+        / Luku:  {{ comment[6] }}
+        {% endif %}
+        <br>
+        {{ comment[7] }}
+        <hr>
+      {% endfor %}
+    {% endif %}
   {% endif %}
   
   {% if session.comment_mode == "2" %}
-  <form action="/comments/save/save_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0" method="POST">
-    {% if last_chapter > 0 %}
-    
-    {% if last_chapter == 1 %}
-    <a>Mihin lukuun viittaat kommentillasi (ainoa luku on 1) (vaihtoehtoinen)</a>
-
-    <br>
-    
-    <input type="text" name="referenced_chapter_number"></p>
-    {% endif %}
-    
-    {% if last_chapter > 1 %}
-    <a>Mihin lukuun viittaat kommentillasi (voit valita luvuista 1-{{ last_chapter }}) (vaihtoehtoinen)</a>
-
-    <br>
-    
-    <input type="text" name="referenced_chapter_number"></p>
-    {% endif %}
-    {% endif %}
-    <a>Kirjoita kommenttisi alla olevaan teksti kenttään</a>
-
-    <br>
-  
-    <textarea name="comment_text" rows="25" cols="100"></textarea>
-
-    <br>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/comments/save/save_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0" method="POST">
+      {% if last_chapter > 0 %}
+        {% if last_chapter == 1 %}
+          <a>Mihin lukuun viittaat kommentillasi (ainoa luku on 1) (vaihtoehtoinen)</a>
+          <br>
+          <input type="text" name="referenced_chapter_number"></p>
+        {% endif %}
+        {% if last_chapter > 1 %}
+          <a>Mihin lukuun viittaat kommentillasi (voit valita luvuista 1-{{ last_chapter }}) (vaihtoehtoinen)</a>
+          <br>
+          <input type="text" name="referenced_chapter_number"></p>
+        {% endif %}
+      {% endif %}
+      <a>Kirjoita kommenttisi alla olevaan teksti kenttään</a>
+      <br>
+      <textarea name="comment_text" rows="25" cols="100"></textarea>
+      <br>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
 
   {% if session.comment_mode == "3" %}
-
-  <hr>
-  {% if size > 0 %}
-  
-  {% for subject in subjects %}
-
-  {% if session.user_name == creator_name %}
-  <a href="/comment/remove/remove_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}/0">Poista</a>
-  {% endif %}
-
-  <br>
-
-  <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}">Vastaukset</a>
-
-  <br>
-  
-  {{ subject_creators[subject[0]] }}
-
-  <br>
-
-  {{ subject[6] }}
-  
-  <hr>
-  
-  {% endfor %}
-  
-  {% endif %}
-  
+    <hr>
+    {% if size > 0 %}
+      {% for subject in subjects %}
+        {% if session.user_name == creator_name %}
+          <a href="/comment/remove/remove_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}/0">Poista</a>
+        {% endif %}
+        <br>
+        <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}">Vastaukset</a>
+        <br>
+        {{ subject_creators[subject[0]] }}
+        <br>
+        {{ subject[6] }}
+        <hr>
+      {% endfor %}
+    {% endif %}
   {% endif %}
 
   {% if size == 0 and session.comment_mode == "4" %}
-  <h1>Kukaan ei ole vielä kommentoinut aihetta</h1>
+    <h1>Kukaan ei ole vielä kommentoinut aihetta</h1>
   {% endif %}
 
   {% if session.comment_mode == "4" %}
-  
-  <hr>
-  {% if size > 0 %}
-  
-  {% for subject_comment in subject_comments %}
-
-  {% if session.user_name == creator_name %}
-  <a href="/comment/remove/remove_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}/{{ subject_comment[0] }}">Poista</a>
-  {% endif %}
-
-  <br>
-  
-  {{ subject_comment_creators[subject_comment[0]] }}
-  
-  <br>
-
-  {{ subject_comment[5] }}
-  
-  <hr>
-  
-  {% endfor %}
-  
-  {% endif %}
-  
+    <hr>
+    {% if size > 0 %}
+      {% for subject_comment in subject_comments %}
+        {% if session.user_name == creator_name %}
+          <a href="/comment/remove/remove_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}/{{ subject_comment[0] }}">Poista</a>
+        {% endif %}
+        <br>
+        {{ subject_comment_creators[subject_comment[0]] }}
+        <br>
+        {{ subject_comment[5] }}
+        <hr>
+      {% endfor %}
+    {% endif %}
   {% endif %}
 
   {% if session.comment_mode == "5" %}
-  <form action="/comments/save/save_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}" method="POST">
-    <a>Kirjoita vastaukseksi rivi aiheeseen liittyen alla olevaan tekstikenttään</a>
-
-    <br>
-  
-    <textarea name="row_subject_comment" rows="25" cols="100"></textarea>
-
-    <br>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/comments/save/save_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}" method="POST">
+      <a>Kirjoita vastaukseksi rivi aiheeseen liittyen alla olevaan tekstikenttään</a>
+      <br>
+      <textarea name="row_subject_comment" rows="25" cols="100"></textarea>
+      <br>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
 </div>
 
