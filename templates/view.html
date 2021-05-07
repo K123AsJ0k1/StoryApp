@@ -131,54 +131,49 @@ textarea {
 
 <div class="header">
   {% if session.view_mode == "0" %}
-  <h1>Postauksella ei ole yhtään lukua</h1>
+    <h1>Postauksella ei ole yhtään lukua</h1>
   {% endif %}
+  
   {% if session.view_mode == "1" %}
-  <h1>{{ post_name }}:{{ chapter_number }}</h1>
+    <h1>{{ post_name }}:{{ chapter_number }}</h1>
   {% endif %}
 </div>
 
 <div class="navbar">
   {% if session.view_mode == "1" %}
-  
-  {% if session.switch_chapter == "0" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
-  {% endif %}
-  
-  {% if session.switch_chapter == "1" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
-  {% endif %}
-  
-  {% if session.switch_chapter == "2" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
-  {% endif %}
-  
-  {% if session.user_name %}
-  <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
-  <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
-  <button type="submit" form="form">Luo rivi aihe</button>
-  
-  {% if session.inquiry %}
-  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
-  {% endif %}
-  
-  {% endif %}
-  
+    {% if session.switch_chapter == "0" %}
+      <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
+      <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
+    {% endif %}
+    {% if session.switch_chapter == "1" %}
+      <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>
+    {% endif %}
+    {% if session.switch_chapter == "2" %}
+      <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
+    {% endif %}
+    {% if session.user_name %}
+      <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+      <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
+      <button type="submit" form="form">Luo rivi aihe</button>
+      {% if session.inquiry %}
+        <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
+      {% endif %}
+    {% endif %}
   {% endif %}
   
   {% if session.user_name == creator_name %}
-  <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
+    <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
   {% endif %}
+  
   <a href="/" class="right">Pääsivulle</a>
 </div>
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
-  {% for para in session.chapter_content %}
-  {{ para }}
-  <br>
-  {% endfor %}
+    {% for para in session.chapter_content %}
+      {{ para }}
+      <br>
+    {% endfor %}
   {% endif %}
 </div>
 

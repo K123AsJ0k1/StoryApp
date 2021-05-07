@@ -96,7 +96,7 @@ textarea {
   {% if session.query_mode == "3" %}
     <h1>Vastaukset</h1>
   {% endif %}
-
+  
   {% if session.query_mode == "4" %}
     <h1>Kysymyksen vastaaminen</h1>
   {% endif %}
@@ -104,28 +104,28 @@ textarea {
 
 <div class="navbar">
   {% if session.query_mode == "1" %}
-  <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
+    <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
     {% if session.user_name == creator_name %}
-    <a href="/query/save/create_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Luo kysymys</a>
+      <a href="/query/save/create_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Luo kysymys</a>
     {% endif %}
   {% endif %}
   
   {% if session.query_mode == "2" %}
-  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
+    <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
-
+  
   {% if session.query_mode == "3" %}
-  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
+    <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
-
+  
   {% if session.query_mode == "4" %}
-  <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
+    <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0">Takaisin</a>
   {% endif %}
   
   <a href="/" class="right">Pääsivulle</a>
   
   {% if session.user_name %}
-  <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+    <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
   {% endif %}
 </div>
 
@@ -147,97 +147,67 @@ textarea {
 
 <div class="footer">
   {% if session.query_mode == "1" %}
-   <hr>
-   
-   {% if size == 0 %}
-   <a>Kirjoittaja ei luonut yhtään kyselyä</a>
-   {% endif %}
-   
-   {% if size > 0 %}
-   
-   {% for query in queries %}
-      {% if session.user_name == creator_name %} 
-      <a href="">(Tilastotietoja)(WIP)</a>
-      <br>
-      <a href="/query/view_answers/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaukset</a>
-      <br>
-      <a href="/query/remove/remove_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}/0">Poista</a>
-      <br>
-      {% endif %}
-      <a href="/query/save/create_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaa</a>
-      <br>
-      {{ query[3] }} 
-   <hr>
-   {% endfor %}
-   
-   {% endif %}
-
-
+    <hr>
+    {% if size == 0 %}
+      <a>Kirjoittaja ei luonut yhtään kyselyä</a>
+    {% endif %}
+    {% if size > 0 %}
+      {% for query in queries %}
+        {% if session.user_name == creator_name %} 
+          <a href="/query/view_answers/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaukset</a>
+          <br>
+          <a href="/query/remove/remove_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}/0">Poista</a>
+          <br>
+        {% endif %}
+        <a href="/query/save/create_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaa</a>
+        <br>
+        {{ query[3] }} 
+        <hr>
+      {% endfor %} 
+    {% endif %}
   {% endif %}
 
   {% if session.query_mode == "2" %}
-  <form action="/query/save/save_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" method="POST">
-    <a>Kirjoita kysymyksesi alla olevaan teksti kenttään</a>
-
-    <br>
-    
-    <textarea name="question" rows="25" cols="100"></textarea>
-
-    <br>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/query/save/save_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" method="POST">
+      <a>Kirjoita kysymyksesi alla olevaan teksti kenttään</a>
+      <br>
+      <textarea name="question" rows="25" cols="100"></textarea>
+      <br>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
 
   {% if session.query_mode == "3" %}
-
-  {% if size == 0 %}
-   <a>Kukaan ei ole vastanut vielä kyselyyn</a>
-   {% endif %}
-   
-   {% if size > 0 %}
-   <hr>
-   {% for answer in answers %}
-   
-   {% if session.user_name == creator_name %} 
-   <a href="/query/remove/remove_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ answer[2] }}/{{ answer[0] }}">Poista</a>
-   {% endif %}
-
-   <br>
-   
-   {{ answer_creators[answer[0]] }}
-   
-   <br>
-
-   {{ answer[3] }}
-   
-   <hr>
-   {% endfor %}
-   
-   {% endif %}
-  
+    {% if size == 0 %}
+      <a>Kukaan ei ole vastanut vielä kyselyyn</a>
+    {% endif %}
+    {% if size > 0 %}
+      <hr>
+      {% for answer in answers %}
+        {% if session.user_name == creator_name %} 
+          <a href="/query/remove/remove_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ answer[2] }}/{{ answer[0] }}">Poista</a>
+        {% endif %}
+        <br>
+        {{ answer_creators[answer[0]] }}
+        <br>
+        {{ answer[3] }}
+        <hr>
+      {% endfor %}
+    {% endif %}
   {% endif %}
 
   {% if session.query_mode == "4" %}
-  <form action="/query/save/save_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query_id }}" method="POST">
-    {{ question }}
-
-    <br>
-
-    <a>Kirjoita vastauksesi alla olevaan tekstikenttään</a>
-
-    <br>
-    
-    <textarea name="answer" rows="25" cols="100"></textarea>
-
-    <br>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/query/save/save_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query_id }}" method="POST">
+      {{ question }}
+      <br>
+      <a>Kirjoita vastauksesi alla olevaan tekstikenttään</a>
+      <br>
+      <textarea name="answer" rows="25" cols="100"></textarea>
+      <br>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
 </div>
 

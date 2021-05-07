@@ -121,18 +121,16 @@ textarea {
   
   {% if session.comment_mode == "4" %}
     <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
-  
     {% if session.user_name %}
       <a href="/comments/save/create_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Luo kommentti</a>
     {% endif %}
-  
   {% endif %}
   
   {% if session.comment_mode == "5" %}
     <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Takaisin</a>
   {% endif %}
   
-    <a href="/" class="right">Pääsivulle</a>
+  <a href="/" class="right">Pääsivulle</a>
   
   {% if session.user_name %}
     <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>

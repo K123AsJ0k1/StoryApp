@@ -112,223 +112,158 @@ textarea {
 
 <div class="footer">
   {% if session.workbench == "1" %}
-  <form action="/workbench/save/save_post" method="POST">
-    <a>Mikä nimi postauksella pitäisi olla?</a>
-    
-    <br>
-    
-    <input type="text" name="name"></p>
-    
-    <br>
-    
-    <a>Haluatko postauksen olevan julkinen?</a>
-    
-    <br>
-    
-    <input type="radio" id="1" name="public" value="true">
-    <label for="Yes">Kyllä</label><br>
-    <input type="radio" id="2" name="public" value="false" checked="checked">
-    <label for="No">Ei</label>
-    
-    <br>
-    
-    <a>Haluatko muiden kommentoivan postausta?</a>
-    
-    <br>
-    
-    <input type="radio" id="1" name="general" value="true">
-    <label for="Yes">Kyllä</label><br>
-    <input type="radio" id="2" name="general" value="false" checked="checked">
-    <label for="No">Ei</label>
-    
-    <br>
-    
-    <a>Minkä ikä rajan haluat?(WIP)</a><br>
-    
-    <input type="radio" id="1" name="rating" value="K" checked="checked">
-    <label for="K">K</label><br>
-    <input type="radio" id="2" name="rating" value="T">
-    <label for="T">T</label><br>
-    <input type="radio" id="3" name="rating" value="M">
-    <label for="M">M</label><br>
-    
-    <a>Mikä on tarinan genre?(WIP)</a><br>
-    
-    <input type="text" name="genre"></p>
-    <input type="submit" value="Tallenna">
-    
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/workbench/save/save_post" method="POST">
+      <a>Mikä nimi postauksella pitäisi olla?</a>
+      <br>
+      <input type="text" name="name"></p>
+      <br>
+      <a>Haluatko postauksen olevan julkinen?</a>
+      <br>
+      <input type="radio" id="1" name="public" value="true">
+      <label for="Yes">Kyllä</label><br>
+      <input type="radio" id="2" name="public" value="false" checked="checked">
+      <label for="No">Ei</label>
+      <br>
+      <a>Haluatko muiden kommentoivan postausta?</a>
+      <br>
+      <input type="radio" id="1" name="general" value="true">
+      <label for="Yes">Kyllä</label><br>
+      <input type="radio" id="2" name="general" value="false" checked="checked">
+      <label for="No">Ei</label>
+      <br>
+      <a>Minkä ikä rajan haluat?(WIP)</a><br>
+      <input type="radio" id="1" name="rating" value="K" checked="checked">
+      <label for="K">K</label><br>
+      <input type="radio" id="2" name="rating" value="T">
+      <label for="T">T</label><br>
+      <input type="radio" id="3" name="rating" value="M">
+      <label for="M">M</label><br>
+      <a>Mikä on tarinan genre?(WIP)</a><br>
+      <input type="text" name="genre"></p>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
   
   {% if session.workbench == "2" %}
-  {% if size == 0 %}
-    <h2>Et omista yhtään postausta</h2>
-  {% endif %}
-  {% if size > 0 %}
-  <form action="/workbench/save/save_chapter" method="POST">
-    <a>Mihin postaukseen haluat lisätä tämän chapterin?</a>
-    
-    <br>
-
-    {% for post in posts %}
-    {{ post[3] }} <input type="radio" id="post_{{ post[1] }}" name="chapter_picked_post" value="{{ post[0] }}">
-    <br>
-    {% endfor %}
-    
-    <br>
-        
-    <a>Haluatko chapterin olevan julkinen?(WIP)</a>
-    
-    <br>
-    
-    <input type="radio" id="1" name="chapter_public" value="true">
-    <label for="Yes">Kyllä</label><br>
-    <input type="radio" id="2" name="chapter_public" value="false" checked="checked">
-    <label for="No">Ei</label>
-    
-    <br>
-    
-    <a>Haluatko chapteriin rivi kommentit?(WIP)</a>
-    
-    <br>
-    
-    <input type="radio" id="1" name="chapter_row_comments_on" value="true">
-    <label for="Yes">Kyllä</label><br>
-    <input type="radio" id="2" name="chapter_row_comments_on" value="false" checked="checked">
-    <label for="No">Ei</label>
-    
-    <br>
-    
-    <a>Haluatko chapteriin kyselyt?</a>
-    
-    <br>
-    
-    <input type="radio" id="1" name="chapter_inquiry" value="true">
-    <label for="Yes">Kyllä</label><br>
-    <input type="radio" id="2" name="chapter_inquiry" value="false" checked="checked">
-    <label for="No">Ei</label>
-    
-    <br>
-    
-    <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään (Teksti rivin saa olla seinään asti)</a>
-
-    <br>
-    
-    <textarea name="chapter_text" rows="25" cols="100"></textarea>
-
-    <br>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
-  {% endif %}
+    {% if size == 0 %}
+      <h2>Et omista yhtään postausta</h2>
+    {% endif %}
+    {% if size > 0 %}
+      <form action="/workbench/save/save_chapter" method="POST">
+        <a>Mihin postaukseen haluat lisätä tämän chapterin?</a>
+        <br>
+        {% for post in posts %}
+          {{ post[3] }} <input type="radio" id="post_{{ post[1] }}" name="chapter_picked_post" value="{{ post[0] }}">
+        <br>
+        {% endfor %}
+        <br>
+        <a>Haluatko chapterin olevan julkinen?(WIP)</a>
+        <br>
+        <input type="radio" id="1" name="chapter_public" value="true">
+        <label for="Yes">Kyllä</label><br>
+        <input type="radio" id="2" name="chapter_public" value="false" checked="checked">
+        <label for="No">Ei</label>
+        <br>
+        <a>Haluatko chapteriin rivi kommentit?(WIP)</a>
+        <br>
+        <input type="radio" id="1" name="chapter_row_comments_on" value="true">
+        <label for="Yes">Kyllä</label><br>
+        <input type="radio" id="2" name="chapter_row_comments_on" value="false" checked="checked">
+        <label for="No">Ei</label>
+        <br>
+        <a>Haluatko chapteriin kyselyt?</a>
+        <br>
+        <input type="radio" id="1" name="chapter_inquiry" value="true">
+        <label for="Yes">Kyllä</label><br>
+        <input type="radio" id="2" name="chapter_inquiry" value="false" checked="checked">
+        <label for="No">Ei</label>
+        <br>
+        <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään (Teksti rivin saa olla seinään asti)</a>
+        <br>
+        <textarea name="chapter_text" rows="25" cols="100"></textarea>
+        <br>
+        <input type="submit" value="Tallenna">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+      </form>
+    {% endif %}
   {% endif %}
   
   {% if session.workbench == "3" %}
-  <form action="/workbench/update/update_post/{{ post_id }}/0" method="POST">
-    <a>Mikä nimi postauksella pitäisi olla?</a>
-    
-    <br>
-    
-    <input type="text" name="name" value="{{ session.given_post_name }}"></p>
-    
-    <br>
-    
-    <a>Haluatko postauksen olevan julkinen?</a>
-    
-    <br>
-    
-    {% if session.given_post_public != "1" %}
-    <input type="radio" id="1" name="public" value="true">
-    <label for="Yes">Kyllä</label><br>
-    {% endif %}
-    
-    {% if session.given_post_public == "1" %}
-    <input type="radio" id="1" name="public" value="true" checked="checked">
-    <label for="Yes">Kyllä</label><br>
-    {% endif %}
-    
-    {% if session.given_post_public != "2" %}
-    <input type="radio" id="2" name="public" value="false">
-    <label for="No">Ei</label>
-    {% endif %}
-    
-    {% if session.given_post_public == "2" %}
-    <input type="radio" id="2" name="public" value="false" checked="checked">
-    <label for="No">Ei</label>
-    {% endif %}
-    
-    <br>
-    
-    <a>Haluatko muiden kommentoivan postausta?</a>
-    
-    <br>
-    
-    {% if session.given_post_general != "1" %}
-    <input type="radio" id="1" name="general" value="true">
-    <label for="Yes">Kyllä</label><br>
-    {% endif %}
-    
-    {% if session.given_post_general == "1" %}
-    <input type="radio" id="1" name="general" value="true" checked="checked">
-    <label for="Yes">Kyllä</label><br>
-    {% endif %}
-    
-    {% if session.given_post_general != "2" %}
-    <input type="radio" id="2" name="general" value="false">
-    <label for="No">Ei</label>
-    {% endif %}
-    
-    {% if session.given_post_general == "2" %}
-    <input type="radio" id="2" name="general" value="false" checked="checked">
-    <label for="No">Ei</label>
-    {% endif %}
-    
-    <br>
-    
-    <a>Minkä ikä rajan haluat</a><br>
-    
-    {% if session.given_post_rating != "K" %}
-    <input type="radio" id="1" name="rating" value="K">
-    <label for="K">K</label><br>
-    {% endif %}
-    
-    {% if session.given_post_rating == "K" %}
-    <input type="radio" id="1" name="rating" value="K" checked="checked">
-    <label for="K">K</label><br>
-    {% endif %}
-    
-    {% if session.given_post_rating != "T" %}
-    <input type="radio" id="2" name="rating" value="T">
-    <label for="T">T</label><br>
-    {% endif %}
-    
-    {% if session.given_post_rating == "T" %}
-    <input type="radio" id="2" name="rating" value="T" checked="checked">
-    <label for="T">T</label><br>
-    {% endif %}
-    
-    {% if session.given_post_rating != "M" %}
-    <input type="radio" id="3" name="rating" value="M">
-    <label for="M">M</label><br>
-    {% endif %}
-    
-    {% if session.given_post_rating == "M" %}
-    <input type="radio" id="3" name="rating" value="M" checked="checked">
-    <label for="M">M</label><br>
-    {% endif %}
-    
-    <a>Mikä on tarinan genre?</a><br>
-    <input type="text" name="genre" value="{{ session.given_post_genre }}"></p>
-
-    <input type="submit" value="Tallenna">
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </form>
+    <form action="/workbench/update/update_post/{{ post_id }}/0" method="POST">
+      <a>Mikä nimi postauksella pitäisi olla?</a>
+      <br>
+      <input type="text" name="name" value="{{ session.given_post_name }}"></p>
+      <br>
+      <a>Haluatko postauksen olevan julkinen?</a>
+      <br>
+      {% if session.given_post_public != "1" %}
+        <input type="radio" id="1" name="public" value="true">
+        <label for="Yes">Kyllä</label><br>
+      {% endif %}
+      {% if session.given_post_public == "1" %}
+        <input type="radio" id="1" name="public" value="true" checked="checked">
+        <label for="Yes">Kyllä</label><br>
+      {% endif %}
+      {% if session.given_post_public != "2" %}
+        <input type="radio" id="2" name="public" value="false">
+        <label for="No">Ei</label>
+      {% endif %}
+      {% if session.given_post_public == "2" %}
+        <input type="radio" id="2" name="public" value="false" checked="checked">
+        <label for="No">Ei</label>
+      {% endif %}
+      <br>
+      <a>Haluatko muiden kommentoivan postausta?</a>
+      <br>
+      {% if session.given_post_general != "1" %}
+        <input type="radio" id="1" name="general" value="true">
+        <label for="Yes">Kyllä</label><br>
+      {% endif %}
+      {% if session.given_post_general == "1" %}
+        <input type="radio" id="1" name="general" value="true" checked="checked">
+        <label for="Yes">Kyllä</label><br>
+      {% endif %}
+      {% if session.given_post_general != "2" %}
+        <input type="radio" id="2" name="general" value="false">
+        <label for="No">Ei</label>
+      {% endif %}
+      {% if session.given_post_general == "2" %}
+        <input type="radio" id="2" name="general" value="false" checked="checked">
+        <label for="No">Ei</label>
+      {% endif %}
+      <br>
+      <a>Minkä ikä rajan haluat</a><br>
+      {% if session.given_post_rating != "K" %}
+        <input type="radio" id="1" name="rating" value="K">
+        <label for="K">K</label><br>
+      {% endif %}
+      {% if session.given_post_rating == "K" %}
+        <input type="radio" id="1" name="rating" value="K" checked="checked">
+        <label for="K">K</label><br>
+      {% endif %}
+      {% if session.given_post_rating != "T" %}
+        <input type="radio" id="2" name="rating" value="T">
+        <label for="T">T</label><br>
+      {% endif %}
+      {% if session.given_post_rating == "T" %}
+        <input type="radio" id="2" name="rating" value="T" checked="checked">
+        <label for="T">T</label><br>
+      {% endif %}
+      {% if session.given_post_rating != "M" %}
+        <input type="radio" id="3" name="rating" value="M">
+        <label for="M">M</label><br>
+      {% endif %}
+      {% if session.given_post_rating == "M" %}
+        <input type="radio" id="3" name="rating" value="M" checked="checked">
+        <label for="M">M</label><br>
+      {% endif %}
+      <a>Mikä on tarinan genre?</a><br>
+      <input type="text" name="genre" value="{{ session.given_post_genre }}"></p>
+      <input type="submit" value="Tallenna">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
   {% endif %}
-
 </div>
 
 </body>

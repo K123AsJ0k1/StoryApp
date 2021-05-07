@@ -68,9 +68,11 @@ body {
 
 <div class="header">
   <h1>Kirjaudu sisään</h1>
+  
   {% if session.log_in == "1" %}
     <p>Käyttäjää ei ole olemassa</p>
   {% endif %}
+  
   {% if session.log_in == "2" %}
     <p>Salasana on väärin</p>
   {% endif %}
@@ -88,6 +90,7 @@ body {
       </form>
     </div>
   {% endif %}
+  
   {% if session.login_mode == "2" %}
     <div class="main">
       <form action="/login/check_admin" method="POST">

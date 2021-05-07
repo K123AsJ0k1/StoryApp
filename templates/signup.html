@@ -68,41 +68,45 @@ body {
 
 <div class="header">
   <h1>Luo uusi käyttäjä</h1>
+  
   {% if session.sign_up == "1" %}
-  <p>Käyttäjän on oltava vähintään 5 merkkiä pitkä</p>
+    <p>Käyttäjän on oltava vähintään 5 merkkiä pitkä</p>
   {% endif %}
+  
   {% if session.sign_up == "2" %}
-  <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
+    <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
   {% endif %}
+  
   {% if session.sign_up == "3" %}
-  <p>Käyttäjä nimi on jo olemassa</p>
+    <p>Käyttäjä nimi on jo olemassa</p>
   {% endif %}
 </div>
 
 <div class="signup">
   {% if session.sign_up_mode == "1" %}
-  <div class="main">
-    <form action="/signup/register_user" method="POST">
-    <p>Tunnus:<br>
-    <input type="text" name="username"></p>
-    <p>Salasana:<br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Kirjaudu">
-    </form>
-  </div>
+    <div class="main">
+      <form action="/signup/register_user" method="POST">
+        <p>Tunnus:<br>
+        <input type="text" name="username"></p>
+        <p>Salasana:<br>
+        <input type="password" name="password"></p>
+        <input type="submit" value="Kirjaudu">
+      </form>
+    </div>
   {% endif %}
+  
   {% if session.sign_up_mode == "2" %}
-  <div class="main">
-    <form action="/signup/register_admin" method="POST">
-    <p>Tunnus:<br>
-    <input type="text" name="admin_name"></p>
-    <p>Salasana:<br>
-    <input type="password" name="admin_password"></p>
-    <p>Super user salasana:<br>
-    <input type="password" name="super_user_password"></p>
-    <input type="submit" value="Kirjaudu">
-    </form>
-  </div>
+    <div class="main">
+      <form action="/signup/register_admin" method="POST">
+        <p>Tunnus:<br>
+        <input type="text" name="admin_name"></p>
+        <p>Salasana:<br>
+        <input type="password" name="admin_password"></p>
+        <p>Super user salasana:<br>
+        <input type="password" name="super_user_password"></p>
+        <input type="submit" value="Kirjaudu">
+      </form>
+    </div>
   {% endif %}
 </div>
 
