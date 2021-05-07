@@ -136,31 +136,31 @@ body {
 
 <div class="topnav">
   {% if session.user_name %}
-  <a>{{ session.user_name }}</a>
-  <a href="/profile/{{ session.user_name }}">Profiili</a>
-  <a href="/logout">Kirjaudu ulos</a>
+    <a>{{ session.user_name }}</a>
+    <a href="/profile/{{ session.user_name }}">Profiili</a>
+    <a href="/logout">Kirjaudu ulos</a>
   {% else %}
-  <a href="/signup/create_user">Luo käyttäjä</a>
-  <a href="/login/log_in_user">Kirjaudu</a>
-  <a>Anonyymi</a>
+    <a href="/signup/create_user">Luo käyttäjä</a>
+    <a href="/login/log_in_user">Kirjaudu</a>
+    <a>Anonyymi</a>
   {% endif %}
 </div>
 
 <div class="row">
   <div class="main">
     {% if size > 0 %}
-    <hr>
-    {% for post in posts %}
-    <a href="/view/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}/1">{{ post[4] }}</a>
-    kirjoittajalta {{ post_creators[post[0]] }}
-    {% if post[3] and owns_chapters[post[0]] %}
-    <a href="/comments/general/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}" class="right">Kommentit</a>
-    {% endif %}
-    <hr>
-    {% endfor %}
+      <hr>
+      {% for post in posts %}
+        <a href="/view/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}/1">{{ post[4] }}</a>
+        kirjoittajalta {{ post_creators[post[0]] }}
+        {% if post[3] and owns_chapters[post[0]] %}
+        <a href="/comments/general/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}" class="right">Kommentit</a>
+        {% endif %}
+        <hr>
+      {% endfor %}
     {% endif %}
     {% if size == 0 %}
-    <h2>Kukaan ei ole luonut yhtään julkista postausta</h2>
+      <h2>Kukaan ei ole luonut yhtään julkista postausta</h2>
     {% endif %}
   </div>
 </div>
