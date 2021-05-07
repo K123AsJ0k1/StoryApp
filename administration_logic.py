@@ -21,3 +21,6 @@ def admin_queries_mode():
 
 def admin_answers_mode():
     session["admin_mode"] = "7"
+
+def admin_clearance_code_mode():
+    session["admin_mode"] = "8"

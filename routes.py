@@ -226,6 +226,11 @@ def administration_answers(admin_name):
 
    admin_answers_mode()
    return render_template("administration.html", admin_name=admin_name, answers=answers)
+
+@app.route("/administration/clearance_code/<string:admin_name>")
+def administration_clearance_code(admin_name):
+   admin_clearance_code_mode()
+   return render_template("administration.html", admin_name=admin_name)
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):

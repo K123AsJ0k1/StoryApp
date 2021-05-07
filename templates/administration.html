@@ -111,6 +111,10 @@ textarea {
   {% if session.admin_mode == "7" %}
     <h1>Vastaukset työkalut(WIP)</h1>
   {% endif %}
+
+  {% if session.admin_mode == "8" %}
+    <h1>Oikeus koodi työkalut(WIP)</h1>
+  {% endif %}
 </div>
 
 <div class="navbar">
@@ -121,7 +125,7 @@ textarea {
     <a href="/administration/comments/{{ admin_name }}">Kommentit</a>
     <a href="/administration/queries/{{ admin_name }}">Kyselyt</a>
     <a href="/administration/answers/{{ admin_name }}">Vastaukset</a>
-    <a href="">Oikeus koodi</a>
+    <a href="/administration/clearance_code/{{ admin_name }}">Oikeus koodi</a>
   {% endif %}
   
   {% if not session.admin_mode == "1" %}
@@ -260,6 +264,9 @@ textarea {
     </table>
   {% endif %}
 
+  {% if session.admin_mode == "8" %}
+    <h2>Tietokannan tilastotietoja(wip)</h2>
+  {% endif %}
 </div>
 
 </body>
