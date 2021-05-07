@@ -71,9 +71,9 @@ def signup(mode):
    if mode == "register_admin" and request.method == "POST":
       username = request.form["admin_name"]
       password = request.form["admin_password"]
-      super_user_password = request.form["super_user_password"]
+      clearance_code = request.form["clearance_code"]
 
-      if not register(mode,username,password,super_user_password):
+      if not register(mode,username,password,clearance_code):
          address = "/signup/create_admin"
          return redirect(address)
 

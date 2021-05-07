@@ -15,7 +15,7 @@ def log_in_user_mode():
 def log_in_admin_mode():
     session["login_mode"] = "2"
 
-def register(mode, username, password, super_user_password):
+def register(mode, username, password, clearance_code):
     if mode == "register_user":
     
       if len(username) < 5:
@@ -52,7 +52,7 @@ def register(mode, username, password, super_user_password):
       if len(password) < 10:
         return False
 
-      check_number = create_admin(username, password, super_user_password)
+      check_number = create_admin(username, password, clearance_code)
         
       if check_number == -1:
         return False
