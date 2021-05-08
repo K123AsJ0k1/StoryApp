@@ -136,7 +136,7 @@ def check_if_user_name_is_admin(user_name):
     if user_role == -1:
       return False
 
-    if user_role == 1 or 3:
+    if user_role == 1 or user_role == 3:
       return True
 
     return False
