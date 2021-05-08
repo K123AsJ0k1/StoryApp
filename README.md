@@ -24,14 +24,38 @@ Sovelluksen ominaisuudet ovat:
 - Admin käyttäjä pystyy tarkastelemaan olemassa olevia käyttäjiä, kommenteja ja kyselyitä
 - Admin käyttäjä pystyy poistamaan käyttäjiä, postauksia, kommenteja ja kyselyitä
 
-# HUOMIOTA (11.4.2021):
+# HUOMIOTA (25.4.2021):
 
-- Sovelluksessa on olemassa jo kaksi valmista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
-- Chapterin luonnissa en suosittele olemaan painamatta tallenna, kun et ole valinnut yhtään postausta, sillä se saattaa aiheuttaa errorin
-- En suosittele käyttämään pääsivulla näkyvää haku selainta, sillä se saattaa aiheuttaa errorin
-- Sovellus ei osaa vielä rivittää tekstiä oikealla lailla, joten en suosittele pitkien tekstien antamista
+Perustiedot:
 
-# Toteutetut ominaisuudet välipalautus 2 (11.4.2021):
+- Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi. Super user password on Salasana
+- Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
+- Sovelluksessa on olemassa jo kaksi tavallista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
+- Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin (käyttäjä nimi/salasana)
+- Kaikki asiat, joissa lukee WIP, on kehityksen alla
+- Julkinen postaus tulee näkyviin silloin, kun se omistaa vähintään yhden chapterin
+- Jos linkin nimen mukainen asia ei omista yhtään asiaa tietokannassa, se pitää käyttäjän sivustolla
+- En suosittele olemaan valitsematta mitään postausta chapterin luonnissa, sillä se voi aiheuttaa errorin
+
+Ongelmia:
+
+- satunnaisen postauksen valinta ei tapahdu automaattisesti chapterin valinnassa
+- sovelluksen tiedosto rakenne kaipaa refaktorointia
+- session asiat tarvitsevat refaktorointia
+- route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
+- route.py linkkejä voisi refaktoroida
+- Tietokanta ja route.py tarvitsevat hieman refaktorointia
+- Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
+- Sovelluksessa on edelleen CSRF haavoittuvuus, joka tullaan korjaamaan
+- Sovelluksen käyttöliittymä on tietyissä paikoissa hieman tynkä
+- Sovellus ei kommunikoi kovinkaan paljon käyttäjän tekemistä virheistä
+- Sovellus ei varmista poistamista, joten käyttäjä voi vahingossa painaa väärää linkkiä ja poistaa asian
+- Adminit pystyvät menemään pääsivulle ja profiilin
+- Tietokannan poisto metodit kaipaavat hieman refaktorointia
+- Tietokannan muutamat asiat tarvitsevat nimi refaktorointia
+- Super user password tarvitsee tietokanta varmistuksen
+
+# Toteutetut ominaisuudet välipalautus 3 (25.4.2021):
 
 - Anonyymit ja kirjoittajat näkevät postauksia pääsivulla
 - Anonyymit ja kirjoittajat voivat tarkastella postauksien chaptereita
@@ -49,7 +73,17 @@ Sovelluksen ominaisuudet ovat:
 - Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
 - Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
 
-# Testauksesta herokussa (11.4.2021):
+Uudet ominaisuudet:
+
+- Chaptereista voidaan valita tekstiä rivi aiheeksi 
+- Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
+- Chapterin rivi aiheita ja niihin liittyviä kommenteja voi poistaa
+- Admin käyttäjän voi luoda ja sen avulla voi kirjautua
+- Hallinto sivusto antaa linkit eri tietokanta näkymiin
+- Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla (Rivi saa olla korkeintaan 100 merkkiä pitkä ilman enteriä)
+- Sovellus osaa näyttää tekstiä oikealla lailla 
+
+# Testauksesta herokussa (25.4.2021):
 
 Perusidea:
 
@@ -84,10 +118,9 @@ Työpöytä
 - Kyseiset linkit pitäisi tehdä nimiensä mukaisia asioita
 - Tapauksessa, jossa postauksia ei ole, chapter luonti pitäisi näyttää, ettei postauksia ole
 
-Reset
+Takaisin
 
-- Kun saavut joko postauksen, chapterin luontiin, vasemmalla puolella pitäisi olla reset, jonka avulla pystyt palamaan takaisin edelliseen valintan
-- Sama linkki pitäisi löytyä muistakin sivuista
+- Tämä linkki löytyy monesta sivusta ja se vie takaisin edelliseen sivuun
 
 Postauksen luonti
 
@@ -163,11 +196,30 @@ Chapterin kyselyn näkymien
 
 - Chapter viewissä pitäisi näkyä kysely, jos kyseinen asetus on annettu
 
+Rivi aiheen valitseminen
 
- 
+- Valittuasi jonkin tekstin chapterin näkymästä (sama periaate kuten copy paste), paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterin rivialueella
 
+Rivi alue
 
+- Rivialueella näkyvät kaikki rivi aiheet, joita voi kommentoida käyttäjät ja joita omistaja pystyy poistamaan
 
+Rivi kommentit
 
+- Riviaihetta voi kommentoida menemällä sen vastauksiin ja luomalla kommentin, jonka jälkeen se pitäisi näkyä rivi aiheen vastauksissa.Luvun omistaja pystyy poistamana rivi kommentteja
 
+Adminin luonti
 
+- Muutettuasi tavallisen käyttäjän luonnin URL:in user adminiksi, anna 10 merkin pituinen uniikki käyttäjä nimi ja salasana ja super user password salasana. Sen jälkeen kirjaudu sisään
+
+Admin kirjautuminen
+
+- Luotuasi uuden adminin tai muutettuasi kirjautumisen URL:n user adminiksi, annan olemassa oleva käyttäjä nimi ja salasana
+
+Hallinto
+
+- Antaa linkit eri tietokanta työkaluihin ja ulos kirjautumis mahdollisuuden
+
+Tietokanta mäkymät
+
+- Näyttävät tällä hetkellä linkin mukaisen taulukon tiedot tietokannassa, takaisin paluu linkin ja ulos kirjautumisen
