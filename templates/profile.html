@@ -111,10 +111,8 @@ body {
         {% if post[2] and owns_chapters[post[0]] %}
             <a href="/comments/general/{{ user_name }}/{{ post[3] }}/{{ post[0] }}">Kommentit</a>
         {% endif %}
-        {% if owner or admin %}
-            {% if not admin %}
-              <a href="/workbench/update/change_post/{{ post[0] }}/0">Muokkaa</a>
-            {% endif %}
+        {% if owner %}
+            <a href="/workbench/update/change_post/{{ post[0] }}/0">Muokkaa</a>
             <a href="/workbench/remove/remove_post/{{ post[0] }}/0">Poista</a>
         {% endif %}
         <hr>
