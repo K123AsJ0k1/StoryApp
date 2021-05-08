@@ -100,4 +100,48 @@ def remove_subject_comments(post_id,chapter_number,subject_id):
       return False
 
     return True
+
+def get_general_comment_amount():
+    comments = get_comments()
+
+    if comments == None:
+      return 0
+
+    size = 0
+    
+    for comment in comments:
+      if comment[4]:
+        size = size + 1
+
+    return size
+
+def get_row_subject_amount():
+    comments = get_comments()
+
+    if comments == None:
+      return 0
+
+    size = 0
+
+    for comment in comments:
+      if comment[5] and comment[3] == 0:
+        size = size + 1
+
+    return size
+
+def get_row_subject_comment_amount():
+    comments = get_comments()
+
+    if comments == None:
+      return 0
+
+    size = 0
+
+    for comment in comments:
+      if comment[5] and comment[3] > 0:
+        size = size + 1
+
+    return size
+
+    
    

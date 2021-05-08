@@ -244,6 +244,22 @@ def remove_chapter(post_id,chapter_number):
     
     return True
 
+def get_posts_amount():
+    posts = get_posts()
+
+    if posts == None:
+      return 0
+
+    return len(posts)
+
+def get_public_post_amount():
+    public_posts = get_public_posts()
+    
+    if public_posts == None:
+      return 0
+    
+    return len(public_posts)
+
 def check_post_owner(user_name,post_id):
     post_owner = get_post_creator(post_id)
 
@@ -251,6 +267,28 @@ def check_post_owner(user_name,post_id):
       return False
 
     return True
+
+def get_chapters_amount():
+    chapters = get_chapters()
+    
+    if chapters == None:
+      return 0
+
+    return len(chapters)
+
+def get_public_chapters_amount():
+    chapters = get_chapters()
+
+    if chapters == None:
+      return 0
+    
+    public_chapters = []
+
+    for chapter in chapters:
+        if chapter[2]:
+          public_chapters.append(chapter)
+
+    return len(public_chapters)
 
     
 

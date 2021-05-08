@@ -133,9 +133,26 @@ textarea {
   {% endif %}
 
   {% if session.admin_mode == "2" %}
-    <a>Käyttäjien määrä:{{ amount_of_regulars }}</a>
-    <a>Adminien määrä:{{ amount_of_admins }}</a>
+    <a>Käyttäjät:{{ amount_of_regulars }}</a>
+    <a>Adminit:{{ amount_of_admins }}</a>
   {% endif %}
+
+  {% if session.admin_mode == "3" %}
+    <a>Määrä:{{ amount_of_posts }}</a>
+    <a>Julkiset:{{ amount_of_public_posts }}</a>
+  {% endif %}
+
+  {% if session.admin_mode == "4" %}
+    <a>Määrä:{{ amount_of_chapters }}</a>
+    <a>Julkiset:{{ amount_of_public_chapters }}</a>
+  {% endif %}
+   
+  {% if session.admin_mode == "5" %}
+    <a>Yleiset:{{ amount_of_general_comments }}</a>
+    <a>Rivi aiheet:{{ amount_of_row_subjects }}</a>
+    <a>Rivi vastaukset:{{ amount_of_row_subject_comments }}</a>
+  {% endif %}
+
 
   <a href="/logout"class="right">Kirjaudu ulos</a>
 </div>
