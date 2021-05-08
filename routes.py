@@ -23,6 +23,11 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def main_page():
+   if get_clearance_proxy() == None:
+      if not create_clearance_proxy():
+         print("ongelma")
+         #Luo sessio errori
+
    if 'user_role' in session:
       if session["user_role"] == 2:
          address = "/administration/" + session["user_name"]
@@ -227,10 +232,23 @@ def administration_answers(admin_name):
    admin_answers_mode()
    return render_template("administration.html", admin_name=admin_name, answers=answers)
 
-@app.route("/administration/clearance_code/<string:admin_name>")
+@app.route("/administration/clearance_code/<string:admin_name>", methods=["get","post"])
 def administration_clearance_code(admin_name):
-   admin_clearance_code_mode()
-   return render_template("administration.html", admin_name=admin_name)
+   if request.method == "GET":
+      admin_clearance_code_mode()
+      clearance_code = get_clearance_code()
+      if clearance_code == None:
+         address = "/administration/" + admin_name
+         return redirect(address)
+      return render_template("administration.html", admin_name=admin_name, clearance_code=clearance_code)
+   if request.method == "POST":
+      check_csrf()
+      new_clearance_code = request.form["clearance_code"]
+      if not change_clearance_code(new_clearance_code):
+         address = "/administration/clearance_code/" + admin_name
+         return redirect(address)
+      address = "/administration/" + admin_name
+      return redirect(address)
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):

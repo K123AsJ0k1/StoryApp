@@ -2,6 +2,27 @@ from app import app
 from db import *
 from werkzeug.security import check_password_hash, generate_password_hash
 
+def create_clearance_proxy():
+    try:
+        sql = "SELECT username FROM users WHERE role=3"
+        result = db.session.execute(sql)
+        proxy = result.fetchone()
+        
+        if not proxy == None:
+          return False
+ 
+        username = "clearance_proxy"
+        password = "starter_clearance_proxy_code"
+        
+        sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
+        db.session.execute(sql, {"username":username,"password": password,"role":3})
+        db.session.commit()
+
+        return True
+    except Exception as e:
+        print(e)
+        return False    
+
 def create_user(username, password):
     try:
         sql = "SELECT id FROM users WHERE username=:username"
@@ -21,7 +42,7 @@ def create_user(username, password):
         print(e)
         return False
 
-def create_admin(username, password, super_user_password):
+def create_admin(username, password, given_clearance_code):
     try:
         sql = "SELECT id FROM users WHERE username=:username"
         result = db.session.execute(sql, {"username":username})
@@ -30,8 +51,14 @@ def create_admin(username, password, super_user_password):
         if not query == None:
           return -1
 
-        # Tarkoitus on hakea tietokannasta user taulusta käyttäjältä super user:in salasana
-        if not super_user_password == "Salasana":
+        sql = "SELECT password FROM users WHERE role=3"
+        result = db.session.execute(sql)
+        clearance_code = result.fetchone()
+        
+        if clearance_code == None:
+          return -3
+
+        if not given_clearance_code == clearance_code[0]:
           return -2
 
         hash_value = generate_password_hash(password)
@@ -80,6 +107,38 @@ def login_admin(username, password):
         print(e)
         return -3
 
+def update_clearance_code(clearance_code):
+    try:
+        sql = "SELECT id FROM users WHERE role=3"
+        result = db.session.execute(sql)
+        proxy_id = result.fetchone()
+  
+        if proxy_id == None:
+          return -1
+
+        sql = "UPDATE users SET password=:clearance_code WHERE id=:proxy_id"
+        db.session.execute(sql, {"clearance_code":clearance_code, "proxy_id":proxy_id[0]})
+        db.session.commit()
+       
+        return 0
+    except Exception as e:
+        print(e)
+        return -2 
+
+def get_clearance_proxy():
+    try:
+        sql = "SELECT id,username,password,role FROM users WHERE role=3"
+        result = db.session.execute(sql)
+        proxy = result.fetchone()
+        if proxy == None:
+          return None
+        if len(proxy) == 0:
+          return None
+        return proxy
+    except Exception as e:
+        print(e)
+        return None    
+        
 def get_user_id(username):
     try:
         sql = "SELECT id FROM users WHERE username=:username"
