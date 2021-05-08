@@ -242,12 +242,18 @@ def administration_queries(admin_name):
 
    queries = get_queries()
 
+   if queries == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    if len(queries) == 0:
       address = "/administration/" + admin_name
       return redirect(address)
 
+   amount_of_queries = get_queries_amount()
+
    admin_queries_mode()
-   return render_template("administration.html", admin_name=admin_name, queries=queries)
+   return render_template("administration.html", admin_name=admin_name, queries=queries, amount_of_queries=amount_of_queries)
 
 @app.route("/administration/answers/<string:admin_name>")
 def administration_answers(admin_name):
@@ -259,12 +265,18 @@ def administration_answers(admin_name):
 
    answers = get_answers()
 
+   if answers == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    if len(answers) == 0:
       address = "/administration/" + admin_name
       return redirect(address)
 
+   amount_of_answers = get_answers_amount()
+
    admin_answers_mode()
-   return render_template("administration.html", admin_name=admin_name, answers=answers)
+   return render_template("administration.html", admin_name=admin_name, answers=answers, amount_of_answers=amount_of_answers)
 
 @app.route("/administration/clearance_code/<string:admin_name>", methods=["get","post"])
 def administration_clearance_code(admin_name):

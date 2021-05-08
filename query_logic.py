@@ -77,4 +77,20 @@ def remove_answer(answer_id):
    
    return True
 
+def get_queries_amount():
+    queries = get_queries()
+
+    if queries == None:
+      return 0
+
+    return len(queries)
+
+def get_answers_amount():
+    answers = get_answers()
+
+    if answers == None:
+      return 0
+
+    return len(answers)
+
 
