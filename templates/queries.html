@@ -125,8 +125,8 @@ textarea {
   <a href="/" class="right">Pääsivulle</a>
   
   {% if session.user_name %}
-    <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
     <a href="/logout" class="right">Kirjaudu ulos</a>
+    <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
   {% endif %}
 </div>
 
