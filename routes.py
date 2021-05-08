@@ -258,9 +258,12 @@ def profile(user_name):
       return redirect("/")
 
    owner = False
+   admin = False
    if 'user_name' in session:
-      if user_name == session["user_name"] or session["user_role"] == 2:
+      if user_name == session["user_name"]:
          owner = True
+      if session["user_role"] == 2:
+         admin = True
 
    profile_session_deletion()
    user_id = get_user_id(user_name)
@@ -273,7 +276,7 @@ def profile(user_name):
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
-   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, owner=owner)
+   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, owner=owner, admin=admin)
 
 @app.route("/workbench/save/<string:mode>", methods=["get","post"])
 def workbench_save(mode):
@@ -367,7 +370,6 @@ def workbench_update(mode, post_id, chapter_number):
 
 @app.route("/workbench/remove/<string:mode>/<int:post_id>/<int:chapter_number>")
 def workbench_remove(mode, post_id, chapter_number):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
 

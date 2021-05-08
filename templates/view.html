@@ -158,11 +158,10 @@ textarea {
       {% if session.inquiry %}
         <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
       {% endif %}
+      {% if session.user_name == creator_name %}
+        <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
+      {% endif %}
     {% endif %}
-  {% endif %}
-  
-  {% if session.user_name == creator_name %}
-    <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
   {% endif %}
   
   <a href="/" class="right">Pääsivulle</a>
