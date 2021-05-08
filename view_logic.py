@@ -32,19 +32,12 @@ def view_chapter(creator_name,post_name,chapter_number):
 
     if chapter == None:
       return False
-
+    
+    row_subject = chapter[3]
     inquiry_on = chapter[4]
-   
-    chapter_content = get_source_text_array(chapter[7])
-       
-    # Edellinen luku, seuraava luku ja valittavat luku asiat
-    
-    # Row comment asiat
-    
-    # chapter_rows = chapter[6]
 
-    # row_comments_on = chapter[3]
-   
+    chapter_content = get_source_text_array(chapter[7])
+        
     session["switch_chapter"] = "0"
 
     if chapter_number == 1:
@@ -55,6 +48,7 @@ def view_chapter(creator_name,post_name,chapter_number):
       session["switch_chapter"] = "3"
     
     session["post_id"] = post_id
+    session["row_subject"] = row_subject
     session["inquiry"] = inquiry_on
     session["chapter_content"] = chapter_content
 

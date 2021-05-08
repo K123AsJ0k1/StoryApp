@@ -107,7 +107,7 @@ textarea {
 </div>
 
 <div class="navbar">
-  {% if session.comment_mode == "1" and session.user_name %}
+  {% if session.comment_mode == "1" and session.user_name and not admin %}
     <a href="/comments/save/create_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0">Luo kommentti</a>
   {% endif %}
   
@@ -121,7 +121,7 @@ textarea {
   
   {% if session.comment_mode == "4" %}
     <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
-    {% if session.user_name %}
+    {% if session.user_name and not admin %}
       <a href="/comments/save/create_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Luo kommentti</a>
     {% endif %}
   {% endif %}

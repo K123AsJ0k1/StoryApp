@@ -151,10 +151,16 @@ textarea {
     {% if session.switch_chapter == "2" %}
       <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number - 1 }}">Edellinen luku</a>
     {% endif %}
-    {% if session.user_name %}
+    <a href="/" class="right">Pääsivulle</a>
+    {% if session.user_name %} 
+      <a href="/logout" class="right">Kirjaudu ulos</a>
       <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
-      <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
-      <button type="submit" form="form">Luo rivi aihe</button>
+      {% if session.row_subject %}
+        <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
+        {% if not admin %}
+          <button type="submit" form="form">Luo rivi aihe</button>
+        {% endif %}
+      {% endif %}
       {% if session.inquiry %}
         <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
       {% endif %}
@@ -163,8 +169,6 @@ textarea {
       {% endif %}
     {% endif %}
   {% endif %}
-  
-  <a href="/" class="right">Pääsivulle</a>
 </div>
 
 <div class="footer"> 

@@ -153,13 +153,17 @@ textarea {
     {% endif %}
     {% if size > 0 %}
       {% for query in queries %}
-        {% if session.user_name == creator_name %} 
+        {% if session.user_name == creator_name or admin %} 
           <a href="/query/view_answers/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaukset</a>
           <br>
+        {% endif %}
+        {% if session.user_name == creator_name and not admin %}
           <a href="/query/remove/remove_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}/0">Poista</a>
           <br>
         {% endif %}
-        <a href="/query/save/create_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaa</a>
+        {% if session.user_name and not admin %} 
+          <a href="/query/save/create_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaa</a>
+        {% endif %}
         <br>
         {{ query[3] }} 
         <hr>

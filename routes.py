@@ -258,7 +258,6 @@ def profile(user_name):
       return redirect("/")
 
    if check_if_user_name_is_admin(user_name):
-      print("hei")
       return redirect("/")
 
    owner = False
@@ -288,7 +287,7 @@ def workbench_save(mode):
       if session["user_role"] == 2:
          address = "/administration/" + session["user_name"]
          return redirect(address)
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
+   
    if mode == "create_post" and request.method == "GET":
       workbench_post_mode()   
       return render_template("workbench.html")
@@ -403,17 +402,30 @@ def view(creator_name, post_name, post_id, chapter_number):
    if not view_chapter(creator_name, post_name, chapter_number):
       view_none_mode()
       return render_template("view.html")
+   
+   admin = False
+   if check_user():
+      if check_if_user_name_is_admin(session["user_name"]):
+         admin = True
+   
    view_read_mode()
-   return render_template("view.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number)
+   return render_template("view.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, admin=admin)
 
 @app.route("/comments/general/<string:creator_name>/<string:post_name>/<int:post_id>")
 def comments_general(creator_name, post_name, post_id):
-   #Luo creator_name, post_name, post_id tarkastus
    comments = get_post_general_comments(post_id)
+
+   if comments == None:
+      return redirect("/")
+   
+   admin = False
+   if check_user():
+      if check_if_user_name_is_admin(session["user_name"]):
+         admin = True
    
    if len(comments) == 0:
       comment_view_mode()
-      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0)
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0, admin=admin)
    
    comment_creators = {}
 
@@ -422,14 +434,14 @@ def comments_general(creator_name, post_name, post_id):
 
    if len(comment_creators) == 0:
       comment_view_mode()
-      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0)
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, size=0, admin=admin)
+   
    size = len(comments)
    comment_view_mode()
-   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, comments=comments, comment_creators=comment_creators, size=size)
+   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, comments=comments, comment_creators=comment_creators, size=size, admin=admin)
 
 @app.route("/comments/row/subjects/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def row_subjects(creator_name, post_name, post_id, chapter_number):
-   #Luo creator_name, post_name, post_id tarkastus
    subjects = get_chapter_row_subjects(post_id, chapter_number)
 
    if len(subjects) == 0:
@@ -451,11 +463,19 @@ def row_subjects(creator_name, post_name, post_id, chapter_number):
 
 @app.route("/comments/row/subject_comments/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>")
 def row_subject_comments(creator_name, post_name, post_id, chapter_number, subject_id):
-   #Luo creator_name, post_name, post_id tarkastus
    subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
+
+   if subject_comments == None:
+      return redirect("/")
+   
+   admin = False
+   if check_user():
+      if check_if_user_name_is_admin(session["user_name"]):
+         admin = True
+   
    if len(subject_comments) == 0:
       row_subject_comments_view_mode()
-      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0)
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0, admin=admin)
 
    subject_comment_creators = {}
 
@@ -464,11 +484,11 @@ def row_subject_comments(creator_name, post_name, post_id, chapter_number, subje
 
    if len(subject_comment_creators) == 0:
       row_subject_comments_view_mode()
-      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0)
+      return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, size=0, admin=admin)
 
    size = len(subject_comments)
    row_subject_comments_view_mode()
-   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, subject_comments=subject_comments, subject_comment_creators=subject_comment_creators, size=size)
+   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, subject_id=subject_id, subject_comments=subject_comments, subject_comment_creators=subject_comment_creators, size=size, admin=admin)
 
 @app.route("/comments/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>", methods=["get","post"])
 def comments_save(mode, creator_name, post_name, post_id, chapter_number, subject_id):
@@ -479,7 +499,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       if session["user_role"] == 2:
          address = "/administration/" + session["user_name"]
          return redirect(address)
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
+   
    if mode == "create_general_comment" and request.method == "GET" and post_id > 0:
       comment_creation_mode()
       last_chapter = get_the_next_chapter_number(post_id)-1
@@ -532,7 +552,6 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       
 @app.route("/comment/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>/<int:comment_id>")
 def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subject_id, comment_id):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
 
@@ -562,9 +581,13 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
          
 @app.route("/query/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
+
+   admin = False
+   if check_user():
+      if check_if_user_name_is_admin(session["user_name"]):
+         admin = True
    
    if mode == "view_questions":
       post = get_the_post(post_id)
@@ -591,11 +614,8 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
 
       size = len(queries)
       query_view_mode()
-      return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, queries=queries, size=size)
+      return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, queries=queries, size=size,admin=admin)
    
-   if not check_post_owner(session["user_name"],post_id):
-      return redirect("/")
-
    if mode == "view_answers":
       post = get_the_post(post_id)
 
@@ -615,7 +635,7 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
    
       if len(answers) == 0:
          query_answers_mode()
-         return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=0)
+         return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=0,admin=admin)
 
       answer_creators = {}
 
@@ -624,11 +644,11 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
    
       if len(answer_creators) == 0:
          query_answers_mode()
-         return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=0)
+         return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=0,admin=admin)
    
       the_amount_of_answers = len(answers)
       query_answers_mode()
-      return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=the_amount_of_answers, answers=answers, answer_creators=answer_creators)
+      return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=the_amount_of_answers, answers=answers, answer_creators=answer_creators,admin=admin)
 
 @app.route("/query/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>", methods=["get","post"])
 def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
