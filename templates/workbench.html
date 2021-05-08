@@ -158,14 +158,14 @@ textarea {
         <br>
         {% endfor %}
         <br>
-        <a>Haluatko chapterin olevan julkinen?(WIP)</a>
+        <a>Haluatko chapterin olevan julkinen?</a>
         <br>
         <input type="radio" id="1" name="chapter_public" value="true">
         <label for="Yes">Kyllä</label><br>
         <input type="radio" id="2" name="chapter_public" value="false" checked="checked">
         <label for="No">Ei</label>
         <br>
-        <a>Haluatko chapteriin rivi kommentit?(WIP)</a>
+        <a>Haluatko chapteriin rivi kommentit?</a>
         <br>
         <input type="radio" id="1" name="chapter_row_comments_on" value="true">
         <label for="Yes">Kyllä</label><br>
@@ -264,6 +264,64 @@ textarea {
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
   {% endif %}
+
+  {% if session.workbench == "4" %}
+      <form action="/workbench/update/update_chapter/{{ post_id }}/{{ chapter_number }}" method="POST">
+        <a>Haluatko chapterin olevan julkinen?</a>
+        <br>
+        {% if session.given_chapter_public == "chapter_public_false" %}
+          <input type="radio" id="1" name="chapter_public" value="1">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_public" value="0" checked="checked">
+          <label for="No">Ei</label>
+        {% endif %}
+        {% if session.given_chapter_public == "chapter_public_true" %}
+          <input type="radio" id="1" name="chapter_public" value="1" checked="checked">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_public" value="0">
+          <label for="No">Ei</label>
+        {% endif %}
+        <br>
+        <a>Haluatko chapteriin rivi kommentit?</a>
+        <br>
+        {% if session.given_chapter_subject == "chapter_subject_false" %}
+          <input type="radio" id="1" name="chapter_row_comments_on" value="1">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_row_comments_on" value="0" checked="checked">
+          <label for="No">Ei</label>
+        {% endif %}
+        {% if session.given_chapter_subject == "chapter_subject_true" %}
+          <input type="radio" id="1" name="chapter_row_comments_on" value="1" checked="checked">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_row_comments_on" value="0">
+          <label for="No">Ei</label>
+        {% endif %}
+        <br>
+        <a>Haluatko chapteriin kyselyt?</a>
+        <br>
+        {% if session.given_chapter_inquiry == "chapter_inquiry_false" %}
+          <input type="radio" id="1" name="chapter_inquiry" value="1">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_inquiry" value="0" checked="checked">
+          <label for="No">Ei</label>
+        {% endif %}
+        {% if session.given_chapter_inquiry == "chapter_inquiry_true" %}
+          <input type="radio" id="1" name="chapter_inquiry" value="1" checked="checked">
+          <label for="Yes">Kyllä</label><br>
+          <input type="radio" id="2" name="chapter_inquiry" value="0">
+          <label for="No">Ei</label>
+        {% endif %}
+        <br>
+        <a>Kirjoita tämän chapterin sisältö seuraavaan teksti kenttään (Teksti rivin saa olla seinään asti)</a>
+        <br>
+        <textarea name="chapter_text" rows="25" cols="100">{{ session.given_chapter_content }}</textarea>
+        <br>
+        <input type="submit" value="Tallenna">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+      </form>
+  {% endif %}
+
+
 </div>
 
 </body>

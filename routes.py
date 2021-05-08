@@ -347,7 +347,8 @@ def workbench_update(mode, post_id, chapter_number):
       return redirect("/")
    
    if mode == "change_post" and post_id > 0 and request.method == "GET":
-      get_post(post_id)
+      if not get_post(post_id):
+         return redirect("/")
       return render_template("workbench.html", post_id=post_id)
 
    if mode == "update_post" and post_id > 0 and request.method == "POST":
@@ -362,11 +363,35 @@ def workbench_update(mode, post_id, chapter_number):
       genre = request.form["genre"]
       
       if not update_post(old_name, user_id, public, general_comments, new_name, rating, genre):
-         return render_template("workbench.html")
+         address = "/workbench/update/change_post" + "/" + str(post_id) + "/"+ str(chapter_number)
+         return redirect(address)
       
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
+
+   if mode == "change_chapter" and post_id > 0 and chapter_number > 0 and request.method == "GET":
+      if not get_chapter(post_id, chapter_number):
+         return redirect("/")
+      return render_template("workbench.html", post_id=post_id, chapter_number=chapter_number)
+
+   if mode == "update_chapter" and post_id > 0 and chapter_number > 0 and request.method == "POST":
+      check_csrf()
+      public = request.form["chapter_public"]
+      row_comments_on = request.form["chapter_row_comments_on"]
+      inquiry_on = request.form["chapter_inquiry"]
+      text_content = request.form["chapter_text"]
+      misc = session["given_chapter_misc"]
+      
+      if not update_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_content, misc):
+         address = "/workbench/update/change_chapter" + "/" + str(post_id) + "/"+ str(chapter_number)
+         return redirect(address)
+      
+      user_name = session["user_name"]
+      address = "/profile/" + user_name
+      return redirect(address)
+
+   return redirect("/")
 
 @app.route("/workbench/remove/<string:mode>/<int:post_id>/<int:chapter_number>")
 def workbench_remove(mode, post_id, chapter_number):

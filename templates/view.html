@@ -165,6 +165,7 @@ textarea {
         <a href="/query/view_questions/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/0" class="right">Kysely</a>
       {% endif %}
       {% if session.user_name == creator_name %}
+        <a href="/workbench/update/change_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Muokkaa</a>
         <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
       {% endif %}
     {% endif %}
@@ -173,10 +174,15 @@ textarea {
 
 <div class="footer"> 
   {% if session.view_mode == "1" %}
-    {% for para in session.chapter_content %}
-      {{ para }}
-      <br>
-    {% endfor %}
+    {% if session.public %}
+      {% for para in session.chapter_content %}
+        {{ para }}
+        <br>
+      {% endfor %}
+    {% endif %}
+    {% if not session.public %}
+      <h1>Tämä chapter ei ole julkinen</h1>
+    {% endif %}
   {% endif %}
 </div>
 

@@ -41,10 +41,13 @@ def check_text_requirements(text):
     
     return True
         
-
 def get_source_text(text):
     text_rows = text.split("\r\n")
     return "|".join(text_row for text_row in text_rows)
+
+def get_original_text(source_text):
+    source_text_rows = source_text.split("|")
+    return "\r\n".join(source_text_row for source_text_row in source_text_rows)
 
 def get_source_text_array(source_text):
     return source_text.split("|")

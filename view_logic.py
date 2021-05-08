@@ -33,6 +33,7 @@ def view_chapter(creator_name,post_name,chapter_number):
     if chapter == None:
       return False
     
+    public = chapter[2]
     row_subject = chapter[3]
     inquiry_on = chapter[4]
 
@@ -48,6 +49,7 @@ def view_chapter(creator_name,post_name,chapter_number):
       session["switch_chapter"] = "3"
     
     session["post_id"] = post_id
+    session["public"] = public
     session["row_subject"] = row_subject
     session["inquiry"] = inquiry_on
     session["chapter_content"] = chapter_content

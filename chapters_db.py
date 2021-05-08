@@ -25,33 +25,33 @@ def update_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_num
     try:
         sql = "SELECT id FROM chapters WHERE post_id=:post_id AND chapter_number=:chapter_number"
         result = db.session.execute(sql, {"post_id":post_id, "chapter_number":chapter_number})
-        chapter_id = result_fetchone()
+        chapter_id = result.fetchone()
         
         if chapter_id == None:
             return -1
 
         sql = "UPDATE chapters SET public=:public WHERE id=:id"
-        db.session.execute(sql, {"public":public, "id":chapter_id})
+        db.session.execute(sql, {"public":public, "id":chapter_id[0]})
         db.session.commit()
 
         sql = "UPDATE chapters SET row_comments_on=:row_comments_on WHERE id=:id"
-        db.session.execute(sql, {"row_comments_on":row_comments_on, "id":chapter_id})
+        db.session.execute(sql, {"row_comments_on":row_comments_on, "id":chapter_id[0]})
         db.session.commit()
 
         sql = "UPDATE chapters SET inquiry_on=:inquiry_on WHERE id=:id"
-        db.session.execute(sql, {"inquiry_on":inquiry_on, "id":chapter_id})
+        db.session.execute(sql, {"inquiry_on":inquiry_on, "id":chapter_id[0]})
         db.session.commit()
 
         sql = "UPDATE chapters SET text_rows=:text_rows WHERE id=:id"
-        db.session.execute(sql, {"text_rows":text_rows, "id":chapter_id})
+        db.session.execute(sql, {"text_rows":text_rows, "id":chapter_id[0]})
         db.session.commit()
 
         sql = "UPDATE chapters SET text_content=:text_content WHERE id=:id"
-        db.session.execute(sql, {"text_content":text_content, "id":chapter_id})
+        db.session.execute(sql, {"text_content":text_content, "id":chapter_id[0]})
         db.session.commit()
 
         sql = "UPDATE chapters SET misc=:misc WHERE id=:id"
-        db.session.execute(sql, {"misc":misc, "id":chapter_id})
+        db.session.execute(sql, {"misc":misc, "id":chapter_id[0]})
         db.session.commit()
 
         return 0

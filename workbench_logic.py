@@ -123,6 +123,39 @@ def get_post(post_id):
     session["workbench"] = "3"
     return True
 
+def get_chapter(post_id,chapter_number):
+    chapter = get_the_chapter(post_id, chapter_number)
+
+    if chapter == None:
+      return False
+    
+    session["given_chapter_post_id"] = chapter[1]
+    
+    check_public = chapter[2]
+    
+    session["given_chapter_public"] = "chapter_public_false"
+    if check_public:
+      session["given_chapter_public"] = "chapter_public_true"
+
+    check_subject = chapter[3]
+    
+    session["given_chapter_subject"] = "chapter_subject_false"
+    if check_subject:
+      session["given_chapter_subject"] = "chapter_subject_true"
+
+    check_inquiry = chapter[4]
+    
+    session["given_chapter_inquiry"] = "chapter_inquiry_false"
+    if check_inquiry:
+      session["given_chapter_inquiry"] = "chapter_inquiry_true"
+  
+    session["given_chapter_number"] = chapter[5]
+    session["given_chapter_content"] = get_original_text(chapter[7])
+    session["given_chapter_misc"] = chapter[8]
+    
+    session["workbench"] = "4"
+    return True
+
 def update_post(old_name, user_id, public, general_comments, new_name, rating, genre):
     visible = '2'
     if public == "true":
@@ -148,6 +181,26 @@ def update_post(old_name, user_id, public, general_comments, new_name, rating, g
     
     return True
 
+def update_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_content, misc):
+    if post_id == None:
+      return False
+
+    if not check_text_requirements(text_content):
+      return False
+
+    text_rows = rows(text_content)
+    text_source = get_source_text(text_content)
+    
+    check_number = update_the_chapter(post_id, public, row_comments_on, inquiry_on, chapter_number, text_rows, text_source, misc)
+
+    if check_number == -1:
+      return False
+
+    if check_number == -2:
+      return False
+
+    return True
+    
 def remove_post(user_id, post_id):
     post = get_the_post(post_id)
 
