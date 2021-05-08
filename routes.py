@@ -254,7 +254,13 @@ def administration_clearance_code(admin_name):
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
+   if user_name == None:
+      return redirect("/")
+   
    if not check_user_name_exists(user_name):
+      return redirect("/")
+
+   if check_if_user_name_is_admin(user_name):
       return redirect("/")
 
    owner = False

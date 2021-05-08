@@ -129,6 +129,17 @@ def check_user_name_exists(user_name):
       return False
 
     return True
+
+def check_if_user_name_is_admin(user_name):
+    user_role = get_user_role(user_name)
+
+    if user_role == -1:
+      return False
+
+    if user_role == 1 or 3:
+      return True
+
+    return False
     
 def check_user():
     if "user_name" in session:

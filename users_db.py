@@ -153,6 +153,20 @@ def get_user_id(username):
         print(e)
         return 0
 
+def get_user_role(user_name):
+    try:
+        sql = "SELECT role FROM users WHERE username=:user_name"
+        result = db.session.execute(sql, {"user_name":user_name})
+        user_role = result.fetchone()
+
+        if user_role == None:
+          return -1
+
+        return user_role[0]
+    except Exception as e:
+        print(e)
+        return -2
+       
 def get_regulars_amount():
     try:
         sql = "SELECT username FROM users WHERE role=0"
