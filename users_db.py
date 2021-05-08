@@ -153,6 +153,34 @@ def get_user_id(username):
         print(e)
         return 0
 
+def get_regulars_amount():
+    try:
+        sql = "SELECT username FROM users WHERE role=0"
+        result = db.session.execute(sql)
+        regulars = result.fetchall()
+
+        if regulars == None:
+          return 0
+
+        return len(regulars)
+    except Exception as e:
+        print(e)
+        return -2
+
+def get_admins_amount():
+    try:
+        sql = "SELECT username FROM users WHERE role=1"
+        result = db.session.execute(sql)
+        admins = result.fetchall()
+
+        if admins == None:
+          return 0
+
+        return len(admins)
+    except Exception as e:
+        print(e)
+        return -2  
+
 def get_users():
     try:
        sql = "SELECT id,username,role FROM users"

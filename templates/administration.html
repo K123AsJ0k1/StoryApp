@@ -131,7 +131,12 @@ textarea {
   {% if not session.admin_mode == "1" %}
     <a href="/administration/{{ admin_name }}">Takaisin</a>
   {% endif %}
-  
+
+  {% if session.admin_mode == "2" %}
+    <a>Käyttäjien määrä:{{ amount_of_regulars }}</a>
+    <a>Adminien määrä:{{ amount_of_admins }}</a>
+  {% endif %}
+
   <a href="/logout"class="right">Kirjaudu ulos</a>
 </div>
 

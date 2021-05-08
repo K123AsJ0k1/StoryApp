@@ -140,12 +140,14 @@ def administration_users(admin_name):
       return redirect("/")
 
    users = get_users()
-
+   amount_of_regulars = get_regulars_amount()
+   amount_of_admins = get_admins_amount()
+   
    if len(users) == 0:
       return redirect("/")
 
    admin_users_mode()
-   return render_template("administration.html", admin_name=admin_name, users=users)
+   return render_template("administration.html", admin_name=admin_name, users=users, amount_of_regulars=amount_of_regulars, amount_of_admins=amount_of_admins)
 
 @app.route("/administration/posts/<string:admin_name>")
 def administration_posts(admin_name):
@@ -257,7 +259,7 @@ def profile(user_name):
 
    owner = False
    if 'user_name' in session:
-      if user_name == session["user_name"]:
+      if user_name == session["user_name"] or session["user_role"] == 2:
          owner = True
 
    profile_session_deletion()
