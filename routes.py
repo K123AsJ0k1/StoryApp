@@ -83,6 +83,8 @@ def signup(mode):
          return redirect(address)
 
       return redirect("/login/log_in_admin")
+
+   return redirect("/")
       
 @app.route("/login/<string:mode>", methods=["get","post"])
 def login(mode):
@@ -114,6 +116,8 @@ def login(mode):
       
       address = "/administration/" + username
       return redirect(address)
+
+   return redirect("/")
 
 @app.route("/logout")
 def logout():
@@ -251,6 +255,8 @@ def administration_clearance_code(admin_name):
          return redirect(address)
       address = "/administration/" + admin_name
       return redirect(address)
+
+   return redirect("/")
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
@@ -303,7 +309,8 @@ def workbench_save(mode):
       genre = request.form["genre"]
       
       if not save_post(user_id,public,general_comments,name,rating,genre):
-         return render_template("workbench.html") 
+         address = "/workbench/save/create_post"
+         return redirect(address)
       
       user_name = session["user_name"]
       address = "/profile/" + user_name
@@ -312,6 +319,8 @@ def workbench_save(mode):
    if mode == "create_chapter" and request.method == "GET":
       workbench_chapter_mode()
       posts = get_profile_posts(session["user_id"])
+      if posts == None:
+         return redirect("/")
       size = len(posts)
       return render_template("workbench.html", posts=posts, size=size)
 
@@ -325,13 +334,14 @@ def workbench_save(mode):
       text_content = request.form["chapter_text"]
 
       if not save_chapter(post_id, chapter_public, row_comments, inquiry, text_content):
-         posts = get_profile_posts(session["user_id"])
-         size = len(posts)
-         return render_template("workbench.html", posts=posts, size=size)
+         address = "/workbench/save/create_chapter"
+         return redirect(address)
       
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
+
+   return redirect("/")
 
 @app.route("/workbench/update/<string:mode>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
 def workbench_update(mode, post_id, chapter_number):
@@ -421,6 +431,8 @@ def workbench_remove(mode, post_id, chapter_number):
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
+
+   return redirect("/")
 
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def view(creator_name, post_name, post_id, chapter_number):
@@ -574,6 +586,8 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
       row_subject_comments_view_mode()
       address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
       return redirect(address)
+
+   return redirect("/")
       
 @app.route("/comment/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>/<int:comment_id>")
 def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subject_id, comment_id):
@@ -603,6 +617,8 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
          return redirect(address)
       address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
       return redirect(address)
+
+   return redirect("/")
          
 @app.route("/query/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
@@ -674,6 +690,8 @@ def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
       the_amount_of_answers = len(answers)
       query_answers_mode()
       return render_template("queries.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number, size=the_amount_of_answers, answers=answers, answer_creators=answer_creators,admin=admin)
+   
+   return redirect("/")
 
 @app.route("/query/save/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>", methods=["get","post"])
 def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
@@ -732,6 +750,8 @@ def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
       address = "/query/view_questions/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(0)
       return redirect(address)
 
+   return redirect("/")
+
 @app.route("/query/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>/<int:answer_id>")
 def query_remove(mode,creator_name,post_name,post_id,chapter_number,query_id,answer_id):
    #Luo creator_name, post_name, post_id ja chapter_number tarkastus
@@ -754,4 +774,6 @@ def query_remove(mode,creator_name,post_name,post_id,chapter_number,query_id,ans
          return render_template("queries.html")
       address = "/query/view_answers/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(query_id)
       return redirect(address)
+
+   return redirect("/")
        
