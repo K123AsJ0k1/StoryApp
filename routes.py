@@ -844,7 +844,7 @@ def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
       if session["user_role"] == 2:
          address = "/administration/" + session["user_name"]
          return redirect(address)
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
+   
    if mode == "create_question" and post_id > 0 and request.method == "GET": 
       if not check_post_owner(session["user_name"],post_id):
          return redirect("/")
@@ -896,7 +896,6 @@ def query_save(mode,creator_name,post_name,post_id,chapter_number,query_id):
 
 @app.route("/query/remove/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>/<int:answer_id>")
 def query_remove(mode,creator_name,post_name,post_id,chapter_number,query_id,answer_id):
-   #Luo creator_name, post_name, post_id ja chapter_number tarkastus
    if not check_user():
       return redirect("/")
 
