@@ -220,12 +220,14 @@ def administration_chapters(admin_name):
    if len(chapter_post_list) == 0:
       address = "/administration/" + admin_name
       return redirect(address)
-
+   
    amount_of_chapters = get_chapters_amount()
    amount_of_public_chapters = get_public_chapters_amount()
+   largest_chapter_number = get_largest_chapter_number()
+   largest_row_number = get_largest_row_amount()
    
    admin_chapters_mode()
-   return render_template("administration.html", admin_name=admin_name, chapters=chapters, chapter_post_list=chapter_post_list,  amount_of_chapters=amount_of_chapters, amount_of_public_chapters=amount_of_public_chapters)
+   return render_template("administration.html", admin_name=admin_name, chapters=chapters, chapter_post_list=chapter_post_list,  amount_of_chapters=amount_of_chapters, amount_of_public_chapters=amount_of_public_chapters, largest_chapter_number=largest_chapter_number, largest_row_number=largest_row_number)
 
 @app.route("/administration/comments/<string:admin_name>")
 def administration_comments(admin_name):

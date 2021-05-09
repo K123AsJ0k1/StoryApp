@@ -319,6 +319,35 @@ def get_public_chapters_amount():
 
     return len(public_chapters)
 
+def get_largest_chapter_number():
+    chapters = get_chapters()
+
+    if chapters == None:
+      return 0
+
+    biggest_chapter_number = 0
+
+    for chapter in chapters:
+      if biggest_chapter_number < chapter[5]:
+        biggest_chapter_number = chapter[5]
+
+    return biggest_chapter_number
+
+def get_largest_row_amount():
+    chapters = get_chapters()
+
+    if chapters == None:
+      return 0
+
+    biggest_row_amount = 0
+
+    for chapter in chapters:
+      if biggest_row_amount < chapter[6]:
+        biggest_row_amount = chapter[6]
+
+    return biggest_row_amount
+
+
     
 
 

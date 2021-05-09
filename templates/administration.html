@@ -145,6 +145,8 @@ textarea {
   {% if session.admin_mode == "4" %}
     <a>Määrä:{{ amount_of_chapters }}</a>
     <a>Julkiset:{{ amount_of_public_chapters }}</a>
+    <a>Suurin luku:{{ largest_chapter_number }}</a>
+    <a>Suurin rivi:{{ largest_row_number }}</a>
   {% endif %}
    
   {% if session.admin_mode == "5" %}

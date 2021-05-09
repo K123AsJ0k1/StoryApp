@@ -162,7 +162,3 @@ def get_user_name(user_id):
         user_name = user[1]
 
     return user_name
-
-
-
-
