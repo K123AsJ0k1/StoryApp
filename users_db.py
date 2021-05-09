@@ -34,7 +34,7 @@ def create_user(username, password):
          
         hash_value = generate_password_hash(password)
         sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
-        db.session.execute(sql, {"username":username,"password":hash_value,"role":0})
+        db.session.execute(sql, {"username":username,"password":hash_value,"role":1})
         db.session.commit()
         
         return True
@@ -63,7 +63,7 @@ def create_admin(username, password, given_clearance_code):
 
         hash_value = generate_password_hash(password)
         sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
-        db.session.execute(sql, {"username":username, "password":hash_value, "role":1})
+        db.session.execute(sql, {"username":username, "password":hash_value, "role":2})
         db.session.commit()
     
         return 0
@@ -73,7 +73,7 @@ def create_admin(username, password, given_clearance_code):
 
 def login_user(username, password):
     try:
-        sql = "SELECT password FROM users WHERE username=:username AND role=0"
+        sql = "SELECT password FROM users WHERE username=:username AND role=1"
         result = db.session.execute(sql, {"username":username})
         user_password = result.fetchone()
 
@@ -91,7 +91,7 @@ def login_user(username, password):
 
 def login_admin(username, password):
     try:
-        sql = "SELECT password FROM users WHERE username=:username AND role=1"
+        sql = "SELECT password FROM users WHERE username=:username AND role=2"
         result = db.session.execute(sql, {"username":username})
         user_password = result.fetchone()
 
@@ -177,34 +177,6 @@ def get_the_user(user_id):
         print(e)
         return None     
        
-def get_regulars_amount():
-    try:
-        sql = "SELECT username FROM users WHERE role=0"
-        result = db.session.execute(sql)
-        regulars = result.fetchall()
-
-        if regulars == None:
-          return 0
-
-        return len(regulars)
-    except Exception as e:
-        print(e)
-        return -2
-
-def get_admins_amount():
-    try:
-        sql = "SELECT username FROM users WHERE role=1"
-        result = db.session.execute(sql)
-        admins = result.fetchall()
-
-        if admins == None:
-          return 0
-
-        return len(admins)
-    except Exception as e:
-        print(e)
-        return -2  
-
 def get_users():
     try:
        sql = "SELECT id,username,role FROM users"

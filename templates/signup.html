@@ -69,21 +69,23 @@ body {
 <div class="header">
   <h1>Luo uusi käyttäjä</h1>
   
-  {% if session.sign_up == "1" %}
-    <p>Käyttäjän on oltava vähintään 5 merkkiä pitkä</p>
+  {% if session.sign_up == "name_too_short" %}
+    <p>Annettu nimi on liian lyhyt</p>
+    <p>(vähintään 5 merkkiä käyttäjälle ja 10 merkkiä adminille)</p>
   {% endif %}
   
-  {% if session.sign_up == "2" %}
-    <p>Salasanan on oltava vähintään 8 merkkiä pitkä</p>
+  {% if session.sign_up == "password_too_short" %}
+    <p>Annettu salasana on liian lyhyt</p>
+    <p>(vähintään 8 merkkiä käyttäjälle ja 10 merkkiä adminille)</p>
   {% endif %}
   
-  {% if session.sign_up == "3" %}
-    <p>Käyttäjä nimi on jo olemassa</p>
+  {% if session.sign_up == "name_already_exists" %}
+    <p>Nimi on jo olemassa</p>
   {% endif %}
 </div>
 
 <div class="signup">
-  {% if session.sign_up_mode == "1" %}
+  {% if session.sign_up_mode == "regular_mode" %}
     <div class="main">
       <form action="/signup/register_user" method="POST">
         <p>Tunnus:<br>
@@ -95,7 +97,7 @@ body {
     </div>
   {% endif %}
   
-  {% if session.sign_up_mode == "2" %}
+  {% if session.sign_up_mode == "admin_mode" %}
     <div class="main">
       <form action="/signup/register_admin" method="POST">
         <p>Tunnus:<br>
