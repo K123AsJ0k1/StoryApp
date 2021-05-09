@@ -210,7 +210,9 @@ textarea {
         <th>{{ post_creators[post[0]] }}</th> 
         <th>{{ post[2] }}</th>
         <th>{{ post[3] }}</th>
-        <th>{{ post[4] }}</th>
+        <th>
+          <a href="/view/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}/1">{{ post[4] }}</a>
+        </th>
       </tr>
     {% endfor %}
     </table>
