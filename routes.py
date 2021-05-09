@@ -23,6 +23,9 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def main_page():
+   get_post_session_deletion()
+   get_chapter_session_deletion()
+
    if get_clearance_proxy() == None:
       if not create_clearance_proxy():
          print("ongelma")
@@ -404,6 +407,10 @@ def administration_clearance_code(admin_name):
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
+   workbench_session_deletion()
+   view_session_deletion()
+   get_post_session_deletion()
+
    if not check_user_name_exists(user_name):
       return redirect("/")
 
@@ -415,8 +422,6 @@ def profile(user_name):
       if user_name == session["user_name"]:
          owner = True
    
-   profile_session_deletion()
-   workbench_session_deletion()
    user_id = get_user_id(user_name)
    posts = get_profile_posts(user_id)
    size = len(posts)
@@ -569,6 +574,7 @@ def workbench_remove(mode, post_id, chapter_number):
          user_name = session["user_name"]
          address = "/profile/" + user_name
          return redirect(address)
+      
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
@@ -578,7 +584,7 @@ def workbench_remove(mode, post_id, chapter_number):
          user_name = session["user_name"]
          address = "/profile/" + user_name
          return redirect(address)
-      remove_chapter_content_session()
+      
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
@@ -587,6 +593,9 @@ def workbench_remove(mode, post_id, chapter_number):
 
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def view(creator_name, post_name, post_id, chapter_number):
+   profile_session_deletion()
+   workbench_session_deletion()
+   get_chapter_session_deletion()
    if not view_chapter(creator_name, post_name, chapter_number):
       view_none_mode()
       return render_template("view.html")

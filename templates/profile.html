@@ -88,6 +88,12 @@ body {
   {% if session.profile == "target_post_doesnt_exist" %}
     <p>Poistettava kohde ei ole olemassa</p>
   {% endif %}
+  {% if session.profile == "post_removed" %}
+    <p>Postaus poistettiin</p>
+  {% endif %}
+  {% if session.profile == "chapter_removed" %}
+    <p>Luku poistettiin</p>
+  {% endif %}
   {% if session.profile == "database_error" %}
     <p>Tietokanta ongelmia</p>
   {% endif %}

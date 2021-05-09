@@ -290,7 +290,8 @@ def remove_post(user_id, post_id):
     if check_number == -3:
       session["profile"] = "database_error"
       return False
-
+    
+    session["profile"] = "post_removed"
     return True
 
 def remove_chapter(post_id,chapter_number):
@@ -320,6 +321,7 @@ def remove_chapter(post_id,chapter_number):
       session["view"] = "database_error"
       return False
     
+    session["profile"] = "chapter_removed"
     return True
 
 def get_post_creators():

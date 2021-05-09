@@ -6,10 +6,10 @@ from chapters_db import *
 from text import *
 
 def view_none_mode():
-    session["view_mode"] = "0"
+    session["view_mode"] = "none_mode"
 
 def view_read_mode():
-    session["view_mode"] = "1"
+    session["view_mode"] = "read_mode"
 
 def remove_chapter_content_session():
     if "chapter_content" in session:
@@ -39,14 +39,14 @@ def view_chapter(creator_name,post_name,chapter_number):
 
     chapter_content = get_source_text_array(chapter[7])
         
-    session["switch_chapter"] = "0"
+    session["switch_chapter"] = "chapters_on_both_sides"
 
     if chapter_number == 1:
-      session["switch_chapter"] = "1"
+      session["switch_chapter"] = "chapters_on_right_side"
     if chapter_number == get_the_next_chapter_number(post_id)-1:
-      session["switch_chapter"] = "2"
+      session["switch_chapter"] = "chapters_on_left_side"
     if get_the_next_chapter_number(post_id) == 2:
-      session["switch_chapter"] = "3"
+      session["switch_chapter"] = "only_chapter"
     
     session["post_id"] = post_id
     session["public"] = public
