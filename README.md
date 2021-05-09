@@ -46,6 +46,7 @@ Kirjautuneiden käyttäjien toimet:
 
 Perustiedot:
 
+- Adminille näytetty pääsivu on tie hallinto sivulle
 - Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi.
 - Nykyinen oikeutus koodi on testauksessa_kaytettava_clearance_code (Muutoksen testaamisen jälkeen, muuta koodi samaksi)
 - Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
@@ -55,16 +56,17 @@ Perustiedot:
 
 Sovellukseen jääneitä ongelmia
 
-- Liian aikainen refaktorointi ja epäonnistuminen sen aiheuttamien name errorien korjaamisessa ei mahdollistanut aikaa sovelluksen tietokanta koodin, routes moduulin ja linkkien refaktoroimiseen, minkä takia kyseiset osa alueet eivät ole rakenteeltaan parhaita
+- Liian aikainen refaktorointi ja epäonnistuminen sen aiheuttamien name errorien korjaamisessa ei mahdollistanut aikaa sovelluksen tietokanta koodin, routes moduulin, linkkien ja logic moduulien refaktoroimiseen, minkä takia kyseiset osa alueet eivät ole rakenteeltaan parhaita
 - Sovelluksen logic moduulit saisivat toteuttaa paljon enemmän db luokissa käytetyistä toimista
 - Poistaminen ei kysy varmistusta, minkä takia kirjoittaja tai admin voi vahingossa poistaa postauksen
+- Nykyinen clearance_code järjestely vaatii admineilta valpautta valvoa uusien adminien ilmestymistä sovellukseen, sillä kyseinen koodi ei ole salattu tietokannassa, minkä seurauksesta tietokanta murtaja pystyisi luomaan adminin sovelluksessa 
 
 # Testauksesta herokussa (9.5.2021):
 
 Perusidea:
 
-- Sovelluksen toimivuuden varmistaminen perustuu suurilta osin sen sisältämien eri sivujen toiminnallisuuden varmistamiseen,joka voidaan tehdä klikkamalla nähtyjä linkkejä, asetuksia ja antmaalla eri tekstejä
-- Suosittelen käyttämään alla olevia ehtoja apuna testauksessa
+- Sovelluksen toimivuuden varmistaminen perustuu suurilta osin sen sisältämien eri sivujen toiminnallisuuden varmistamiseen,joka voidaan tehdä klikkamalla nähtyjä linkkejä, asetuksia ja antamalla eri tekstejä
+- Suosittelen käyttämään alla olevia ehtoja testauksessa
 
 Käyttäjän luonti:
 
@@ -72,12 +74,29 @@ Käyttäjän luonti:
 - Jokainen käyttäjän salasana täytyy olla vähintään 8 merkkiä pitkä
 - Käyttäjän nimi täytyy olla uniikki
 - Tapauksessa, jossa nämä ehdot eivät toteudu, sivu päivittyy ja antaa ns error viestin
+- Tapauksessa, jossa kaikki on hyvin, sivu näyttää pääsivun
 
-Kirjautuminen:
+Adminin luonti:
 
-- Käyttäjä nimi täytyy olla olemassa
+- Jokainen admin on oltava vähintään 10 merkkiä pitkä 
+- Jokainen admin salasana on oltava vähintä 10 merkkiä pitkä
+- Admin nimi täytyy olla uniikki
+- Tapauksessa, jossa nämä ehdot eivät toteudu, sivu päivittyy ja antaa ns error viestin
+- Tapauksessa, jossa kaikki on hyvin, sivu näyttää hallinto sivun
+
+Kirjautuminen kirjoittajana:
+
+- Käyttäjä nimi täytyy olla olemassa ja ei admin roolin omistava
 - Käyttäjän salasana täytyy olla oikea
 - Tapauksessa, jossa nämä ehdot eivät toteudu, sivu päivittyy ja antaa ns error viestin
+- Tapauksessa, jossa kaikki on hyvin, sivu näyttää pääsivun
+
+Kirjautuminen adminina:
+
+- Käyttäjä nimi täytyy olla olemassa ja admin roolin omistava
+- Käyttäjän salasana täytyy olla oikea
+- Tapauksessa, jossa nämä ehdot eivät toteudu, sivu päivittyy ja antaa ns error viestin
+- Tapauksessa, jossa kaikki on hyvin, sivu näyttää hallinto sivun
 
 Ulos kirjautuminen
 
@@ -85,79 +104,80 @@ Ulos kirjautuminen
 
 Profiili:
 
-- Tapauskessa, jossa käyttällä ei ole postauksia, sivu pitäisi näyttää ei postauksia
-- Tapauksessa, jossa käyttäjä on luonut postauksia, niin se pitäisi näyttää kaikki postaukset, niiden asetuksiin, antaa linkin työpöytään, pääsivulle ja ulos kirjautumisen
-
-Työpöytä
-
-- Antaa kaksi neljä vaihtoehtoa, jotka ovat uuden postauksen luonti, uuden chapterin luonti, linkin pääsivulle ja ulos kirjautumisen
-- Kyseiset linkit pitäisi tehdä nimiensä mukaisia asioita
-- Tapauksessa, jossa postauksia ei ole, chapter luonti pitäisi näyttää, ettei postauksia ole
-
-Takaisin
-
-- Tämä linkki löytyy monesta sivusta ja se vie takaisin edelliseen sivuun
+- Anonyymit, kirjoittajat ja adminit pitäisi pystyä näkemään postaukset, lukemaan niitä ja menemään niiden yleisiin kommentteihin
+- Ainoastaan kirjoittajat omistavat profiilin
+- Tapauksessa, jossa käyttäjällä ei ole postauksia, sivu pitäisi näyttää ei postauksia
+- Tapauksessa, jossa käyttäjä on luonut postauksia, sivu pitäisi näyttää postauksia
+- Ainoastaan omistajat pystyvät luomaan ja muokkamaan postauksia, mutta adminit pystyvät poistamaan postauksia
 
 Postauksen luonti
 
-- Annettavissa asetuksissa on eri vaihtoehtoja, jotka ovat nimen antaminen, julkisuus asetus, kommentti asetus ja WIP asetuksia, joista kaksi ensimmäistä on testattava
-- Annettuasi tiedot, paina sivun pohjalla olevaa tietoa tallenna, jonka jälkeen sivu pitäisi päivittyä profiili sivulle ja siellä pitäisi näkyä postaus
+- Antaa mahdollisuuden nimen, julkisuus, kommentointi, ikärajan ja genren asettamiseen
+- Nimi ja genre ei saa olla tyhjä tai 50 merkkiä pitkä, jolloin sivu näyttää error viestin
+- Valintojen jälkeen vie profiiliin
 
 Postauksen muokkaus
 
-- Profiilissa paina muokka valintaa
-- Vaihda jotain tietoja, joiden muutoksen pitäisi näkyä profiilissa
+- Sama näkymä ja toiminta kuin postauksen luonnissa
 
 Postauksen poisto
 
-- Profiilissa paina postauksessa poista linkkiä
-- Painamisen jälkeen postaus pitäisi kadota profiilista
+- Postaukseen liitetyn poista linkin painaminen poistaa postauksen profiilistas
+- Profiili näyttää varmistavan viestin nimen alla
 
 Chapterin luonti
 
-- Annettavista asetuksissa on eri vaihtoehtoja, joista tarkastettavat ovat ei WIP nimeä sisältävät
-- Tärkein vaihtoehto on se, että luonnissa näkyy käyttäjän luomat postaukset, hän pystyy valitsemaan niistä ja linkkaus toimii oikealla tavalla
-- Tallennuksen jälkeen, chapter pitäisi olla luettavissa postauksen lue napin avulla
+- Antaa mahdollisuuden postauksen valitsemiseen, julkisuuden, rivi aiheiden, kyselyiden ja sisällön antamiseen
+- Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
+- Valintojen jälkeen takaisin profiiliin
 
 Chapterien tarkastelu
 
-- Tapauksessa, jossa on enemmän kuin 2 chapteria, pitäisi vasemmassa kulmassa luku sivustossa olla seuraava ja edellinen
-- Seuraava vie seuraavaan chapteriin ja edellinen edelliseen chapteriin
+- Tänne pääsee joko pääsivun tai profiilin kautta
+- Vasemmassa kulmassa on chapter liikkuminen ja rivi kommentointi
+- Oikeassa kulmassa on poisto, muokkaus, kyselyt ja muita linkkejä
+- Tapauksessa, jossa chapter on julkinen, näkyy teksti
+- Tapauksessa, jossa chapter on rivi kommentoitava, näkyy rivikommentointi työkalut
+- Tapauksessa, jsosa chapterissa on kysely, näkyy kysely työkaly
 
 Kyselyiden lisäys
 
 - Postauksen omistava käyttäjä voi lisätä kyselyn menemällä painamalla kysely linkkiä luku paikasta ja menemällä luo kysely paikkaan
+- Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
 - Kysely luomisen jälkeen, se pitäisi ilmestyä kysely sivulle
 
 Kyselyn poisto
 
+- Omistaja ja admin voi poistaa kyselyn
 - Kysely paikassa kyselyiden päällä on poisto linkki, jonka painamisen jälkeen kysely pitäisi hävitä
 
 Kyselyyn vastaaminen
 
 - Kirjoittajat voivat vastata kyselyyn menemällä kyselyyn ja painamalla vastaa linkkiä, jonka tallentamisen jälkeen käyttäjä palaa kyselyy sivulle
+- Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
 
 Kyselyn vastauksien tarkastelu
 
-- Postauksen omistava kirjoittaja pysty tarkastelemaan kyselyiden vastauksia kysely sivustosta ja kysymyksen vastaus paikasta
+- Postauksen omistava kirjoittaja ja admin pysty tarkastelemaan kyselyiden vastauksia kysely sivustosta ja kysymyksen vastaus paikasta
 
 Kyselyn vastauksien poisto
 
-- Postauksen omistava kirjoittaja pystyy poistamaan kysymykseen tulleita vastauksia poista linkin avulla
+- Postauksen omistava kirjoittaja ja admin pystyy poistamaan kysymykseen tulleita vastauksia poista linkin avulla
 
 Postausten kommentien tarkastelu
 
-- Kirjoittajat pystyvät kommentoimaan postauksia joko pääsivun kautta tai profiilin kautta omia postauksia kommentti linkin avulla
+- Anonyymit, kirjoittajat ja adminit pystyvät kommentoimaan postauksia joko pääsivun kautta tai profiilin kautta omia postauksia kommentti linkin avulla
 
 Postausten kommentoiminen
 
-- Kirjotittajat pystyvät kommentoimaan painamalla kommentti sivusta luo kommentti linkkiä ja kirjoittamalla tarvitut asiat
+- Kirjoittajat pystyvät kommentoimaan painamalla kommentti sivusta luo kommentti linkkiä ja kirjoittamalla tarvitut asiat
 - Kommentoija pystyy tarkentamaan olemassa olevia lukuja, mutta tyhjän ja numeroista ulkopuolisen merkin tapauksissa tätä viittausta ei ole
+- Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
 - Tallentamisen jälkeen kommentti pitäisi näkyä itse kommentti ja kommentoija vittauksilla
 
 Postauksen kommenttien poisto
 
-- Postauksen omistava kommentoija pystyy poistamaan kommentteja menemällä sen kommentti paikaan ja painamalla poista linkkiä
+- Postauksen omistava kommentoija ja admin pystyy poistamaan kommentteja menemällä sen kommentti paikaan ja painamalla poista linkkiä
 - Painalluksen jälkeen kommenttia ei pitäisi näkyä
 
 Postauksen näkeminen
@@ -168,34 +188,31 @@ Postauksen kommentointi mahdollisuus
 
 - Pääsivulla ja profiilissa pitäisi näkyä mahdollisuus kommentoida, jos se on mahdollistettu
 
-Chapterin kyselyn näkymien
-
-- Chapter viewissä pitäisi näkyä kysely, jos kyseinen asetus on annettu
-
 Rivi aiheen valitseminen
 
 - Valittuasi jonkin tekstin chapterin näkymästä (sama periaate kuten copy paste), paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterin rivialueella
+- Tapauksessa, jossa tämä ei tapahdu, tulee error viesti
 
 Rivi alue
 
-- Rivialueella näkyvät kaikki rivi aiheet, joita voi kommentoida käyttäjät ja joita omistaja pystyy poistamaan
+- Rivialueella näkyvät kaikki rivi aiheet, joita voi kommentoida käyttäjät ja joita omistaja ja admin pystyy poistamaan
 
 Rivi kommentit
 
 - Riviaihetta voi kommentoida menemällä sen vastauksiin ja luomalla kommentin, jonka jälkeen se pitäisi näkyä rivi aiheen vastauksissa.Luvun omistaja pystyy poistamana rivi kommentteja
 
-Adminin luonti
-
-- Muutettuasi tavallisen käyttäjän luonnin URL:in user adminiksi, anna 10 merkin pituinen uniikki käyttäjä nimi ja salasana ja super user password salasana. Sen jälkeen kirjaudu sisään
-
-Admin kirjautuminen
-
-- Luotuasi uuden adminin tai muutettuasi kirjautumisen URL:n user adminiksi, annan olemassa oleva käyttäjä nimi ja salasana
-
 Hallinto
 
-- Antaa linkit eri tietokanta työkaluihin ja ulos kirjautumis mahdollisuuden
+- Antaa linkit eri tietokanta tauluihin ja oikeutus koodin vaihtoon
 
-Tietokanta mäkymät
+Tietokanta taulut
 
 - Näyttävät tällä hetkellä linkin mukaisen taulukon tiedot tietokannassa, takaisin paluu linkin ja ulos kirjautumisen
+- Käyttäjä ja postaus taulujen tapauksessa admin pystyy siirtymään joko valitun käyttäjän profiiliin tai postauksen ensimmäisen chapteriin
+
+Oikeutus koodin vaihto
+
+- Sivu näyttää nykyisen oikeutus koodin
+- Voidaan vaihtaa, jos annettu koodi on vähintään 20 merkkiä
+- Tapauksessa, jossa annettu koodi ei ole vähintään 20 merkkiä, näkyy ns error viesti
+- Vaihdon onnistuessa, sivu varmista vaihdon tapahtumisen
