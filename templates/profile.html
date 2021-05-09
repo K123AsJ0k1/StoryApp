@@ -85,6 +85,12 @@ body {
 
 <div class="header">
   <h1>{{ user_name }}</h1>
+  {% if session.profile == "target_post_doesnt_exist" %}
+    <p>Poistettava kohde ei ole olemassa</p>
+  {% endif %}
+  {% if session.profile == "database_error" %}
+    <p>Tietokanta ongelmia</p>
+  {% endif %}
 </div>
 
 <div class="navbar">

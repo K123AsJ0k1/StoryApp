@@ -137,9 +137,24 @@ textarea {
   {% if session.view_mode == "1" %}
     <h1>{{ post_name }}:{{ chapter_number }}</h1>
   {% endif %}
+
+  {% if session.view == "target_chapter_doesnt_exist" %}
+    <p>Poistettava luku ei ole olemassa</p>
+  {% endif %}
+  
+  {% if session.view == "database_error" %}
+    <p>Tietokanta ongelmia</p>
+  {% endif %}
 </div>
 
 <div class="navbar">
+  {% if session.view_mode == "0" %}
+    <a href="/" class="right">Pääsivulle</a>
+    {% if session.user_name %} 
+      <a href="/logout" class="right">Kirjaudu ulos</a>
+      <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+    {% endif %}
+  {% endif %}
   {% if session.view_mode == "1" %}
     {% if session.switch_chapter == "0" %}
       <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number + 1 }}">Seuraava luku</a>

@@ -86,6 +86,29 @@ textarea {
 
 <div class="header">
   <h1>Työpöytä</h1>
+  
+  {% if session.workbench == "title_doesnt_fulfill_requirements" %}
+    <p>Postauksen nimi ei toteutua vaatimuksia</p>
+    <p>(Se on joko tyhjä tai yli 50 merkkiä pitkä)</p>
+  {% endif %}
+
+  {% if session.workbench == "genre_doesnt_fulfill_requirements" %}
+    <p>Genre ei toteuta vaatimuksia</p>
+    <p>(Se on joko tyhjä tai yli 50 merkkiä pitkä)</p>
+  {% endif %}
+
+  {% if session.workbench == "text_doesnt_fulfill_requirements" %}
+    <p>Luvun teksti ei toteutua vaatimuksia</p>
+    <p>(Se on joko tyhjä tai välilyöntiä ei ole suoritettu 100 merkin jälkeen)</p>
+  {% endif %}
+
+  {% if session.workbench == "post_name_exists" %}
+    <p>Postauksen nimi on jo olemassa</p>
+  {% endif %}
+
+  {% if session.workbench == "database_error" %}
+    <p>Tietokanta ongelmia</p>
+  {% endif %}
 </div>
 
 <div class="navbar">
@@ -111,11 +134,11 @@ textarea {
 </script>
 
 <div class="footer">
-  {% if session.workbench == "1" %}
+  {% if session.workbench_mode == "create_post" %}
     <form action="/workbench/save/save_post" method="POST">
       <a>Mikä nimi postauksella pitäisi olla?</a>
       <br>
-      <input type="text" name="name"></p>
+      <input type="text" name="name" size="50"></p>
       <br>
       <a>Haluatko postauksen olevan julkinen?</a>
       <br>
@@ -139,13 +162,13 @@ textarea {
       <input type="radio" id="3" name="rating" value="M">
       <label for="M">M</label><br>
       <a>Mikä on tarinan genre?</a><br>
-      <input type="text" name="genre"></p>
+      <input type="text" name="genre" size="50"></p>
       <input type="submit" value="Tallenna">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
   {% endif %}
   
-  {% if session.workbench == "2" %}
+  {% if session.workbench_mode == "create_chapter" %}
     {% if size == 0 %}
       <h2>Et omista yhtään postausta</h2>
     {% endif %}
@@ -189,11 +212,11 @@ textarea {
     {% endif %}
   {% endif %}
   
-  {% if session.workbench == "3" %}
+  {% if session.workbench_mode == "update_post" %}
     <form action="/workbench/update/update_post/{{ post_id }}/0" method="POST">
       <a>Mikä nimi postauksella pitäisi olla?</a>
       <br>
-      <input type="text" name="name" value="{{ session.given_post_name }}"></p>
+      <input type="text" name="name" value="{{ session.given_post_name }}" size="50"></p>
       <br>
       <a>Haluatko postauksen olevan julkinen?</a>
       <br>
@@ -259,13 +282,13 @@ textarea {
         <label for="M">M</label><br>
       {% endif %}
       <a>Mikä on tarinan genre?</a><br>
-      <input type="text" name="genre" value="{{ session.given_post_genre }}"></p>
+      <input type="text" name="genre" value="{{ session.given_post_genre }}" size="50"></p>
       <input type="submit" value="Tallenna">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
   {% endif %}
 
-  {% if session.workbench == "4" %}
+  {% if session.workbench_mode == "update_chapter" %}
       <form action="/workbench/update/update_chapter/{{ post_id }}/{{ chapter_number }}" method="POST">
         <a>Haluatko chapterin olevan julkinen?</a>
         <br>

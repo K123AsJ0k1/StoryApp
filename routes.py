@@ -66,7 +66,8 @@ def signup(mode):
       if not register(mode,username,password,""):
          address = "/signup/create_user"
          return redirect(address)
-         
+
+      sign_up_session_deletion()
       return redirect("/")
 
    if mode == "create_admin" and request.method == "GET":
@@ -81,9 +82,9 @@ def signup(mode):
       if not register(mode,username,password,clearance_code):
          address = "/signup/create_admin"
          return redirect(address)
-
+      sign_up_session_deletion()
       return redirect("/administration/" + session["user_name"])
-
+   sign_up_session_deletion()
    return redirect("/")
       
 @app.route("/login/<string:mode>", methods=["get","post"])
@@ -99,7 +100,7 @@ def login(mode):
       if not log_in(mode,username, password):
          address = "/login/log_in_user"
          return redirect(address)
-
+      log_in_session_deletion()
       return redirect("/")
    
    if mode == "log_in_admin" and request.method == "GET":
@@ -114,9 +115,10 @@ def login(mode):
          address = "/login/log_in_admin"
          return redirect(address)
       
+      log_in_session_deletion()
       address = "/administration/" + username
       return redirect(address)
-
+   log_in_session_deletion()
    return redirect("/")
 
 @app.route("/logout")
@@ -412,8 +414,9 @@ def profile(user_name):
    if 'user_name' in session:
       if user_name == session["user_name"]:
          owner = True
-
+   
    profile_session_deletion()
+   workbench_session_deletion()
    user_id = get_user_id(user_name)
    posts = get_profile_posts(user_id)
    size = len(posts)
@@ -437,7 +440,7 @@ def workbench_save(mode):
          return redirect(address)
    
    if mode == "create_post" and request.method == "GET":
-      workbench_post_mode()   
+      workbench_create_post_mode()   
       return render_template("workbench.html")
 
    if mode == "save_post" and request.method == "POST":
@@ -454,12 +457,13 @@ def workbench_save(mode):
          address = "/workbench/save/create_post"
          return redirect(address)
       
+      workbench_session_deletion()
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
 
    if mode == "create_chapter" and request.method == "GET":
-      workbench_chapter_mode()
+      workbench_create_chapter_mode()
       posts = get_profile_posts(session["user_id"])
       if posts == None:
          return redirect("/")
@@ -474,11 +478,12 @@ def workbench_save(mode):
       row_comments = request.form["chapter_row_comments_on"]
       inquiry = request.form["chapter_inquiry"]
       text_content = request.form["chapter_text"]
-
+      
       if not save_chapter(post_id, chapter_public, row_comments, inquiry, text_content):
          address = "/workbench/save/create_chapter"
          return redirect(address)
       
+      workbench_session_deletion()
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
@@ -518,6 +523,8 @@ def workbench_update(mode, post_id, chapter_number):
          address = "/workbench/update/change_post" + "/" + str(post_id) + "/"+ str(chapter_number)
          return redirect(address)
       
+      get_post_session_deletion()
+      workbench_session_deletion()
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
@@ -539,10 +546,12 @@ def workbench_update(mode, post_id, chapter_number):
          address = "/workbench/update/change_chapter" + "/" + str(post_id) + "/"+ str(chapter_number)
          return redirect(address)
       
+      get_chapter_session_deletion()
+      workbench_session_deletion()
       user_name = session["user_name"]
       address = "/profile/" + user_name
       return redirect(address)
-
+   
    return redirect("/")
 
 @app.route("/workbench/remove/<string:mode>/<int:post_id>/<int:chapter_number>")

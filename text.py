@@ -11,7 +11,7 @@ def check_title_requirements(title):
     
     if text_lenght > 50:
         return False
-
+    
     return True
        
 def check_text_requirements(text):

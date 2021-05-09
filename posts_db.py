@@ -34,7 +34,7 @@ def update_the_post(old_name, user_id, visible, general_comments_on, new_name, m
         username_id = check[1]
 
         if not username_id == user_id:
-           return -2
+           return -3
         
         sql = "UPDATE posts SET visible=:visible WHERE id=:id"
         db.session.execute(sql, {"visible":visible,"id":post_id})
@@ -55,7 +55,7 @@ def update_the_post(old_name, user_id, visible, general_comments_on, new_name, m
         return 0
     except Exception as e:
         print(e)
-        return -3
+        return -2
 
 def remove_the_post(user_id,name):
     try:
@@ -70,7 +70,7 @@ def remove_the_post(user_id,name):
             return -1
         
         if not username_id == user_id:
-            return -2
+            return -3
         
         check_number = remove_the_chapters(post_id)
 
@@ -78,12 +78,12 @@ def remove_the_post(user_id,name):
             return -1
 
         if check_number == -2:
-            return -3
+            return -2
 
         check_number = remove_the_comments(post_id)
         
         if check_number == -2:
-            return -3
+            return -2
 
         sql = "DELETE FROM posts WHERE id=:id"
         db.session.execute(sql, {"id":post_id})
@@ -92,7 +92,7 @@ def remove_the_post(user_id,name):
         return 0
     except Exception as e:
         print(e)
-        return -3
+        return -2
 
 def check_if_post_exists(post_id):
     try:
