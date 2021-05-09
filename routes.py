@@ -290,10 +290,40 @@ def administration_queries(admin_name):
       address = "/administration/" + admin_name
       return redirect(address)
 
+   query_owner_list = get_query_owners()
+   
+   if query_owner_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(query_owner_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   query_posts_list = get_query_posts()
+   
+   if query_posts_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(query_posts_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   query_chapter_numbers_list = get_query_chapter_numbers()
+   
+   if query_chapter_numbers_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(query_chapter_numbers_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+   
    amount_of_queries = get_queries_amount()
 
    admin_queries_mode()
-   return render_template("administration.html", admin_name=admin_name, queries=queries, amount_of_queries=amount_of_queries)
+   return render_template("administration.html", admin_name=admin_name, queries=queries, query_owner_list=query_owner_list, query_posts_list=query_posts_list, query_chapter_numbers_list=query_chapter_numbers_list, amount_of_queries=amount_of_queries)
 
 @app.route("/administration/answers/<string:admin_name>")
 def administration_answers(admin_name):
@@ -313,10 +343,40 @@ def administration_answers(admin_name):
       address = "/administration/" + admin_name
       return redirect(address)
 
+   answer_owner_list = get_answer_owner()
+
+   if answer_owner_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(answer_owner_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   answer_chapter_number_list = get_answer_chapter_numbers()
+
+   if answer_chapter_number_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(answer_chapter_number_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   answer_post_list = get_answer_posts()
+
+   if answer_post_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(answer_post_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    amount_of_answers = get_answers_amount()
 
    admin_answers_mode()
-   return render_template("administration.html", admin_name=admin_name, answers=answers, amount_of_answers=amount_of_answers)
+   return render_template("administration.html", admin_name=admin_name, answers=answers, answer_owner_list=answer_owner_list, answer_chapter_number_list=answer_chapter_number_list, answer_post_list=answer_post_list, amount_of_answers=amount_of_answers)
 
 @app.route("/administration/clearance_code/<string:admin_name>", methods=["get","post"])
 def administration_clearance_code(admin_name):

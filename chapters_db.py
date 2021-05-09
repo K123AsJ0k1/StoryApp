@@ -157,6 +157,16 @@ def get_the_chapter(post_id, chapter_number):
         print(e)
         return None
 
+def get_the_chapter_with_id(chapter_id):
+    try:
+        sql = "SELECT id,post_id,public,row_comments_on,inquiry_on,chapter_number,text_rows,text_content,misc FROM chapters WHERE id=:id"
+        result = db.session.execute(sql, {"id":chapter_id})
+        chapter = result.fetchone()
+        return chapter
+    except Exception as e:
+        print(e)
+        return None
+
 def get_the_next_chapter_number(post_id):
     try:
         sql = "SELECT chapter_number FROM chapters WHERE post_id=:post_id ORDER BY chapter_number DESC"

@@ -270,14 +270,16 @@ textarea {
     <table style="width:100%">
       <tr>
         <th>Id</th>
-        <th>Käyttäjä id</th>
-        <th>Luku id</th>
+        <th>Omistaja</th>
+        <th>Postaus</th>
+        <th>Luku</th>
       </tr>
     {% for query in queries %}
       <tr>
         <th>{{ query[0] }}</th>
-        <th>{{ query[1] }}</th> 
-        <th>{{ query[2] }}</th>
+        <th>{{ query_owner_list[query[0]] }}</th> 
+        <th>{{ query_posts_list[query[0]] }}</th>
+        <th>{{ query_chapter_numbers_list[query[0]] }}</th>
       </tr>
     {% endfor %}
     </table>
@@ -287,14 +289,18 @@ textarea {
     <table style="width:100%">
       <tr>
         <th>Id</th>
-        <th>Käyttäjä id</th>
+        <th>Vastaaja</th>
         <th>Kysymys id</th>
+        <th>Luku</th>
+        <th>Postaus</th>
       </tr>
     {% for answer in answers %}
       <tr>
         <th>{{ answer[0] }}</th>
-        <th>{{ answer[1] }}</th> 
+        <th>{{ answer_owner_list[answer[0]] }}</th> 
         <th>{{ answer[2] }}</th>
+        <th>{{ answer_chapter_number_list[answer[0]] }}</th>
+        <th>{{ answer_post_list[answer[0]] }}</th>
       </tr>
     {% endfor %}
     </table>

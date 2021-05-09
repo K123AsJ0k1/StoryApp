@@ -93,4 +93,95 @@ def get_answers_amount():
 
     return len(answers)
 
+def get_query_owners():
+    queries = get_queries()
+
+    if queries == None:
+      return None
+
+    query_owner_list = {}
+
+    for query in queries:
+      user = get_the_user(query[1])
+      query_owner_list[query[0]] = user[1]
+
+    return query_owner_list
+
+def get_query_posts():
+    queries = get_queries()
+
+    if queries == None:
+      return None
+
+    query_post_list = {}
+
+    for query in queries:
+      chapter = get_the_chapter_with_id(query[2])
+      post = get_the_post(chapter[1])
+      query_post_list[query[0]] = post[4]
+      
+    return query_post_list
+
+def get_query_chapter_numbers():
+    queries = get_queries()
+
+    if queries == None:
+      return None
+
+    query_chapter_numbers_list = {}
+
+    for query in queries:
+      chapter = get_the_chapter_with_id(query[2])
+      query_chapter_numbers_list[query[0]] = chapter[5]
+
+    return query_chapter_numbers_list
+
+def get_answer_owner():
+    answers = get_answers()
+
+    if answers == None:
+      return None
+
+    answer_owner_list = {}
+
+    for answer in answers:
+      user = get_the_user(answer[1])
+      answer_owner_list[answer[0]] = user[1]
+
+    return answer_owner_list
+
+def get_answer_chapter_numbers():
+    answers = get_answers()
+
+    if answers == None:
+      return None
+
+    answer_chapter_numbers_list = {}
+
+    for answer in answers:
+      query = get_the_query(answer[2])
+      chapter = get_the_chapter_with_id(query[2])
+      answer_chapter_numbers_list[answer[0]] = chapter[5]
+
+    return answer_chapter_numbers_list
+
+def get_answer_posts():
+    answers = get_answers()
+
+    if answers == None:
+      return None
+
+    answer_post_list = {}
+
+    for answer in answers:
+      query = get_the_query(answer[2])
+      chapter = get_the_chapter_with_id(query[2])
+      post = get_the_post(chapter[1])
+      answer_post_list[answer[0]] = post[4]
+
+    return answer_post_list
+
+
+
+
 
