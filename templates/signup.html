@@ -82,6 +82,18 @@ body {
   {% if session.sign_up == "name_already_exists" %}
     <p>Nimi on jo olemassa</p>
   {% endif %}
+
+  {% if session.sign_up == "wrong_clearance_code" %}
+    <p>Väärä oikeutus koodi</p>
+  {% endif %}
+
+  {% if session.sign_up == "no_clearance_proxy" %}
+    <p>Ei oikeutus edustajaa</p>
+  {% endif %}
+
+  {% if session.sign_up == "database_error" %}
+    <p>Tietokanta ongelmia</p>
+  {% endif %}
 </div>
 
 <div class="signup">

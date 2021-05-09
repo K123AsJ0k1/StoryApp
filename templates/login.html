@@ -83,7 +83,7 @@ body {
 </div>
 
 <div class="signup">
-  {% if session.login_mode == "1" %}
+  {% if session.login_mode == "regular_mode" %}
     <div class="main">
       <form action="/login/check_user" method="POST">
         <p>Tunnus:<br>
@@ -95,7 +95,7 @@ body {
     </div>
   {% endif %}
   
-  {% if session.login_mode == "2" %}
+  {% if session.login_mode == "admin_mode" %}
     <div class="main">
       <form action="/login/check_admin" method="POST">
         <p>Tunnus:<br>

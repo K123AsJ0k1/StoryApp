@@ -82,7 +82,7 @@ def signup(mode):
          address = "/signup/create_admin"
          return redirect(address)
 
-      return redirect("/login/log_in_admin")
+      return redirect("/administration/" + session["user_name"])
 
    return redirect("/")
       

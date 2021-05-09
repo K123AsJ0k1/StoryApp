@@ -10,72 +10,84 @@ def sign_up_admin_mode():
     session["sign_up_mode"] = "admin_mode"
 
 def log_in_user_mode():
-    session["login_mode"] = "1"
+    session["login_mode"] = "regular_mode"
 
 def log_in_admin_mode():
-    session["login_mode"] = "2"
+    session["login_mode"] = "admin_mode"
 
-def register(mode, username, password, clearance_code):
+def sign_up_session_deletion():
+    if 'sign_up' in session:
+      del session["sign_up"]
+    if 'sign_up_mode' in session:
+      del session["sign_up_mode"] 
+
+def log_in_session_deletion():
+    if 'log_in' in session:
+      del session["log_in"]
+    if 'login_mode' in session:
+      del session["login_mode"]
+
+def register(mode, user_name, password, clearance_code):
+    user_id = 0
     if mode == "register_user":
-    
-      if len(username) < 5:
+      if len(user_name) < 5:
         session["sign_up"] = "name_too_short"
         return False
-
       if len(password) < 8:
         session["sign_up"] = "password_too_short"
         return False
-
-      check = create_user(username, password) 
-
-      if not check:
+      
+      check_number = create_user(user_name, password) 
+      
+      if check_number == -1:
         session["sign_up"] = "name_already_exists"
         return False
-  
-      user_id = get_user_id(username)
-
-      if user_id == 0:
+      if check_number == -2:
+        session["sign_up"] = "database_error"
         return False
-    
-      session["csrf_token"] = os.urandom(16).hex()  
-      session["user_id"] = user_id
-      session["user_name"] = username 
-      session["user_role"] = 1
-    
-      return True
+      
+      user_id = get_user_id(user_name)
 
     if mode == "register_admin":
-
-      if len(username) < 10:
+      if len(user_name) < 10:
+        session["sign_up"] = "name_too_short"
         return False
-
       if len(password) < 10:
+        session["sign_up"] = "password_too_short"
         return False
 
-      check_number = create_admin(username, password, clearance_code)
-        
+      check_number = create_admin(user_name, password, clearance_code)
+
       if check_number == -1:
+        session["sign_up"] = "name_already_exists"
         return False
-
       if check_number == -2:
+        session["sign_up"] = "database_error"
         return False
-
       if check_number == -3:
+        session["sign_up"] = "wrong_clearance_code"
+        return False
+      if check_number == -4:
+        session["sign_up"] = "no_clearance_proxy"
         return False
 
-      user_id = get_user_id(username)
+      user_id = get_user_id(user_name)
 
-      if user_id == 0:
+    if user_id == 0:
         return False
 
-      session["csrf_token"] = os.urandom(16).hex()  
-      session["user_id"] = user_id
-      session["user_name"] = username 
-      session["user_role"] = 2
+    user = get_the_user(user_id)
 
-      return True
-      
+    if user == None:
+      return False
 
+    session["csrf_token"] = os.urandom(16).hex() 
+    session["user_id"] = user_id
+    session["user_name"] = user_name 
+    session["user_role"] = user[3]
+    
+    return True
+  
 def log_in(mode, user_name, password):
     check_number = 0
     
@@ -113,10 +125,8 @@ def log_in(mode, user_name, password):
     
 def check_user_name_exists(user_name):
     check_number = get_user_id(user_name)
-
     if check_number == 0:
       return False
-
     return True
 
 def check_if_user_name_is_admin(user_name):
@@ -124,7 +134,6 @@ def check_if_user_name_is_admin(user_name):
 
     if user_role == -1:
       return False
-
     if user_role == 2 or user_role == 3:
       return True
 
@@ -146,7 +155,6 @@ def get_regulars_amount():
       return 0
 
     amount = 0
-
     for user in users:
       if user[2] == 1:
         amount = amount + 1
@@ -160,7 +168,6 @@ def get_admins_amount():
       return 0
 
     amount = 0
-
     for user in users:
       if user[2] == 2:
         amount = amount + 1

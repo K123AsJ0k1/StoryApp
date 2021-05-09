@@ -30,17 +30,17 @@ def create_user(username, password):
         query = result.fetchone()
 
         if not query == None:
-          return False
+          return -1
          
         hash_value = generate_password_hash(password)
         sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
         db.session.execute(sql, {"username":username,"password":hash_value,"role":1})
         db.session.commit()
         
-        return True
+        return 0
     except Exception as e:
         print(e)
-        return False
+        return -2
 
 def create_admin(username, password, given_clearance_code):
     try:
@@ -56,10 +56,10 @@ def create_admin(username, password, given_clearance_code):
         clearance_code = result.fetchone()
         
         if clearance_code == None:
-          return -3
+          return -4
 
         if not given_clearance_code == clearance_code[0]:
-          return -2
+          return -3
 
         hash_value = generate_password_hash(password)
         sql = "INSERT INTO users (username,password,role) VALUES (:username,:password,:role)"
@@ -69,7 +69,7 @@ def create_admin(username, password, given_clearance_code):
         return 0
     except Exception as e:
         print(e)
-        return -3
+        return -2
 
 def login_user(username, password):
     try:
