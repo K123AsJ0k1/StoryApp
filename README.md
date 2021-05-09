@@ -78,6 +78,7 @@ Käyttäjän luonti:
 
 Adminin luonti:
 
+- Mene pääsivun kautta käyttäjän luontiin ja muuta URL:in user adminiksi
 - Jokainen admin on oltava vähintään 10 merkkiä pitkä 
 - Jokainen admin salasana on oltava vähintä 10 merkkiä pitkä
 - Admin nimi täytyy olla uniikki
@@ -93,12 +94,13 @@ Kirjautuminen kirjoittajana:
 
 Kirjautuminen adminina:
 
+- Mene pääsivun kautta käyttäjän kirjautumiseen ja muuta URL:in user adminiksi
 - Käyttäjä nimi täytyy olla olemassa ja admin roolin omistava
 - Käyttäjän salasana täytyy olla oikea
 - Tapauksessa, jossa nämä ehdot eivät toteudu, sivu päivittyy ja antaa ns error viestin
 - Tapauksessa, jossa kaikki on hyvin, sivu näyttää hallinto sivun
 
-Ulos kirjautuminen
+Ulos kirjautuminen:
 
 - Ulos kirjautumisen jälkeen selain pitäisi olla pääsivulla ja näyttää anonyymi nimikkeen
 
@@ -116,20 +118,24 @@ Postauksen luonti
 - Nimi ja genre ei saa olla tyhjä tai 50 merkkiä pitkä, jolloin sivu näyttää error viestin
 - Valintojen jälkeen vie profiiliin
 
-Postauksen muokkaus
+Postauksen muokkaus:
 
 - Sama näkymä ja toiminta kuin postauksen luonnissa
 
-Postauksen poisto
+Postauksen poisto:
 
 - Postaukseen liitetyn poista linkin painaminen poistaa postauksen profiilistas
 - Profiili näyttää varmistavan viestin nimen alla
 
-Chapterin luonti
+Chapterin luonti:
 
 - Antaa mahdollisuuden postauksen valitsemiseen, julkisuuden, rivi aiheiden, kyselyiden ja sisällön antamiseen
 - Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
 - Valintojen jälkeen takaisin profiiliin
+
+Chapterin muokkaus:
+
+- Antaa saman näkymän ja toiminnan kuin chapterin luonti, paitsi tiedot eivät katoa errorin tapauksessa
 
 Chapterien tarkastelu
 
@@ -140,7 +146,7 @@ Chapterien tarkastelu
 - Tapauksessa, jossa chapter on rivi kommentoitava, näkyy rivikommentointi työkalut
 - Tapauksessa, jsosa chapterissa on kysely, näkyy kysely työkaly
 
-Kyselyiden lisäys
+Kyselyiden lisäys:
 
 - Postauksen omistava käyttäjä voi lisätä kyselyn menemällä painamalla kysely linkkiä luku paikasta ja menemällä luo kysely paikkaan
 - Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
@@ -188,18 +194,35 @@ Postauksen kommentointi mahdollisuus
 
 - Pääsivulla ja profiilissa pitäisi näkyä mahdollisuus kommentoida, jos se on mahdollistettu
 
-Rivi aiheen valitseminen
+Rivi aiheen valitseminen:
 
 - Valittuasi jonkin tekstin chapterin näkymästä (sama periaate kuten copy paste), paina luo rivi aihe, jonka jälkeen se pitäisi näkyä chapterin rivialueella
 - Tapauksessa, jossa tämä ei tapahdu, tulee error viesti
 
-Rivi alue
+Rivi alue:
 
 - Rivialueella näkyvät kaikki rivi aiheet, joita voi kommentoida käyttäjät ja joita omistaja ja admin pystyy poistamaan
 
-Rivi kommentit
+Rivi kommentit:
 
 - Riviaihetta voi kommentoida menemällä sen vastauksiin ja luomalla kommentin, jonka jälkeen se pitäisi näkyä rivi aiheen vastauksissa.Luvun omistaja pystyy poistamana rivi kommentteja
+
+Rivi kommenttien poisto:
+
+- Omistaja ja admin pystyvät poistamaan rivi komemnttin siihen liitetyn linkin avulla
+
+Rivi kommentti vastaus:
+
+- Kirjoittajat voivat vastata rivi kommenttiin sen vastaus linkin avulla
+- Sisältö ei saa olla tyhjä tai ilman välilyöntiä yli 100 merkkiä, jonka sivu näyttää error viestin
+
+Rivi kommentti vastausten näkeminen:
+
+- Kirjoittajat näkevät rivi kommenttiin liitetyt vastaukset painamalla niihin liitettyä vastaukset linkkiä
+
+Rivi kommentti vastaus poisto:
+
+- Omistaja ja admin pystyvät poistamaan rivi kommetti vastauksen siihen liitetyn linkin avulla
 
 Hallinto
 
