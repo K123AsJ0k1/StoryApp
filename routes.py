@@ -434,39 +434,43 @@ def profile(user_name):
 
    if not check_user_name_exists(user_name):
       return redirect("/")
-
+   
    if check_if_user_name_is_admin(user_name):
       return redirect("/")
+   
 
    owner = False
+   admin = False
    if 'user_name' in session:
       if user_name == session["user_name"]:
          owner = True
+      if session["user_role"] == 2:
+         admin = True
    
    user_id = get_user_id(user_name)
    posts = get_profile_posts(user_id)
    
    if posts == None:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
 
    if len(posts) == None:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
 
    ratings = get_post_ratings()
    
    if ratings == None:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
    
    if len(ratings) == 0:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
 
    genres = get_post_genres()
    
    if genres == None:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
 
    if len(genres) == 0:
-      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner, admin=admin)
 
    size = len(posts)
    
@@ -476,10 +480,11 @@ def profile(user_name):
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
-   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, ratings=ratings, genres=genres, owner=owner)
+   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, ratings=ratings, genres=genres, owner=owner, admin=admin)
 
 @app.route("/workbench/save/<string:mode>", methods=["get","post"])
 def workbench_save(mode):
+   profile_session_deletion()
    if not check_user():
       return redirect("/")
 
@@ -541,6 +546,7 @@ def workbench_save(mode):
 
 @app.route("/workbench/update/<string:mode>/<int:post_id>/<int:chapter_number>", methods=["get","post"])
 def workbench_update(mode, post_id, chapter_number):
+   profile_session_deletion()
    if not check_user():
       return redirect("/")
 
@@ -609,29 +615,51 @@ def workbench_remove(mode, post_id, chapter_number):
    if not check_user():
       return redirect("/")
 
-   if not check_post_owner(session["user_name"],post_id):
+   allowed = False
+
+   if check_post_owner(session["user_name"],post_id):
+      allowed = True
+
+   if session["user_role"] == 2:
+      allowed = True
+
+   if not allowed:
       return redirect("/")
 
    if mode == "remove_post" and post_id > 0:
-      user_id = session["user_id"]
-      
-      if not remove_post(user_id,post_id):
-         user_name = session["user_name"]
-         address = "/profile/" + user_name
+      post = get_the_post(post_id)
+
+      if post == None:
+         return redirect("/")
+
+      if len(post) == 0:
+         return redirect("/")
+
+      user = get_the_user(post[1])
+
+      if not remove_post(user[0],post_id):
+         address = "/profile/" + user[1]
          return redirect(address)
       
-      user_name = session["user_name"]
-      address = "/profile/" + user_name
+      address = "/profile/" + user[1]
       return redirect(address)
 
    if mode == "remove_chapter" and post_id > 0 and chapter_number > 0:
+      post = get_the_post(post_id)
+
+      if post == None:
+         return redirect("/")
+
+      if len(post) == 0:
+         return redirect("/")
+      
+      user = get_the_user(post[1])
+
       if not remove_chapter(post_id,chapter_number):
-         user_name = session["user_name"]
-         address = "/profile/" + user_name
+         address = "/profile/" + user[1]
          return redirect(address)
       
-      user_name = session["user_name"]
-      address = "/profile/" + user_name
+      address = "/profile/" + user[1]
       return redirect(address)
 
    return redirect("/")
@@ -690,7 +718,17 @@ def comments_general(creator_name, post_name, post_id):
 def row_subjects(creator_name, post_name, post_id, chapter_number):
    comment_session_deletion()
    view_chapter_session_deletion()
+
+   admin = False
+   if check_user():
+      if check_if_user_name_is_admin(session["user_name"]):
+         admin = True
+   
    subjects = get_chapter_row_subjects(post_id, chapter_number)
+
+   if subjects == None:
+      address = "/view/" + creator_name + "/" + post_name + "/" + str(post_id)  + "/" + str(chapter_number)
+      return redirect(address)
 
    if len(subjects) == 0:
       address = "/view/" + creator_name + "/" + post_name + "/" + str(post_id)  + "/" + str(chapter_number)
@@ -707,20 +745,21 @@ def row_subjects(creator_name, post_name, post_id, chapter_number):
 
    size = len(subjects)
    row_subject_view_mode()
-   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number ,subjects=subjects, subject_creators=subject_creators, size=size)
+   return render_template("comments.html", creator_name=creator_name, post_name=post_name, post_id=post_id, chapter_number=chapter_number ,subjects=subjects, subject_creators=subject_creators, size=size, admin=admin)
 
 @app.route("/comments/row/subject_comments/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>")
 def row_subject_comments(creator_name, post_name, post_id, chapter_number, subject_id):
    comment_session_deletion()
-   subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
-
-   if subject_comments == None:
-      return redirect("/")
    
    admin = False
    if check_user():
       if check_if_user_name_is_admin(session["user_name"]):
          admin = True
+
+   subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
+
+   if subject_comments == None:
+      return redirect("/")
    
    if len(subject_comments) == 0:
       row_subject_comments_view_mode()
@@ -809,7 +848,15 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
    if not check_user():
       return redirect("/")
 
-   if not check_post_owner(session["user_name"],post_id):
+   allowed = False
+
+   if check_post_owner(session["user_name"],post_id):
+      allowed = True
+
+   if session["user_role"] == 2:
+      allowed = True
+
+   if not allowed:
       return redirect("/")
 
    if mode == "remove_general_comment" and post_id > 0 and comment_id > 0:
@@ -974,7 +1021,15 @@ def query_remove(mode,creator_name,post_name,post_id,chapter_number,query_id,ans
    if not check_user():
       return redirect("/")
 
-   if not check_post_owner(session["user_name"],post_id):
+   allowed = False
+
+   if check_post_owner(session["user_name"],post_id):
+      allowed = True
+
+   if session["user_role"] == 2:
+      allowed = True
+
+   if not allowed:
       return redirect("/")
 
    if mode == "remove_question" and query_id > 0:

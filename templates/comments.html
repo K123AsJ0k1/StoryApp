@@ -158,7 +158,7 @@ textarea {
     <hr>
     {% if size > 0 %}
       {% for comment in comments %}
-        {% if session.user_name == creator_name %}
+        {% if session.user_name == creator_name or admin %}
             <a href="/comment/remove/remove_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0/{{ comment[0] }}">Poista</a>
         {% endif %}
         <br>
@@ -200,7 +200,7 @@ textarea {
     <hr>
     {% if size > 0 %}
       {% for subject in subjects %}
-        {% if session.user_name == creator_name %}
+        {% if session.user_name == creator_name or admin %}
           <a href="/comment/remove/remove_row_subject/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject[0] }}/0">Poista</a>
         {% endif %}
         <br>
@@ -222,7 +222,7 @@ textarea {
     <hr>
     {% if size > 0 %}
       {% for subject_comment in subject_comments %}
-        {% if session.user_name == creator_name %}
+        {% if session.user_name == creator_name or admin %}
           <a href="/comment/remove/remove_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}/{{ subject_comment[0] }}">Poista</a>
         {% endif %}
         <br>

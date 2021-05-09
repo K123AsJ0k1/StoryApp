@@ -190,6 +190,8 @@ textarea {
       {% endif %}
       {% if session.user_name == creator_name %}
         <a href="/workbench/update/change_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Muokkaa</a>
+      {% endif %}
+      {% if session.user_name == creator_name or admin %}
         <a href="/workbench/remove/remove_chapter/{{ post_id }}/{{ chapter_number }}" class="right">Poista</a>
       {% endif %}
     {% endif %}

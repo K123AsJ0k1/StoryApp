@@ -174,7 +174,7 @@ textarea {
           <a href="/query/view_answers/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}">Vastaukset</a>
           <br>
         {% endif %}
-        {% if session.user_name == creator_name and not admin %}
+        {% if session.user_name == creator_name or admin %}
           <a href="/query/remove/remove_question/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ query[0] }}/0">Poista</a>
           <br>
         {% endif %}
@@ -206,7 +206,7 @@ textarea {
     {% if size > 0 %}
       <hr>
       {% for answer in answers %}
-        {% if session.user_name == creator_name %} 
+        {% if session.user_name == creator_name or admin %} 
           <a href="/query/remove/remove_answer/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ answer[2] }}/{{ answer[0] }}">Poista</a>
         {% endif %}
         <br>
