@@ -118,6 +118,8 @@ body {
         Tarina: {{ post[3] }} <br>
         Julkisesti nähtävä: {{ post[1] }} <br>
         Yleinen kommentointi: {{ post[2] }} <br>
+        Ikäraja: {{ ratings[post[0]] }} <br>
+        Genre: {{ genres[post[0]] }} <br>
         <a href="/view/{{ user_name }}/{{ post[3] }}/{{ post[0] }}/1">Lue</a>
         {% if post[2] and owns_chapters[post[0]] %}
             <a href="/comments/general/{{ user_name }}/{{ post[3] }}/{{ post[0] }}">Kommentit</a>

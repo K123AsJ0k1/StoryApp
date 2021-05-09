@@ -36,6 +36,28 @@ def main_page():
 
    posts = get_public_posts()
    
+   if posts == None:
+      return render_template("main.html", size=0)
+   
+   if len(posts) == 0:
+      return render_template("main.html", size=0)
+
+   ratings = get_post_ratings()
+   
+   if ratings == None:
+      return render_template("main.html", size=0)
+   
+   if len(ratings) == 0:
+      return render_template("main.html", size=0)
+
+   genres = get_post_genres()
+   
+   if genres == None:
+      return render_template("main.html", size=0)
+
+   if len(genres) == 0:
+      return render_template("main.html", size=0)
+   
    size = len(posts)
 
    post_creators = {}
@@ -50,7 +72,7 @@ def main_page():
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
-   return render_template("main.html", posts=posts, size=size, post_creators=post_creators, owns_chapters=posts_have_chapters)
+   return render_template("main.html", posts=posts, size=size, post_creators=post_creators, owns_chapters=posts_have_chapters, ratings=ratings, genres=genres)
 
 @app.route("/signup/<string:mode>", methods=["get","post"])
 def signup(mode):
@@ -423,6 +445,29 @@ def profile(user_name):
    
    user_id = get_user_id(user_name)
    posts = get_profile_posts(user_id)
+   
+   if posts == None:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+
+   if len(posts) == None:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+
+   ratings = get_post_ratings()
+   
+   if ratings == None:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+   
+   if len(ratings) == 0:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+
+   genres = get_post_genres()
+   
+   if genres == None:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+
+   if len(genres) == 0:
+      return render_template("profile.html", user_name=user_name, size=0, owner=owner)
+
    size = len(posts)
    
    posts_have_chapters = {}
@@ -431,7 +476,7 @@ def profile(user_name):
       has_chapters = check_post_chapters(post[0])
       posts_have_chapters[post[0]] = has_chapters
 
-   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, owner=owner)
+   return render_template("profile.html", user_name=user_name, posts=posts, size=size, owns_chapters=posts_have_chapters, ratings=ratings, genres=genres, owner=owner)
 
 @app.route("/workbench/save/<string:mode>", methods=["get","post"])
 def workbench_save(mode):

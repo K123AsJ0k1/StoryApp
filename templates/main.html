@@ -108,10 +108,15 @@
       <hr>
       {% for post in posts %}
         <a href="/view/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}/1">{{ post[4] }}</a>
-        kirjoittajalta {{ post_creators[post[0]] }}
+        kirjoittajalta 
+        <a href="/profile/{{ post_creators[post[0]] }}" class="right">{{ post_creators[post[0]] }}</a>
         {% if post[3] and owns_chapters[post[0]] %}
         <a href="/comments/general/{{ post_creators[post[0]] }}/{{ post[4] }}/{{ post[0] }}" class="right">Kommentit</a>
         {% endif %}
+        <br>
+        Ikäraja: {{ ratings[post[0]] }}
+        <br>
+        Genre: {{ genres[post[0]] }}
         <hr>
       {% endfor %}
     {% endif %}

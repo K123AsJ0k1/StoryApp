@@ -338,6 +338,34 @@ def get_post_creators():
 
     return post_creators
 
+def get_post_ratings():
+    posts = get_posts()
+
+    if posts == None:
+      return None
+
+    post_ratings = {}
+
+    for post in posts:
+      misc = list_misc(post[5])
+      post_ratings[post[0]] = misc[0]
+
+    return post_ratings
+
+def get_post_genres():
+    posts = get_posts()
+
+    if posts == None:
+      return None
+
+    post_genres = {}
+
+    for post in posts:
+       misc = list_misc(post[5])
+       post_genres[post[0]] = misc[1]
+
+    return post_genres
+
 def get_chapter_posts():
     chapters = get_chapters()
     
