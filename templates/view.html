@@ -157,7 +157,9 @@ textarea {
     <a href="/" class="right">Pääsivulle</a>
     {% if session.user_name %} 
       <a href="/logout" class="right">Kirjaudu ulos</a>
-      <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+      {% if session.user_role == 1 %}
+        <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+      {% endif %}
     {% endif %}
   {% endif %}
   {% if session.view_mode == "read_mode" %}
@@ -174,7 +176,9 @@ textarea {
     <a href="/" class="right">Pääsivulle</a>
     {% if session.user_name %} 
       <a href="/logout" class="right">Kirjaudu ulos</a>
-      <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+      {% if session.user_role == 1 %}
+        <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+      {% endif %}
       {% if session.row_subject %}
         <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Rivi aiheet</a>
         {% if not admin %}

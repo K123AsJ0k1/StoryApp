@@ -140,7 +140,9 @@ textarea {
   
   {% if session.user_name %}
     <a href="/logout" class="right">Kirjaudu ulos</a>
-    <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+    {% if session.user_role == 1 %}
+        <a href="/profile/{{ session.user_name }}" class="right">Profiili</a>
+    {% endif %}
   {% endif %}
 </div>
 
