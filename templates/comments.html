@@ -85,48 +85,57 @@ textarea {
 <body>
 
 <div class="header">
-  {% if session.comment_mode == "1" %}
+  {% if session.comment_mode == "general_view_mode" %}
     <h1>{{ creator_name }}/{{ post_name }}/Yleiset kommentit</h1>
   {% endif %}
   
-  {% if session.comment_mode == "2" %}
+  {% if session.comment_mode == "general_creation_mode" %}
     <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
   {% endif %}
   
-  {% if session.comment_mode == "3" %}
+  {% if session.comment_mode == "row_subject_view_mode" %}
     <h1>Rivi Aiheet</h1>
   {% endif %}
   
-  {% if session.comment_mode == "4" %}
+  {% if session.comment_mode == "row_subject_comment_view_mode" %}
     <h1>Aiheen kommentit</h1>
   {% endif %}
   
-  {% if session.comment_mode == "5" %}
+  {% if session.comment_mode == "row_subject_comment_creation_mode" %}
     <h1>Kommentoi aihetta</h1>
+  {% endif %}
+  
+  {% if session.comment == "comment_doesnt_fulfill_requirements" %}
+    <p>Kommentti ei toteuta vaatimuksia</p>
+    <p>(Se on joko tyhjä tai rivinvaihtoa ei ole tapahtunut yli 100 merkkiin)</p>
+  {% endif %}
+
+  {% if session.comment == "database_error" %}
+    <p>Tietokanta ongelmia</p>
   {% endif %}
 </div>
 
 <div class="navbar">
-  {% if session.comment_mode == "1" and session.user_name and not admin %}
+  {% if session.comment_mode == "general_view_mode" and session.user_name and not admin %}
     <a href="/comments/save/create_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0">Luo kommentti</a>
   {% endif %}
   
-  {% if session.comment_mode == "2" %}
+  {% if session.comment_mode == "general_creation_mode" %}
     <a href="/comments/general/{{ creator_name }}/{{ post_name }}/{{ post_id }}">Takaisin</a>
   {% endif %}
   
-  {% if session.comment_mode == "3" %}
+  {% if session.comment_mode == "row_subject_view_mode" %}
     <a href="/view/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
   {% endif %}
   
-  {% if session.comment_mode == "4" %}
+  {% if session.comment_mode == "row_subject_comment_view_mode" %}
     <a href="/comments/row/subjects/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}">Takaisin</a>
     {% if session.user_name and not admin %}
       <a href="/comments/save/create_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Luo kommentti</a>
     {% endif %}
   {% endif %}
   
-  {% if session.comment_mode == "5" %}
+  {% if session.comment_mode == "row_subject_comment_creation_mode" %}
     <a href="/comments/row/subject_comments/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}">Takaisin</a>
   {% endif %}
   
@@ -139,11 +148,11 @@ textarea {
 </div>
 
 <div class="footer">  
-  {% if size == 0 and session.comment_mode == "1" %}
+  {% if size == 0 and session.comment_mode == "general_view_mode" %}
      <h1>Kukaan ei ole vielä kommentoinut postausta</h1>
   {% endif %}
 
-  {% if session.comment_mode == "1" %}
+  {% if session.comment_mode == "general_view_mode" %}
     <hr>
     {% if size > 0 %}
       {% for comment in comments %}
@@ -162,7 +171,7 @@ textarea {
     {% endif %}
   {% endif %}
   
-  {% if session.comment_mode == "2" %}
+  {% if session.comment_mode == "general_creation_mode" %}
     <form action="/comments/save/save_general_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/0/0" method="POST">
       {% if last_chapter > 0 %}
         {% if last_chapter == 1 %}
@@ -185,7 +194,7 @@ textarea {
     </form>
   {% endif %}
 
-  {% if session.comment_mode == "3" %}
+  {% if session.comment_mode == "row_subject_view_mode" %}
     <hr>
     {% if size > 0 %}
       {% for subject in subjects %}
@@ -203,11 +212,11 @@ textarea {
     {% endif %}
   {% endif %}
 
-  {% if size == 0 and session.comment_mode == "4" %}
+  {% if size == 0 and session.comment_mode == "row_subject_comment_view_mode" %}
     <h1>Kukaan ei ole vielä kommentoinut aihetta</h1>
   {% endif %}
 
-  {% if session.comment_mode == "4" %}
+  {% if session.comment_mode == "row_subject_comment_view_mode" %}
     <hr>
     {% if size > 0 %}
       {% for subject_comment in subject_comments %}
@@ -223,7 +232,7 @@ textarea {
     {% endif %}
   {% endif %}
 
-  {% if session.comment_mode == "5" %}
+  {% if session.comment_mode == "row_subject_comment_creation_mode" %}
     <form action="/comments/save/save_row_subject_comment/{{ creator_name }}/{{ post_name }}/{{ post_id }}/{{ chapter_number }}/{{ subject_id }}" method="POST">
       <a>Kirjoita vastaukseksi rivi aiheeseen liittyen alla olevaan tekstikenttään</a>
       <br>

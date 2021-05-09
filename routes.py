@@ -25,6 +25,12 @@ app.secret_key = getenv("SECRET_KEY")
 def main_page():
    get_post_session_deletion()
    get_chapter_session_deletion()
+   view_chapter_session_deletion()
+   profile_session_deletion()
+   workbench_session_deletion()
+   get_post_session_deletion()
+   get_chapter_session_deletion()
+   comment_session_deletion()
 
    if get_clearance_proxy() == None:
       if not create_clearance_proxy():
@@ -400,15 +406,16 @@ def administration_clearance_code(admin_name):
       if not change_clearance_code(new_clearance_code):
          address = "/administration/clearance_code/" + admin_name
          return redirect(address)
-      address = "/administration/" + admin_name
+      address = "/administration/clearance_code/" + admin_name
       return redirect(address)
 
    return redirect("/")
     
 @app.route("/profile/<string:user_name>")
 def profile(user_name):
+   comment_session_deletion()
    workbench_session_deletion()
-   view_session_deletion()
+   view_chapter_session_deletion()
    get_post_session_deletion()
 
    if not check_user_name_exists(user_name):
@@ -535,6 +542,7 @@ def workbench_update(mode, post_id, chapter_number):
       return redirect(address)
 
    if mode == "change_chapter" and post_id > 0 and chapter_number > 0 and request.method == "GET":
+      comment_session_deletion()
       if not get_chapter(post_id, chapter_number):
          return redirect("/")
       return render_template("workbench.html", post_id=post_id, chapter_number=chapter_number)
@@ -594,8 +602,10 @@ def workbench_remove(mode, post_id, chapter_number):
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def view(creator_name, post_name, post_id, chapter_number):
    profile_session_deletion()
+   comment_session_deletion()
    workbench_session_deletion()
    get_chapter_session_deletion()
+
    if not view_chapter(creator_name, post_name, chapter_number):
       view_none_mode()
       return render_template("view.html")
@@ -610,6 +620,7 @@ def view(creator_name, post_name, post_id, chapter_number):
 
 @app.route("/comments/general/<string:creator_name>/<string:post_name>/<int:post_id>")
 def comments_general(creator_name, post_name, post_id):
+   comment_session_deletion()
    comments = get_post_general_comments(post_id)
 
    if comments == None:
@@ -639,6 +650,8 @@ def comments_general(creator_name, post_name, post_id):
 
 @app.route("/comments/row/subjects/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def row_subjects(creator_name, post_name, post_id, chapter_number):
+   comment_session_deletion()
+   view_chapter_session_deletion()
    subjects = get_chapter_row_subjects(post_id, chapter_number)
 
    if len(subjects) == 0:
@@ -660,6 +673,7 @@ def row_subjects(creator_name, post_name, post_id, chapter_number):
 
 @app.route("/comments/row/subject_comments/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:subject_id>")
 def row_subject_comments(creator_name, post_name, post_id, chapter_number, subject_id):
+   comment_session_deletion()
    subject_comments = get_subject_comments(post_id,chapter_number,subject_id)
 
    if subject_comments == None:
@@ -713,6 +727,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
          address = "/comments/save/create_general_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
          return redirect(address)
       
+      comment_session_deletion()
       address = "/comments/general/"+ creator_name + "/"+ post_name +"/" + str(post_id)
       return redirect(address)
 
@@ -726,6 +741,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
          address = "/view/" + creator_name + "/" + post_name + "/" + str(post_id)  + "/" + str(chapter_number)
          return redirect(address)
       
+      comment_session_deletion()
       address = "/comments/row/subjects/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number)
       return redirect(address)
 
@@ -743,6 +759,7 @@ def comments_save(mode, creator_name, post_name, post_id, chapter_number, subjec
          address = "/comments/save/create_row_subject_comment/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
          return redirect(address)
       
+      comment_session_deletion()
       row_subject_comments_view_mode()
       address = "/comments/row/subject_comments/" + creator_name + "/" + post_name + "/" + str(post_id) + "/" + str(chapter_number) + "/" + str(subject_id)
       return redirect(address)
@@ -782,6 +799,7 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
          
 @app.route("/query/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
+   view_chapter_session_deletion()
    if not check_user():
       return redirect("/")
 

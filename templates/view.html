@@ -141,6 +141,11 @@ textarea {
   {% if session.view == "target_chapter_doesnt_exist" %}
     <p>Poistettava luku ei ole olemassa</p>
   {% endif %}
+
+  {% if session.view == "row_subject_doesnt_fulfill_requirements" %}
+    <p>Rivi aihe ei toteuta vaatimuksia</p>
+    <p>(Et ole valinnut mitään asiaa rivi aiheeksi)</p>
+  {% endif %}
   
   {% if session.view == "database_error" %}
     <p>Tietokanta ongelmia</p>

@@ -11,9 +11,21 @@ def view_none_mode():
 def view_read_mode():
     session["view_mode"] = "read_mode"
 
-def remove_chapter_content_session():
-    if "chapter_content" in session:
-        del session["chapter_content"]
+def view_chapter_session_deletion():
+    if 'view' in session:
+      del session["view"]
+    if 'switch_chapter' in session:
+      del session["switch_chapter"]
+    if 'post_id' in session:
+      del session["post_id"]
+    if 'public' in session:
+      del session["public"]
+    if 'row_subject' in session:
+      del session["row_subject"]
+    if 'inquiry' in session:
+      del session["inquiry"]
+    if 'chapter_content' in session:
+      del session["chapter_content"]
 
 def view_chapter(creator_name,post_name,chapter_number):
     user_id = get_user_id(creator_name)

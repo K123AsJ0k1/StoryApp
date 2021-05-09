@@ -9,22 +9,33 @@ from comments_db import *
 from text import *
 
 def comment_view_mode():
-    session["comment_mode"] = "1"
+    session["comment_mode"] = "general_view_mode"
 
 def comment_creation_mode():
-    session["comment_mode"] = "2"
+    session["comment_mode"] = "general_creation_mode"
 
 def row_subject_view_mode():
-    session["comment_mode"] = "3"
+    session["comment_mode"] = "row_subject_view_mode"
 
 def row_subject_comments_view_mode():
-    session["comment_mode"] = "4"
+    session["comment_mode"] = "row_subject_comment_view_mode"
 
 def row_subject_comments_creation_mode():
-    session["comment_mode"] = "5"
+    session["comment_mode"] = "row_subject_comment_creation_mode"
 
-def save_general_comment(post_id,user_id,comment,referenced_chapter):
+def comment_session_deletion():
+    if 'comment_mode' in session:
+      del session["comment_mode"]
+    if 'comment' in session:
+      del session["comment"]
+
+def save_general_comment(post_id,user_id,comment,referenced_chapter):   
     if not check_text_requirements(comment):
+      session["comment"] = "comment_doesnt_fulfill_requirements"
+      return False
+
+    if len(referenced_chapter) > 10:
+      session["comment"] = "reference_doesnt_fulfill_requirements"
       return False
 
     chapter_list = get_the_chapter_numbers(post_id)
@@ -41,28 +52,33 @@ def save_general_comment(post_id,user_id,comment,referenced_chapter):
     check_number = save_the_comment(user_id, post_id, 0, '1', '0', chapter_number_on, chapter_number, comment)
    
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
    
     return True
 
 def save_row_subject(user_id, post_id, chapter_number, comment):
     if not check_text_requirements(comment):
+      session["view"] = "row_subject_doesnt_fulfill_requirements"
       return False
 
     check_number = save_the_comment(user_id, post_id, 0, '0', '1', '1', chapter_number, comment)
 
     if check_number == -2:
+      session["view"] = "database_error"
       return False
 
     return True
 
 def save_row_subject_comment(user_id, post_id, chapter_number, row_id, comment):
     if not check_text_requirements(comment):
+      session["comment"] = "comment_doesnt_fulfill_requirements"
       return False
 
     check_number = save_the_comment(user_id, post_id, row_id, '0', '1', '1', chapter_number, comment)
 
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
 
     return True
@@ -71,27 +87,31 @@ def remove_comment(comment_id):
    check_number = remove_the_comment(comment_id)
 
    if check_number == -2:
+      session["comment"] = "database_error"
       return False
-
+   
    return True
 
 def remove_subject(post_id,chapter_number,subject_id):
     check_number = remove_the_subject_comments(post_id,chapter_number,subject_id)
 
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
       
     check_number = remove_comment(subject_id)
     
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
-
+    
     return True
 
 def remove_subjects(post_id,chapter_number):
     check_number = remove_the_chapter_row_subjects(post_id,chapter_number)
 
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
 
     return True
@@ -100,6 +120,7 @@ def remove_subject_comments(post_id,chapter_number,subject_id):
     check_number = remove_the_subject_comments(post_id,chapter_number,subject_id)
 
     if check_number == -2:
+      session["comment"] = "database_error"
       return False
 
     return True

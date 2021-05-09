@@ -177,7 +177,7 @@ textarea {
         <a>Mihin postaukseen haluat lisätä tämän chapterin?</a>
         <br>
         {% for post in posts %}
-          {{ post[3] }} <input type="radio" id="post_{{ post[1] }}" name="chapter_picked_post" value="{{ post[0] }}">
+          {{ post[3] }} <input type="radio" id="post_{{ post[1] }}" name="chapter_picked_post" value="{{ post[0] }}" checked="checked">
         <br>
         {% endfor %}
         <br>
