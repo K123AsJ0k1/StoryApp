@@ -84,41 +84,55 @@ textarea {
 <body>
 
 <div class="header">
-  {% if session.admin_mode == "1" %}
-    <h1>Sovelluksen hallinto työkalut</h1>
+  {% if session.admin_mode == "main_mode" %}
+    <h1>Hallinto</h1>
+    <p>(Tapauksessa, jossa taulu linkkien klikkaus ei tee mitään, on taulu tyhjä)</p>
   {% endif %}
   
-  {% if session.admin_mode == "2" %}
+  {% if session.admin_mode == "users_mode" %}
     <h1>Käyttäjät</h1>
   {% endif %}
   
-  {% if session.admin_mode == "3" %}
+  {% if session.admin_mode == "posts_mode" %}
     <h1>Postaukset </h1>
   {% endif %}
   
-  {% if session.admin_mode == "4" %}
+  {% if session.admin_mode == "chapters_mode" %}
     <h1>Luvut</h1>
   {% endif %}
   
-  {% if session.admin_mode == "5" %}
+  {% if session.admin_mode == "comments_mode" %}
     <h1>Kommentit</h1>
   {% endif %}
   
-  {% if session.admin_mode == "6" %}
+  {% if session.admin_mode == "queries_mode" %}
     <h1>Kyselyt</h1>
   {% endif %}
   
-  {% if session.admin_mode == "7" %}
+  {% if session.admin_mode == "answers_mode" %}
     <h1>Vastaukset</h1>
   {% endif %}
 
-  {% if session.admin_mode == "8" %}
+  {% if session.admin_mode == "clearance_code_mode" %}
     <h1>Oikeus koodi</h1>
+  {% endif %}
+
+  {% if session.admin == "database_error" %}
+    <p>Ongelmia tietokannassa</p>
+  {% endif %}
+
+  {% if session.admin == "short_clearance_code" %}
+    <p>Lyhyt oikeutus koodi</p>
+    <p>Koodi on oltava vähintään 20 merkkiä pitkä</p>
+  {% endif %}
+
+  {% if session.admin == "empty_clearance_code" %}
+    <p>Tyhjä koodi</p>
   {% endif %}
 </div>
 
 <div class="navbar">
-  {% if session.admin_mode == "1" %}
+  {% if session.admin_mode == "main_mode" %}
     <a href="/administration/users/{{ admin_name }}">Käyttäjät</a>
     <a href="/administration/posts/{{ admin_name }}">Postaukset</a>
     <a href="/administration/chapters/{{ admin_name }}">Luvut</a>
@@ -128,38 +142,38 @@ textarea {
     <a href="/administration/clearance_code/{{ admin_name }}">Oikeus koodi</a>
   {% endif %}
   
-  {% if not session.admin_mode == "1" %}
+  {% if not session.admin_mode == "main_mode" %}
     <a href="/administration/{{ admin_name }}">Takaisin</a>
   {% endif %}
 
-  {% if session.admin_mode == "2" %}
+  {% if session.admin_mode == "users_mode" %}
     <a>Käyttäjät:{{ amount_of_regulars }}</a>
     <a>Adminit:{{ amount_of_admins }}</a>
   {% endif %}
 
-  {% if session.admin_mode == "3" %}
+  {% if session.admin_mode == "posts_mode" %}
     <a>Määrä:{{ amount_of_posts }}</a>
     <a>Julkiset:{{ amount_of_public_posts }}</a>
   {% endif %}
 
-  {% if session.admin_mode == "4" %}
+  {% if session.admin_mode == "chapters_mode" %}
     <a>Määrä:{{ amount_of_chapters }}</a>
     <a>Julkiset:{{ amount_of_public_chapters }}</a>
     <a>Suurin luku:{{ largest_chapter_number }}</a>
     <a>Suurin rivi:{{ largest_row_number }}</a>
   {% endif %}
    
-  {% if session.admin_mode == "5" %}
+  {% if session.admin_mode == "comments_mode" %}
     <a>Yleiset:{{ amount_of_general_comments }}</a>
     <a>Rivi aiheet:{{ amount_of_row_subjects }}</a>
     <a>Rivi vastaukset:{{ amount_of_row_subject_comments }}</a>
   {% endif %}
 
-  {% if session.admin_mode == "6" %}
+  {% if session.admin_mode == "queries_mode" %}
     <a>Määrä:{{ amount_of_queries }}</a>
   {% endif %}
 
-  {% if session.admin_mode == "7" %}
+  {% if session.admin_mode == "answers_mode" %}
     <a>Määrä:{{ amount_of_answers }}</a>
   {% endif %}
 
@@ -167,7 +181,7 @@ textarea {
 </div>
 
 <div class="footer">
-  {% if session.admin_mode == "2" %}
+  {% if session.admin_mode == "users_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -191,7 +205,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "3" %}
+  {% if session.admin_mode == "posts_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -214,7 +228,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "4" %}
+  {% if session.admin_mode == "chapters_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -239,7 +253,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "5" %}
+  {% if session.admin_mode == "comments_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -266,7 +280,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "6" %}
+  {% if session.admin_mode == "queries_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -285,7 +299,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "7" %}
+  {% if session.admin_mode == "answers_mode" %}
     <table style="width:100%">
       <tr>
         <th>Id</th>
@@ -306,7 +320,7 @@ textarea {
     </table>
   {% endif %}
 
-  {% if session.admin_mode == "8" %}
+  {% if session.admin_mode == "clearance_code_mode" %}
     <form action="/administration/clearance_code/{{ admin_name }}" method="POST">
       <p>Oikeutus koodi:<br>
       <input type="text" name="clearance_code" value="{{ clearance_code }}" size="50"></p>

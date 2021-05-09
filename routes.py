@@ -23,28 +23,17 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def main_page():
-   get_post_session_deletion()
-   get_chapter_session_deletion()
-   view_chapter_session_deletion()
-   profile_session_deletion()
-   workbench_session_deletion()
-   get_post_session_deletion()
-   get_chapter_session_deletion()
-   comment_session_deletion()
-   query_session_deletion()
+   main_page_other_page_session_deletion()
 
    if get_clearance_proxy() == None:
       if not create_clearance_proxy():
-         print("ongelma")
-         #Luo sessio errori
+         main_page_proxy_init_problem()
 
    if 'user_role' in session:
       if session["user_role"] == 2:
          address = "/administration/" + session["user_name"]
          return redirect(address)
 
-   main_page_session_deletion()
-   
    posts = get_public_posts()
    
    size = len(posts)
@@ -143,8 +132,9 @@ def administration(admin_name):
    
    if not session["user_role"] == 2:
       return redirect("/")
-
-   admin_statistic_mode()
+   
+   admin_session_deletion()
+   admin_main_mode()
    return render_template("administration.html", admin_name=admin_name)
    
 @app.route("/administration/users/<string:admin_name>")

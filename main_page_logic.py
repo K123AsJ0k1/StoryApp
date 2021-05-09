@@ -1,48 +1,39 @@
 from app import app
 from flask import redirect, render_template, request, session
 
-def main_page_session_deletion():
-    if 'log_in' in session:
-      del session["log_in"]
-   
-    if 'sign_up' in session:
-      del session["sign_up"]
-   
-    if 'workbench' in session:
-      del session["workbench"] 
+from users_logic import *
+from main_page_logic import *
+from profile_logic import *
+from workbench_logic import *
+from view_logic import *
+from comments_logic import *
+from query_logic import *
+from administration_logic import *
+
+def main_page_proxy_init_problem():
+    session["main"] = "database_error"
+
+def main_page_other_page_session_deletion():
+    sign_up_session_deletion()
     
-    if 'given_post_name' in session:
-      del session["given_post_name"]
+    log_in_session_deletion()
     
-    if 'given_post_public' in session:
-      del session["given_post_public"]    
+    get_post_session_deletion()
     
-    if 'given_post_general' in session:
-      del session["given_post_general"]  
+    get_chapter_session_deletion()
     
-    if 'given_post_rating' in session:
-      del session["given_post_rating"]  
+    view_chapter_session_deletion()
     
-    if 'given_post_genre' in session:
-      del session["given_post_genre"] 
+    profile_session_deletion()
+    
+    workbench_session_deletion()
+    
+    get_post_session_deletion()
+    
+    get_chapter_session_deletion()
+    
+    comment_session_deletion()
+    
+    query_session_deletion()
 
-    if 'view_chapter' in session:
-      del session["view_chapter"] 
-
-    if 'view_mode' in session:
-      del session["view_mode"] 
-
-    if 'view_error' in session:
-      del session["view_error"] 
-
-    if 'comment_mode' in session:
-      del session["comment_mode"]
-
-    if 'comment_error' in session:
-      del session["comment_error"] 
-
-    if 'query_mode' in session:
-      del session["query_mode"]
-
-    if 'query_error' in session:
-      del session["query_error"]
+    admin_session_deletion()

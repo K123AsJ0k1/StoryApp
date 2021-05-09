@@ -85,6 +85,9 @@
 
 <div class="header">
   <h1>Tervetuloa</h1>
+  {% if session.main == "database_error" %}
+    <p>Ongelmia tietokannassa</p>
+  {% endif %}
 </div>
 
 <div class="navbar">
