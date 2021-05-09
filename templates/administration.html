@@ -22,7 +22,7 @@ body {
 .header {
   padding: 10px;
   text-align: center;
-  background: #1abc9c;
+  background: #10bfe7;
   color: white;
 }
 
@@ -192,10 +192,10 @@ textarea {
       <tr>
         <th>{{ user[0] }}</th>
         <th>
-          {% if user[2] == 0 %}
+          {% if user[2] == 1 %}
             <a href="/profile/{{ user[1] }}">{{ user[1] }}</a>
           {% endif %}
-          {% if not user[2] == 0 %}
+          {% if not user[2] == 1 %}
             {{ user[1] }}
           {% endif %}
         </th> 
