@@ -82,12 +82,12 @@ def login_user(username, password):
 
         hash_value = user_password[0]
         if not check_password_hash(hash_value,password):
-          return -2
+          return -3
 
         return 0
     except Exception as e:
         print(e)
-        return -3
+        return -2
 
 def login_admin(username, password):
     try:
@@ -100,12 +100,12 @@ def login_admin(username, password):
 
         hash_value = user_password[0]
         if not check_password_hash(hash_value,password):
-          return -2
+          return -3
 
         return 0
     except Exception as e:
         print(e)
-        return -3
+        return -2
 
 def update_clearance_code(clearance_code):
     try:

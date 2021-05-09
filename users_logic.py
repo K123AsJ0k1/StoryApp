@@ -74,54 +74,43 @@ def register(mode, username, password, clearance_code):
       session["user_role"] = 2
 
       return True
+      
 
-def log_in(mode, username, password):
+def log_in(mode, user_name, password):
+    check_number = 0
+    
     if mode == "check_user":
-      check_number = login_user(username, password)
-
-      if check_number == -1:
-        session["log_in"] = "1"
-        return False
-
-      if check_number == -2:
-        session["log_in"] = "2"
-        return False
-
-      user_id = get_user_id(username)
-
-      if user_id == 0:
-        return False
-   
-      session["csrf_token"] = os.urandom(16).hex() 
-      session["user_id"] = user_id
-      session["user_name"] = username 
-      session["user_role"] = 1
-
-      return True
-
+      check_number = login_user(user_name, password)
     if mode == "check_admin":
-      check_number = login_admin(username, password)
+      check_number = login_admin(user_name, password)
+    
+    if check_number == -1:
+      session["log_in"] = "name_doesnt_exist"
+      return False
+    if check_number == -2:
+      session["log_in"] = "database_error"
+      return False
+    if check_number == -3:
+      session["log_in"] = "wrong_password"
+      return False
 
-      if check_number == -1:
-        session["log_in"] = "1"
-        return False
+    user_id = get_user_id(user_name) 
 
-      if check_number == -2:
-        session["log_in"] = "2"
-        return False
+    if user_id == 0:
+      return False
 
-      user_id = get_user_id(username)
+    user = get_the_user(user_id)
 
-      if user_id == 0:
-        return False
-   
-      session["csrf_token"] = os.urandom(16).hex() 
-      session["user_id"] = user_id
-      session["user_name"] = username 
-      session["user_role"] = 2
+    if user == None:
+      return False
 
-      return True
-
+    session["csrf_token"] = os.urandom(16).hex() 
+    session["user_id"] = user_id
+    session["user_name"] = user_name 
+    session["user_role"] = user[3]
+    
+    return True
+    
 def check_user_name_exists(user_name):
     check_number = get_user_id(user_name)
 

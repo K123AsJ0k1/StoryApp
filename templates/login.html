@@ -69,12 +69,16 @@ body {
 <div class="header">
   <h1>Kirjaudu sisään</h1>
   
-  {% if session.log_in == "1" %}
-    <p>Käyttäjää ei ole olemassa</p>
+  {% if session.log_in == "name_doesnt_exist" %}
+    <p>Nimeä ei ole olemassa</p>
+  {% endif %}
+
+  {% if session.log_in == "database_error" %}
+    <p>Tietokanta ongelma</p>
   {% endif %}
   
-  {% if session.log_in == "2" %}
-    <p>Salasana on väärin</p>
+  {% if session.log_in == "wrong_password" %}
+    <p>Annettu salasana on väärin</p>
   {% endif %}
 </div>
 
