@@ -61,5 +61,6 @@ def change_clearance_code(clearance_code):
     if check_number == -2:
         session["admin"] = "database_error"
         return False
-
+    
+    session["admin"] = "clearance_code_updated"
     return True

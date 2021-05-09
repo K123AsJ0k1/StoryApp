@@ -121,9 +121,13 @@ textarea {
     <p>Ongelmia tietokannassa</p>
   {% endif %}
 
+  {% if session.admin == "clearance_code_updated" %}
+    <p>Oikeutus koodi muutettu</p>
+  {% endif %}
+
   {% if session.admin == "short_clearance_code" %}
     <p>Lyhyt oikeutus koodi</p>
-    <p>Koodi on oltava vähintään 20 merkkiä pitkä</p>
+    <p>(Koodi on oltava vähintään 20 merkkiä pitkä)</p>
   {% endif %}
 
   {% if session.admin == "empty_clearance_code" %}
