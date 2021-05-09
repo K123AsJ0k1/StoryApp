@@ -31,6 +31,7 @@ def main_page():
    get_post_session_deletion()
    get_chapter_session_deletion()
    comment_session_deletion()
+   query_session_deletion()
 
    if get_clearance_proxy() == None:
       if not create_clearance_proxy():
@@ -415,6 +416,7 @@ def administration_clearance_code(admin_name):
 def profile(user_name):
    comment_session_deletion()
    workbench_session_deletion()
+   query_session_deletion()
    view_chapter_session_deletion()
    get_post_session_deletion()
 
@@ -602,6 +604,7 @@ def workbench_remove(mode, post_id, chapter_number):
 @app.route("/view/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>")
 def view(creator_name, post_name, post_id, chapter_number):
    profile_session_deletion()
+   query_session_deletion()
    comment_session_deletion()
    workbench_session_deletion()
    get_chapter_session_deletion()
@@ -800,6 +803,7 @@ def comment_remove(mode, creator_name, post_name, post_id, chapter_number, subje
 @app.route("/query/<string:mode>/<string:creator_name>/<string:post_name>/<int:post_id>/<int:chapter_number>/<int:query_id>")
 def query(mode, creator_name, post_name, post_id, chapter_number, query_id):
    view_chapter_session_deletion()
+   query_session_deletion()
    if not check_user():
       return redirect("/")
 

@@ -9,29 +9,37 @@ from answers_db import *
 from text import *
 
 def query_none_mode():
-    session["query_mode"] = "0"
+    session["query_mode"] = "none_mode"
 
 def query_view_mode():
-    session["query_mode"] = "1"
+    session["query_mode"] = "view_mode"
 
 def query_create_mode():
-    session["query_mode"] = "2"
+    session["query_mode"] = "create_mode"
 
 def query_answers_mode():
-    session["query_mode"] = "3"
+    session["query_mode"] = "answers_mode"
 
 def query_answer_mode():
-    session["query_mode"] = "4"
+    session["query_mode"] = "answer_mode"
+
+def query_session_deletion():
+    if 'query_mode' in session:
+      del session["query_mode"]
+    if 'query' in session:
+      del session["query"]
 
 def save_question(user_id,post_id,chapter_number,question):   
     chapter = get_the_chapter(post_id,chapter_number)
 
     if chapter == None:
+      session["query"] = "database_error"
       return False
 
     chapter_id = chapter[0]
 
     if not check_text_requirements(question):
+      session["query"] = "question_doesnt_fulfill_requirements"
       return False
 
     misc = ""
@@ -39,6 +47,7 @@ def save_question(user_id,post_id,chapter_number,question):
     check_number = save_the_query(user_id,chapter_id,question,misc)
 
     if check_number == -2:
+      session["query"] = "database_error"
       return False
    
     return True
@@ -47,6 +56,7 @@ def remove_question(question_id):
     check_number = remove_the_query(question_id)
 
     if check_number == -2:
+      session["query"] = "database_error"
       return False
 
     return True
@@ -55,9 +65,11 @@ def save_answer(user_id, query_id, answer):
     query = get_the_query(query_id)
    
     if query == None:
+      session["query"] = "database_error"
       return False
    
     if not check_text_requirements(answer):
+      session["query"] = "answer_doesnt_fulfill_requirements"
       return False
 
     misc = ""
@@ -65,6 +77,7 @@ def save_answer(user_id, query_id, answer):
     check_number = save_the_answer(user_id, query_id, answer, misc)
 
     if check_number == -2:
+      session["query"] = "database_error"
       return False
 
     return True
@@ -73,6 +86,7 @@ def remove_answer(answer_id):
    check_number = remove_the_answer(answer_id)
 
    if check_number == -2:
+      session["query"] = "database_error"
       return False
    
    return True

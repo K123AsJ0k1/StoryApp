@@ -86,11 +86,11 @@ textarea {
 
 <div class="header">
   {% if session.comment_mode == "general_view_mode" %}
-    <h1>{{ creator_name }}/{{ post_name }}/Yleiset kommentit</h1>
+    <h1>Yleiset kommentit</h1>
   {% endif %}
   
   {% if session.comment_mode == "general_creation_mode" %}
-    <h1>{{ creator_name }}/{{ post_name }}/Kommentin luonti</h1>
+    <h1>Yleisen kommentin luonti</h1>
   {% endif %}
   
   {% if session.comment_mode == "row_subject_view_mode" %}
