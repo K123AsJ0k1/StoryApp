@@ -2,88 +2,64 @@
 
 Pääset sovelluksen heroku versioon tästä linkistä https://st0ryapp.herokuapp.com/
 
-# Sovellusmäärittelly:
+# Sovellusmäärittelly (9.5.2021):
 
 Sovelluksen avulla voi tarkastella, jakaa ja kommentoida tarinoita.Sovelluksessa on olemassa kolme käyttäjää, jotka ovat anonyymit, kirjoittajat ja adminit.
 
 Sovelluksen ominaisuudet ovat:
 
-- Anonyymit, kirjoittajat ja adminit voi hakea ja lukea eri tarina postauksia 
-- Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden kirjoittaja tunnuksen
-- Kirjoittajat voivat luoda ja poistaa tarina postauksia
-- Kirjoittajat voivat luoda ja poistaa tarina postaukseen uusia lukuja
-- Kirjoittaja voi lisätä mahdollisuuden kommentoida lukua
-- Kirjoittajat voivat kommentoida tarina postausten tiettyjä lukuja 
-- Kirjoittajat voivat kommentoida tekstin tiettyä riviä
-- Kirjoittajat voivat lisätä lukuihin kyselyitä
-- Kirjoittajat voivat vastata lukujen lopussa oleviin kyselyihin
-- Anonyymit ja kirjoittajat pystyvät näkemään postauksen kommentit
-- Postauksen omistavat kirjoittajat pystyvät näkemään yksityisesti luvun kyselyt
-- Postauksen omistava kirjoittaja pystyy poistamaan joko muutaman tai kaikki kommentit
-- Postauksen omistava kirjoittaja pystyy poistamaan muutaman tai kaikki kyselyt
-- Admin käyttäjä pystyy tarkastelemaan olemassa olevia käyttäjiä, kommenteja ja kyselyitä
-- Admin käyttäjä pystyy poistamaan käyttäjiä, postauksia, kommenteja ja kyselyitä
+Yleisesti:
 
-# HUOMIOTA (25.4.2021):
+- Jokainen voi lukea pääsivulla olevia postauksia, lukea chaptereita, tarkastaa yleiset kommentit ja tarkastella kirjoittajien profiileja
+
+Kirjautuneiden käyttäjien toimet:
+
+- Kirjoittajat voi luoda käyttäjän ja kirjautua sillä sisään (nimen on oltava uniikki ja vähintään 5 merkkiä, kun taas salasanan on oltava vähintään 8 merkkiä)
+- Adminin voi luoda ja sen avulla voi kirjautua sovelluksen hallintoon (on muutettava tavallisen kirjautumisen url viimeiset sanat adminiksi ja nimen on oltava uniikki, nimen ja salasanan on oltava vähintään 10 merkkiä ja on tiedettävä oiketus koodi)
+- Kirjoittajat voi luoda postauksia, muokata niitä ja poistaa niitä
+- Adminit pystyvät poistamaan postauksia
+- Kirjoittajat voi luoda postauksiin chaptereita, muokata niitä ja poistaa niitä
+- Adminit pystyvät poistamaan chaptereita
+- Postauksen voi laittaa julkiseksi ja kommentit voi laittaa piiloon
+- Chapterin voi laittaa julkiseksi, sen rivi-aiheet ja kysely voi laittaa piiloon
+- Postauksen kommentti voi olla joko viittaava tai ei
+- Postauksen omistaja ja admin voi poistaa yleisiä kommentteja
+- Kirjoittajat voivat luoda chapterista tekstistä voidaan luoda rivi aihe maalamalla tekstin ja painamalla luo rivi aihe
+- Kirjoittajat voivat tarkastella chapterin rivi-aiheita ja vastata niihin
+- Adminit pystyvät näkemään rivi aiheet
+- Postauksen omistaja ja admin voi poistaa rivi aiheita ja niiden vastauksia
+- Kirjoittajat voivat luoda kyselyita ja vastata niihin
+- Admin voi poistaa kyselyn
+- Postauksen omistaja ja admin pystyvät tarkastelemaan kyselyiden vastauksia ja poistamaan niitä
+- Hallintoon kirjautunut admin pystyy tarkastelemaan sovelluksen tietokanta taulujen tietoja
+- Hallinnon käyttäjä sivulla admin pystyy näkemään taulukon (id,käyttäjä,rooli), käyttäjien määrän, adminien määrän ja painamaan kirjoittajien linkkejä päästäkseen heidän profiileihin
+- Hallinnon postaus sivulla admin psytyy näkemään taulukon (id,omistaja,julkisuus,kommentointi,nimi), postausten määrän, julkisten postausten määrän ja painamaan nimi linkkiä päästäkseen lukemaan postauksen chaptereita
+- Hallinnon luvut sivulla admin pystyy näkemään taulukon (id,postaus,julkisuus,rivi kommentit, kyselyt,luku,rivit), lukujen määrän, julkisten lukujen määrän, suurimman luvun ja suurimman rivin
+- Hallinnon kommentit sivulla admin pystyy näkemään taulukon (id,omistaja,postaus,rivi id, yleinen kommentti, rivi kommentti, numerointi ja luku), yleisten kommenttien määrään, rivi aiheiden määrään ja rivi vastausten määrän
+- Hallinnon kyselyt sivulla admin pystyy näkemään taulukon (id,omistaja,postaus,luku) ja kyselyiden määrän
+- Hallinnon vastaus sivulla admin pystyy näkemään taulukon (id,vastaaja,kysymys id, luku, postaus ) ja vastausten määrän
+- Hallintoon kirjautunut admin pystyy tarkastamaan oikeutus koodin ja muuttamaan sen (uusi oikeutus koodi on oltava vähintään 20 merkkiä)
+- Admin pystyy käyttäjä taulun tiedoista menemään kirjoittajan profiliin
+- Admin pystyy post taulun tiedoista menemään postauksen ensimmäiseen chapteriin
+
+# HUOMIOTA (9.5.2021):
 
 Perustiedot:
 
-- Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi. Super user password on Salasana
+- Jos haluat testata admin luontia, muuta tavallisen käyttäjän luonnin url user adminiksi.
+- Nykyinen oikeutus koodi on testauksessa_kaytettava_clearance_code (Muutoksen testaamisen jälkeen, muuta koodi samaksi)
 - Jos haluat testata admin kirjautumista , muuta tavallisen käyttäjän kirjautuminen url user adminiksi
 - Sovelluksessa on olemassa jo kaksi tavallista käyttäjää, jotka ovat salainen/salainen ja salainen1/salainen1 (käyttäjä nimi/salasana)
-- Sovelluksella on olemassa admin käyttäjä testaus_admin/testaus_admin (käyttäjä nimi/salasana)
-- Kaikki asiat, joissa lukee WIP, on kehityksen alla
+- Sovelluksessa on olemassa jo kaksi adminia, jotka testaus_admin/testaus_admin ja testaus_admin2/testaus_admin2
 - Julkinen postaus tulee näkyviin silloin, kun se omistaa vähintään yhden chapterin
-- Jos linkin nimen mukainen asia ei omista yhtään asiaa tietokannassa, se pitää käyttäjän sivustolla
-- En suosittele olemaan valitsematta mitään postausta chapterin luonnissa, sillä se voi aiheuttaa errorin
 
-Ongelmia:
+Sovellukseen jääneitä ongelmia
 
-- satunnaisen postauksen valinta ei tapahdu automaattisesti chapterin valinnassa
-- sovelluksen tiedosto rakenne kaipaa refaktorointia
-- session asiat tarvitsevat refaktorointia
-- route.py käyttämät linkit saattavat aiheuttaa turvallisuus ongelman
-- route.py linkkejä voisi refaktoroida
-- Tietokanta ja route.py tarvitsevat hieman refaktorointia
-- Muut käyttäjät ja adminit pystyvät luomaan, näkemään ja poistamaan luvatta muiden käyttäjien nimillä tietokantaan
-- Sovelluksessa on edelleen CSRF haavoittuvuus, joka tullaan korjaamaan
-- Sovelluksen käyttöliittymä on tietyissä paikoissa hieman tynkä
-- Sovellus ei kommunikoi kovinkaan paljon käyttäjän tekemistä virheistä
-- Sovellus ei varmista poistamista, joten käyttäjä voi vahingossa painaa väärää linkkiä ja poistaa asian
-- Adminit pystyvät menemään pääsivulle ja profiilin
-- Tietokannan poisto metodit kaipaavat hieman refaktorointia
-- Tietokannan muutamat asiat tarvitsevat nimi refaktorointia
-- Super user password tarvitsee tietokanta varmistuksen
+- Liian aikainen refaktorointi ja epäonnistuminen sen aiheuttamien name errorien korjaamisessa ei mahdollistanut aikaa sovelluksen tietokanta koodin, routes moduulin ja linkkien refaktoroimiseen, minkä takia kyseiset osa alueet eivät ole rakenteeltaan parhaita
+- Sovelluksen logic moduulit saisivat toteuttaa paljon enemmän db luokissa käytetyistä toimista
+- Poistaminen ei kysy varmistusta, minkä takia kirjoittaja tai admin voi vahingossa poistaa postauksen
 
-# Toteutetut ominaisuudet välipalautus 3 (25.4.2021):
-
-- Anonyymit ja kirjoittajat näkevät postauksia pääsivulla
-- Anonyymit ja kirjoittajat voivat tarkastella postauksien chaptereita
-- Anonyymit ja kirjoittajat voivat tarkastella postausten kommentteja
-- Kirjoittajat pystyvät vastamaan chapteriin liitettyihin kyselyihin
-- Käyttäjä voi luoda uuden kirjoittaja tunnukset
-- Käyttäjä pystyy kirjautumaan sisään ja ulos
-- Kirjoittaja voi luoda ja poistaa postauksia
-- Kirjoittaja voi luoda ja poista lukuja postauksista
-- Kirjoittaja voi luoda ja poistaa kyselyitä
-- Kirjoittaja voi luoda ja poistaa kyselyn vastauksia
-- Kirjoittaja voi luoda kommentteja ja poistaa omasta postauksesta kommentteja
-- Kirjoittaja pystyy valitsemaan, onko postaus julkinen vai yksityinen
-- Kirjoittaja pystyy valitsemaan, onko chapterilla kysely vai ei
-- Kirjoittaja pystyy valitsemaan, pystyykö postausta kommentoimaan
-- Postauksen omistava kirjoittaja näkee ainoastaan kyselyn vastaukset
-
-Uudet ominaisuudet:
-
-- Chaptereista voidaan valita tekstiä rivi aiheeksi 
-- Chapterien rivi aiheet näkyvät ja niitä voi kommentoida
-- Chapterin rivi aiheita ja niihin liittyviä kommenteja voi poistaa
-- Admin käyttäjän voi luoda ja sen avulla voi kirjautua
-- Hallinto sivusto antaa linkit eri tietokanta näkymiin
-- Sovellus pakottaa kirjoittajan rivittämän tekstin oikealla lailla (Rivi saa olla korkeintaan 100 merkkiä pitkä ilman enteriä)
-- Sovellus osaa näyttää tekstiä oikealla lailla 
-
-# Testauksesta herokussa (25.4.2021):
+# Testauksesta herokussa (9.5.2021):
 
 Perusidea:
 
