@@ -1,5 +1,8 @@
 from app import app
 from flask import redirect, render_template, request, session
+from users_logic import *
+from workbench_logic import *
+from users_db import *
 from posts_db import *
 from chapters_db import *
 from comments_db import *
@@ -100,6 +103,34 @@ def remove_subject_comments(post_id,chapter_number,subject_id):
       return False
 
     return True
+
+def get_comment_creators():
+    comments = get_comments()
+
+    if comments == None:
+      return None
+
+    comment_creators = {}
+
+    for comment in comments:
+      user = get_the_user(comment[1])
+      comment_creators[comment[0]] = user[1]
+      
+    return comment_creators
+
+def get_comment_posts():
+    comments = get_comments()
+
+    if comments == None:
+      return None
+
+    comment_posts = {}
+
+    for comment in comments:
+      post = get_the_post(comment[2])
+      comment_posts[comment[0]] = post[4]
+
+    return comment_posts
 
 def get_general_comment_amount():
     comments = get_comments()

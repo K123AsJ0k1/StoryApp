@@ -150,6 +150,19 @@ def check_csrf():
     if session["csrf_token"] != request.form["csrf_token"]:
       abort(403)
 
+def get_user_name(user_id):
+    users = get_users()
+
+    if users == None:
+      return None
+    
+    user_name = ""
+    for user in users:
+      if user[0] == user_id:
+        user_name = user[1]
+
+    return user_name
+
 
 
 

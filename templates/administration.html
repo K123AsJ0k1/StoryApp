@@ -197,7 +197,7 @@ textarea {
     <table style="width:100%">
       <tr>
         <th>Id</th>
-        <th>Käyttäjä id</th> 
+        <th>Omistaja</th> 
         <th>Julkisuus</th>
         <th>Kommentointi</th>
         <th>Nimi</th>
@@ -205,7 +205,7 @@ textarea {
     {% for post in posts %}
       <tr>
         <th>{{ post[0] }}</th>
-        <th>{{ post[1] }}</th> 
+        <th>{{ post_creators[post[0]] }}</th> 
         <th>{{ post[2] }}</th>
         <th>{{ post[3] }}</th>
         <th>{{ post[4] }}</th>
@@ -218,7 +218,7 @@ textarea {
     <table style="width:100%">
       <tr>
         <th>Id</th>
-        <th>Postaus id</th> 
+        <th>Postaus</th> 
         <th>Julkisuus</th>
         <th>Rivi kommentit</th>
         <th>Kyselyt</th>
@@ -228,7 +228,7 @@ textarea {
     {% for chapter in chapters %}
       <tr>
         <th>{{ chapter[0] }}</th>
-        <th>{{ chapter[1] }}</th> 
+        <th>{{ chapter_post_list[chapter[0]] }}</th> 
         <th>{{ chapter[2] }}</th>
         <th>{{ chapter[3] }}</th>
         <th>{{ chapter[4] }}</th>
@@ -243,8 +243,8 @@ textarea {
     <table style="width:100%">
       <tr>
         <th>Id</th>
-        <th>Käyttäjä id</th>
-        <th>Postaus id</th>
+        <th>Omistaja</th>
+        <th>Postaus</th>
         <th>Rivi id</th>
         <th>Yleinen kommentti</th>
         <th>Rivi kommentti</th>
@@ -254,8 +254,8 @@ textarea {
     {% for comment in comments %}
       <tr>
         <th>{{ comment[0] }}</th>
-        <th>{{ comment[1] }}</th> 
-        <th>{{ comment[2] }}</th>
+        <th>{{ comment_creators[comment[0]] }}</th> 
+        <th>{{ comment_post_list[comment[0]] }}</th>
         <th>{{ comment[3] }}</th>
         <th>{{ comment[4] }}</th>
         <th>{{ comment[5] }}</th>

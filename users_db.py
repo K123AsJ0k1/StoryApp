@@ -139,10 +139,10 @@ def get_clearance_proxy():
         print(e)
         return None    
         
-def get_user_id(username):
+def get_user_id(user_name):
     try:
         sql = "SELECT id FROM users WHERE username=:username"
-        result = db.session.execute(sql, {"username":username})
+        result = db.session.execute(sql, {"username":user_name})
         user_id = result.fetchone()
 
         if user_id == None:
@@ -166,6 +166,16 @@ def get_user_role(user_name):
     except Exception as e:
         print(e)
         return -2
+
+def get_the_user(user_id):
+    try:
+        sql = "SELECT id,username,password,role FROM users WHERE id=:user_id"
+        result = db.session.execute(sql, {"user_id":user_id})
+        user = result.fetchone()
+        return user
+    except Exception as e:
+        print(e)
+        return None     
        
 def get_regulars_amount():
     try:

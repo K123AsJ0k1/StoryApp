@@ -1,6 +1,7 @@
 from app import app
 from flask import redirect, render_template, request, session
 from users_logic import *
+from users_db import *
 from posts_db import *
 from chapters_db import *
 from text import *
@@ -243,6 +244,34 @@ def remove_chapter(post_id,chapter_number):
       return False
     
     return True
+
+def get_post_creators():
+    posts = get_posts()
+
+    if posts == None:
+      return None
+
+    post_creators = {}
+
+    for post in posts:
+      user = get_the_user(post[1])
+      post_creators[post[0]] = user[1]
+
+    return post_creators
+
+def get_chapter_posts():
+    chapters = get_chapters()
+    
+    if chapters == None:
+      return None
+  
+    chapter_post_list = {}
+
+    for chapter in chapters:
+      post = get_the_post(chapter[1])
+      chapter_post_list[chapter[0]] = post[4]
+
+    return chapter_post_list
 
 def get_posts_amount():
     posts = get_posts()

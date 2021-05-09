@@ -177,11 +177,21 @@ def administration_posts(admin_name):
       address = "/administration/" + admin_name
       return redirect(address)
 
+   post_creators = get_post_creators()
+
+   if post_creators == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(post_creators) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    amount_of_posts = get_posts_amount()
    amount_of_public_posts = get_public_post_amount()
 
    admin_posts_mode()
-   return render_template("administration.html", admin_name=admin_name, posts=posts, amount_of_posts=amount_of_posts, amount_of_public_posts=amount_of_public_posts)
+   return render_template("administration.html", admin_name=admin_name, posts=posts, post_creators=post_creators, amount_of_posts=amount_of_posts, amount_of_public_posts=amount_of_public_posts)
 
 @app.route("/administration/chapters/<string:admin_name>")
 def administration_chapters(admin_name):
@@ -201,11 +211,21 @@ def administration_chapters(admin_name):
       address = "/administration/" + admin_name
       return redirect(address)
 
+   chapter_post_list = get_chapter_posts()
+
+   if chapter_post_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(chapter_post_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    amount_of_chapters = get_chapters_amount()
    amount_of_public_chapters = get_public_chapters_amount()
    
    admin_chapters_mode()
-   return render_template("administration.html", admin_name=admin_name, chapters=chapters, amount_of_chapters=amount_of_chapters, amount_of_public_chapters=amount_of_public_chapters)
+   return render_template("administration.html", admin_name=admin_name, chapters=chapters, chapter_post_list=chapter_post_list,  amount_of_chapters=amount_of_chapters, amount_of_public_chapters=amount_of_public_chapters)
 
 @app.route("/administration/comments/<string:admin_name>")
 def administration_comments(admin_name):
@@ -225,12 +245,32 @@ def administration_comments(admin_name):
       address = "/administration/" + admin_name
       return redirect(address)
 
+   comment_creators = get_comment_creators()
+   
+   if comment_creators == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(comment_creators) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   comment_post_list = get_comment_posts()
+   
+   if comment_post_list == None:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
+   if len(comment_post_list) == 0:
+      address = "/administration/" + admin_name
+      return redirect(address)
+
    amount_of_general_comments = get_general_comment_amount()
    amount_of_row_subjects = get_row_subject_amount()
    amount_of_row_subject_comments = get_row_subject_comment_amount()
    
    admin_comments_mode()
-   return render_template("administration.html", admin_name=admin_name, comments=comments, amount_of_general_comments=amount_of_general_comments, amount_of_row_subjects=amount_of_row_subjects, amount_of_row_subject_comments=amount_of_row_subject_comments)
+   return render_template("administration.html", admin_name=admin_name, comments=comments, comment_creators=comment_creators, comment_post_list=comment_post_list, amount_of_general_comments=amount_of_general_comments, amount_of_row_subjects=amount_of_row_subjects, amount_of_row_subject_comments=amount_of_row_subject_comments)
 
 @app.route("/administration/queries/<string:admin_name>")
 def administration_queries(admin_name):
